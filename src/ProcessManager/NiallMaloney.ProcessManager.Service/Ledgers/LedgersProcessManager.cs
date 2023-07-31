@@ -8,7 +8,7 @@ using NiallMaloney.ProcessManager.Service.Ledgers.Events;
 namespace NiallMaloney.ProcessManager.Service.Ledgers;
 
 [SubscriberName("LedgersProcessManager")]
-[Subscription("$ce-ledgers.booking")]
+[Subscription("$ce-process_manager.booking")]
 public class LedgersProcessManager : SubscriberBase
 {
     private readonly ILedgersRepository _repository;
