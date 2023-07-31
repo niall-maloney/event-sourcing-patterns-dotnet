@@ -1,9 +1,9 @@
 using MediatR;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
+using NiallMaloney.ProcessManager.Cassandra;
 using NiallMaloney.ProcessManager.Service.Ledgers.Commands;
 using NiallMaloney.ProcessManager.Service.Ledgers.Events;
-using NiallMaloney.ProcessManager.Service.Ledgers.Repositories;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers;
 
@@ -11,10 +11,10 @@ namespace NiallMaloney.ProcessManager.Service.Ledgers;
 [Subscription("$ce-ledgers.booking")]
 public class LedgersProcessManager : SubscriberBase
 {
-    private readonly IBalanceRepository _repository;
+    private readonly ILedgersRepository _repository;
     private readonly IMediator _mediator;
 
-    public LedgersProcessManager(IBalanceRepository repository, IMediator mediator)
+    public LedgersProcessManager(ILedgersRepository repository, IMediator mediator)
     {
         _repository = repository;
         _mediator = mediator;

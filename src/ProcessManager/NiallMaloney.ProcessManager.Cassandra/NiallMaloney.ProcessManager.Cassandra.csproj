@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CassandraCSharpDriver" Version="3.19.2" />
+      <PackageReference Include="NiallMaloney.EventSourcing" Version="0.0.1" />
+    </ItemGroup>
+
 </Project>

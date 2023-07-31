@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Cassandra", "src\ProcessManager\NiallMaloney.ProcessManager.Cassandra\NiallMaloney.ProcessManager.Cassandra.csproj", "{4E134E58-8170-4AED-8822-213585522605}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB-BF47-4209-B7A0-F844230F0CEE}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		cassandra-init.sh = cassandra-init.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,71 @@
+using Cassandra;
+using Cassandra.Mapping;
+
+namespace NiallMaloney.ProcessManager.Cassandra;
+
+public class CassandraLedgersRepository : ILedgersRepository
+{
+    private readonly ISession _session;
+    private readonly Mapper _mapper;
+
+    public CassandraLedgersRepository()
+    {
+        var cluster = Cluster.Builder().AddContactPoint("localhost").WithPort(9042).Build();
+        _session = cluster.Connect("process_manager");
+        _mapper = new Mapper(_session);
+        CreateTables();
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint);
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint)");
+    }
+
+    public async Task<IEnumerable<LedgerRow>> GetLedgers() =>
+        await _mapper.FetchAsync<LedgerRow>("SELECT * FROM ledgers");
+
+    public async Task<LedgerRow?> GetLedger(string ledger) =>
+        await _mapper.SingleOrDefaultAsync<LedgerRow?>("SELECT * FROM ledgers WHERE ledger=?", ledger);
+
+    public async Task<decimal?> GetBalance(string ledger)
+    {
+        var r = await GetLedger(ledger);
+        return r?.Amount;
+    }
+
+    public async Task<(bool, decimal)> UpdateBalance(string ledger, decimal amount)
+    {
+        var currentBalance = await GetBalance(ledger);
+        var isNew = currentBalance is null;
+
+        currentBalance ??= 0;
+        var updatedBalance = currentBalance.Value + amount;
+        if (updatedBalance < 0)
+        {
+            return (false, currentBalance.Value);
+        }
+
+        Statement statement;
+        if (isNew)
+        {
+            var query = "INSERT INTO ledgers (ledger, amount) VALUES (?, ?) IF NOT EXISTS";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(ledger, updatedBalance);
+        }
+        else
+        {
+            var query = "UPDATE ledgers SET amount=? WHERE ledger =? IF amount=?";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(updatedBalance, ledger, currentBalance);
+        }
+        var rs = await _session.ExecuteAsync(statement);
+        var r = rs.Single().GetValue<bool>(0);
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected amount");
+        }
+        return (true, updatedBalance);
+    }
+}

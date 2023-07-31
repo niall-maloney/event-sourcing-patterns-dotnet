@@ -34,7 +34,8 @@ public class Booking : Aggregate
     {
         if (_requested == false)
         {
-            throw new InvalidOperationException();
+            //todo log error
+            return;
         }
 
         if (_committed)
@@ -49,7 +50,8 @@ public class Booking : Aggregate
     {
         if (_requested == false || _committed)
         {
-            throw new InvalidOperationException();
+            //todo log error
+            return;
         }
 
         if (_rejected)

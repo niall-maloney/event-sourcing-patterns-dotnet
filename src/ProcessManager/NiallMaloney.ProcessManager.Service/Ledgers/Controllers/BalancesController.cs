@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using NiallMaloney.ProcessManager.Service.Ledgers.Repositories;
+using NiallMaloney.ProcessManager.Cassandra;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Controllers;
 
@@ -8,23 +8,30 @@ namespace NiallMaloney.ProcessManager.Service.Ledgers.Controllers;
 public class BalancesController : ControllerBase
 {
     private readonly ILogger<BalancesController> _logger;
-    private readonly IBalanceRepository _repository;
+    private readonly ILedgersRepository _repository;
 
-    public BalancesController(ILogger<BalancesController> logger, IBalanceRepository repository)
+    public BalancesController(ILogger<BalancesController> logger, ILedgersRepository repository)
     {
         _logger = logger;
         _repository = repository;
     }
 
-    [HttpGet("{ledger}")]
-    public async Task<IActionResult> GetBalance(string ledger)
+    [HttpGet]
+    public async Task<IActionResult> GetLedger()
     {
-        var balance = await _repository.GetBalance(ledger);
-        if (balance is null)
+        var ls = await _repository.GetLedgers();
+        return Ok(ls);
+    }
+
+    [HttpGet("{ledger}")]
+    public async Task<IActionResult> GetLedger(string ledger)
+    {
+        var l = await _repository.GetLedger(ledger);
+        if (l is null)
         {
             return NotFound();
         }
 
-        return Ok(balance);
+        return Ok(l);
     }
 }
