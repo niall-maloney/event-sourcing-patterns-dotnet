@@ -35,20 +35,10 @@ public class CassandraLedgersRepository : ILedgersRepository
         return r?.Amount;
     }
 
-    public async Task<(bool, decimal)> UpdateBalance(string ledger, decimal amount)
+    public async Task<(bool, decimal)> UpdateBalance(string ledger, decimal updatedBalance, decimal? currentBalance)
     {
-        var currentBalance = await GetBalance(ledger);
-        var isNew = currentBalance is null;
-
-        currentBalance ??= 0;
-        var updatedBalance = currentBalance.Value + amount;
-        if (updatedBalance < 0)
-        {
-            return (false, currentBalance.Value);
-        }
-
         Statement statement;
-        if (isNew)
+        if (currentBalance is null)
         {
             var query = "INSERT INTO ledgers (ledger, amount) VALUES (?, ?) IF NOT EXISTS";
             var prepared = await _session.PrepareAsync(query);
