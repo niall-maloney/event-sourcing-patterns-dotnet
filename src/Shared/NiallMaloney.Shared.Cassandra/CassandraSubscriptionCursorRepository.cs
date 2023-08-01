@@ -3,7 +3,7 @@ using Cassandra;
 using Cassandra.Mapping;
 using NiallMaloney.EventSourcing.Subscriptions;
 
-namespace NiallMaloney.ProcessManager.Cassandra;
+namespace NiallMaloney.Shared.Cassandra;
 
 public class CassandraSubscriptionCursorRepository : ISubscriptionCursorRepository
 {
@@ -11,10 +11,10 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
     private readonly ISession _session;
     private readonly Mapper _mapper;
 
-    public CassandraSubscriptionCursorRepository()
+    public CassandraSubscriptionCursorRepository(string keyspace)
     {
         var cluster = Cluster.Builder().AddContactPoint("localhost").WithPort(9042).Build();
-        _session = cluster.Connect("process_manager");
+        _session = cluster.Connect(keyspace);
         _mapper = new Mapper(_session);
         CreateTables();
     }

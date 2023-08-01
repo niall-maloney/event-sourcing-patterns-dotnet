@@ -17,6 +17,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB
 		cassandra-init.sh = cassandra-init.sh
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{5337124F-4203-4550-9F2A-0BB26C03082E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Service", "src\SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Service\NiallMaloney.SingleCurrentAggregate.Service.csproj", "{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.Cassandra", "src\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj", "{6A624084-583F-4368-B4E6-166E4FE6F971}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +42,22 @@ Global
 		{4E134E58-8170-4AED-8822-213585522605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E134E58-8170-4AED-8822-213585522605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E134E58-8170-4AED-8822-213585522605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A624084-583F-4368-B4E6-166E4FE6F971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A624084-583F-4368-B4E6-166E4FE6F971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A624084-583F-4368-B4E6-166E4FE6F971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A624084-583F-4368-B4E6-166E4FE6F971}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
 		{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B} = {CBBE6F88-A883-4F32-9682-2CFA45183472}
 		{4E134E58-8170-4AED-8822-213585522605} = {CBBE6F88-A883-4F32-9682-2CFA45183472}
+		{5337124F-4203-4550-9F2A-0BB26C03082E} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
+		{9CB6EE1C-B9E1-4E19-92F3-673C0428F857} = {5337124F-4203-4550-9F2A-0BB26C03082E}
+		{2164C3C1-B711-48DE-A88A-C72ABDD3AE6B} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
+		{6A624084-583F-4368-B4E6-166E4FE6F971} = {2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}
 	EndGlobalSection
 EndGlobal
