@@ -19,5 +19,5 @@ public class BillingPeriodProcessManager : SubscriberBase
     }
 
     private Task Handle(BillingPeriodClosed evnt, EventMetadata metadata) =>
-        _mediator.Send(new OpenBillingPeriod(Guid.NewGuid().ToString()));
+        _mediator.Send(new OpenBillingPeriod(Ids.NewBillingPeriodId()));
 }

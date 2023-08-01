@@ -23,7 +23,7 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
     {
         //CREATE TABLE IF NOT EXISTS process_manager.subscription_cursors ( subscription text PRIMARY KEY, position varint);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS process_manager.subscription_cursors ( subscription text PRIMARY KEY, position varint)");
+            "CREATE TABLE IF NOT EXISTS subscription_cursors ( subscription text PRIMARY KEY, position varint)");
     }
 
     public async Task<ulong?> GetSubscriptionCursor(string subscriberName, string streamName)

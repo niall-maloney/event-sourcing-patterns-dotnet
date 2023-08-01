@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.ProcessManager.Service.Ledgers.Commands;
-using NiallMaloney.ProcessManager.Service.Ledgers.Models;
+using NiallMaloney.ProcessManager.Service.Ledgers.Controllers.Models;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Controllers;
 
