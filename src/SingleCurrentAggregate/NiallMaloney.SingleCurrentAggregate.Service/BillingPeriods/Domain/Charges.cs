@@ -10,17 +10,11 @@ public class Charges
 
     public void Add(string chargeId, decimal amount)
     {
-        if (!_charges.TryAdd(chargeId, amount))
-        {
-            throw new InvalidOperationException("Charge already added.");
-        }
+        if (!_charges.TryAdd(chargeId, amount)) throw new InvalidOperationException("Charge already added.");
     }
 
     public void Remove(string chargeId)
     {
-        if (!_charges.Remove(chargeId))
-        {
-            throw new InvalidOperationException("Charge already removed.");
-        }
+        if (!_charges.Remove(chargeId)) throw new InvalidOperationException("Charge already removed.");
     }
 }

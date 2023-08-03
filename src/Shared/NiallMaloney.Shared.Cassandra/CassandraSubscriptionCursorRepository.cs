@@ -7,9 +7,10 @@ namespace NiallMaloney.Shared.Cassandra;
 
 public class CassandraSubscriptionCursorRepository : ISubscriptionCursorRepository
 {
+    private readonly Mapper _mapper;
+
     //CREATE KEYSPACE IF NOT EXISTS "process_manager" WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
     private readonly ISession _session;
-    private readonly Mapper _mapper;
 
     public CassandraSubscriptionCursorRepository(string keyspace)
     {
@@ -17,13 +18,6 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
         _session = cluster.Connect(keyspace);
         _mapper = new Mapper(_session);
         CreateTables();
-    }
-
-    private void CreateTables()
-    {
-        //CREATE TABLE IF NOT EXISTS process_manager.subscription_cursors ( subscription text PRIMARY KEY, position varint);
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS subscription_cursors ( subscription text PRIMARY KEY, position varint)");
     }
 
     public async Task<ulong?> GetSubscriptionCursor(string subscriberName, string streamName)
@@ -40,5 +34,12 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
         var prepared = await _session.PrepareAsync(query);
         var statement = prepared.Bind($"{subscriberName}.{streamName}", (BigInteger)position);
         await _session.ExecuteAsync(statement);
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS process_manager.subscription_cursors ( subscription text PRIMARY KEY, position varint);
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS subscription_cursors ( subscription text PRIMARY KEY, position varint)");
     }
 }

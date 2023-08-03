@@ -6,12 +6,9 @@ namespace NiallMaloney.ProcessManager.Service.Ledgers.Domain;
 [Category("process_manager.booking")]
 public class Booking : Aggregate
 {
-    private bool _requested;
     private bool _committed;
     private bool _rejected;
-
-    private string Ledger { get; set; }
-    private decimal Amount { get; set; }
+    private bool _requested;
 
     public Booking()
     {
@@ -20,12 +17,12 @@ public class Booking : Aggregate
         When<BookingRejected>(Apply);
     }
 
+    private string Ledger { get; set; }
+    private decimal Amount { get; set; }
+
     public void Request(string ledger, decimal amount)
     {
-        if (_requested)
-        {
-            return;
-        }
+        if (_requested) return;
 
         RaiseEvent(new BookingRequested(Id, ledger, amount));
     }
@@ -33,15 +30,10 @@ public class Booking : Aggregate
     public void Commit(decimal balance)
     {
         if (_requested == false)
-        {
             //todo log error
             return;
-        }
 
-        if (_committed)
-        {
-            return;
-        }
+        if (_committed) return;
 
         RaiseEvent(new BookingCommitted(Id, Ledger, Amount, balance));
     }
@@ -49,15 +41,10 @@ public class Booking : Aggregate
     public void Reject(decimal balance)
     {
         if (_requested == false || _committed)
-        {
             //todo log error
             return;
-        }
 
-        if (_rejected)
-        {
-            return;
-        }
+        if (_rejected) return;
 
         RaiseEvent(new BookingRejected(Id, Ledger, Amount, balance));
     }

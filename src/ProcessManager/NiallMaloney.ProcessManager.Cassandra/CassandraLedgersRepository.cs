@@ -5,8 +5,8 @@ namespace NiallMaloney.ProcessManager.Cassandra;
 
 public class CassandraLedgersRepository : ILedgersRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraLedgersRepository()
     {
@@ -14,13 +14,6 @@ public class CassandraLedgersRepository : ILedgersRepository
         _session = cluster.Connect("process_manager");
         _mapper = new Mapper(_session);
         CreateTables();
-    }
-
-    private void CreateTables()
-    {
-        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint);
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint)");
     }
 
     public async Task<IEnumerable<LedgerRow>> GetLedgers() =>
@@ -52,10 +45,14 @@ public class CassandraLedgersRepository : ILedgersRepository
         }
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
-        if (r == false)
-        {
-            throw new InvalidOperationException("Unexpected amount");
-        }
+        if (r == false) throw new InvalidOperationException("Unexpected amount");
         return (true, updatedBalance);
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint);
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS ledgers ( ledger text PRIMARY KEY, amount varint)");
     }
 }

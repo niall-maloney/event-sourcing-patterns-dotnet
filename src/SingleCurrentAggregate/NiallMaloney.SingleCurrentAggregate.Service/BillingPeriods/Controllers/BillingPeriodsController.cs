@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Commands;
+using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers;
 
@@ -17,6 +18,23 @@ public class BillingPeriodsController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpGet("{billingPeriodId}")]
+    public async Task<IActionResult> GetBillingPeriod([FromRoute] string billingPeriodId)
+    {
+        var billingPeriod = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
+        if (billingPeriod is null) return NotFound();
+        return Ok(billingPeriod);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchBillingPeriods(
+        [FromQuery] string? billingPeriodId = null,
+        [FromQuery] string? status = null)
+    {
+        var billingPeriods = await _mediator.Send(new SearchBillingPeriod(billingPeriodId, status));
+        return Ok(billingPeriods);
+    }
+
     [HttpPost]
     public async Task<IActionResult> OpenBillingPeriod()
     {
@@ -28,7 +46,8 @@ public class BillingPeriodsController : ControllerBase
     [HttpPost("{billingPeriodId}/actions/close")]
     public async Task<IActionResult> CloseBillingPeriod([FromRoute] string billingPeriodId)
     {
-        //todo: look up in projection
+        var billingPeriod = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
+        if (billingPeriod is null) return NotFound();
         await _mediator.Send(new CloseBillingPeriod(billingPeriodId));
         return Accepted(billingPeriodId);
     }

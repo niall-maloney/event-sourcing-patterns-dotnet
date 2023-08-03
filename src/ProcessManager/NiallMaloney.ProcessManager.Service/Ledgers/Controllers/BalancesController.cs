@@ -27,10 +27,7 @@ public class BalancesController : ControllerBase
     public async Task<IActionResult> GetLedger(string ledger)
     {
         var l = await _repository.GetLedger(ledger);
-        if (l is null)
-        {
-            return NotFound();
-        }
+        if (l is null) return NotFound();
 
         return Ok(l);
     }
