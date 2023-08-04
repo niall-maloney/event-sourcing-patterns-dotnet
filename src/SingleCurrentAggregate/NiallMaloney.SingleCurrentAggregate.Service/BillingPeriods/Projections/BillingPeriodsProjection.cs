@@ -30,7 +30,8 @@ public class BillingPeriodsProjection : Projection
             return;
         }
 
-        await _repository.AddBillingPeriod(new BillingPeriodRow(evnt.BillingPeriodId, "Open", metadata.StreamPosition));
+        await _repository.AddBillingPeriod(new BillingPeriodRow(evnt.BillingPeriodId, "Open", 0,
+            metadata.StreamPosition));
     }
 
     private async Task Handle(BillingPeriodClosed evnt, EventMetadata metadata)
@@ -43,7 +44,8 @@ public class BillingPeriodsProjection : Projection
 
         billingPeriod = billingPeriod with
         {
-            Status = "Closed"
+            Status = "Closed",
+            TotalAmount = evnt.TotalAmount
         };
 
         await _repository.UpdateBillingPeriod(billingPeriod);
@@ -57,6 +59,11 @@ public class BillingPeriodsProjection : Projection
         {
             return;
         }
+
+        billingPeriod = billingPeriod with
+        {
+            TotalAmount = evnt.TotalAmount
+        };
         await _repository.UpdateBillingPeriod(billingPeriod);
     }
 
@@ -67,6 +74,11 @@ public class BillingPeriodsProjection : Projection
         {
             return;
         }
+
+        billingPeriod = billingPeriod with
+        {
+            TotalAmount = evnt.TotalAmount
+        };
         await _repository.UpdateBillingPeriod(billingPeriod);
     }
 

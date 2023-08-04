@@ -52,6 +52,6 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
     {
         //CREATE TABLE IF NOT EXISTS single_current_aggregate.billing_periods ( billingPeriodId text PRIMARY KEY, status text);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, status text, version varint)");
+            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, status text, totalAmount decimal, version varint)");
     }
 }

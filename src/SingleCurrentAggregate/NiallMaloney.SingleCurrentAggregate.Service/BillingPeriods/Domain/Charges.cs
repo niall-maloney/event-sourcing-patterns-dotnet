@@ -6,7 +6,9 @@ public class Charges
 
     public bool Contains(string chargeId) => _charges.ContainsKey(chargeId);
 
-    public decimal GetAmount(string chargeId) => _charges[chargeId];
+    public decimal GetChargeAmount(string chargeId) => _charges[chargeId];
+
+    public decimal GetTotalAmount() => _charges.Sum(c => c.Value);
 
     public void Add(string chargeId, decimal amount)
     {

@@ -29,21 +29,24 @@ public class BillingPeriod : Aggregate
     {
         if (_closed) return;
 
-        RaiseEvent(new BillingPeriodClosed(Id));
+        RaiseEvent(new BillingPeriodClosed(Id, _charges.GetTotalAmount()));
     }
 
     public void AddCharge(string chargeId, decimal amount)
     {
         if (_charges.Contains(chargeId) || _closed) return;
 
-        RaiseEvent(new ChargeAdded(Id, chargeId, amount));
+        var totalAmount = _charges.GetTotalAmount() + amount;
+        RaiseEvent(new ChargeAdded(Id, chargeId, amount, totalAmount));
     }
 
     public void RemoveCharge(string chargeId)
     {
         if (!_charges.Contains(chargeId) || _closed) return;
 
-        RaiseEvent(new ChargeRemoved(Id, chargeId, _charges.GetAmount(chargeId)));
+        var amount = _charges.GetChargeAmount(chargeId);
+        var totalAmount = _charges.GetTotalAmount() - amount;
+        RaiseEvent(new ChargeRemoved(Id, chargeId, amount, totalAmount));
     }
 
     private void Apply(BillingPeriodOpened evnt)

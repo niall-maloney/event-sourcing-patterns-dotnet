@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace NiallMaloney.SingleCurrentAggregate.Cassandra;
 
-public record BillingPeriodRow(string BillingPeriodId, string Status, ulong Version);
+public record BillingPeriodRow(string BillingPeriodId, string Status, decimal TotalAmount, ulong Version);
