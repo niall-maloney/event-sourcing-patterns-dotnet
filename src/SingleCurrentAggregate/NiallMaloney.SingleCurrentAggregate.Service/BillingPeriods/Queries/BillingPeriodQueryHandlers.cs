@@ -1,8 +1,7 @@
 using MediatR;
 using NiallMaloney.SingleCurrentAggregate.Cassandra;
-using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
-namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Domain;
+namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
 public class BillingPeriodQueryHandlers : IRequestHandler<GetBillingPeriod, BillingPeriodRow>,
     IRequestHandler<SearchBillingPeriod, IEnumerable<BillingPeriodRow>>

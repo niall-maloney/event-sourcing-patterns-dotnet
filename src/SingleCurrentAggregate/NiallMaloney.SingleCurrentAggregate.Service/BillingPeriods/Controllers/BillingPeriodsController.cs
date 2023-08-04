@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Commands;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
+using BillingPeriod = NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models.BillingPeriod;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers;
 
@@ -21,9 +22,12 @@ public class BillingPeriodsController : ControllerBase
     [HttpGet("{billingPeriodId}")]
     public async Task<IActionResult> GetBillingPeriod([FromRoute] string billingPeriodId)
     {
-        var billingPeriod = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
-        if (billingPeriod is null) return NotFound();
-        return Ok(billingPeriod);
+        var row = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
+        if (row is null)
+        {
+            return NotFound();
+        }
+        return Ok(BillingPeriod.Map(row));
     }
 
     [HttpGet]
@@ -31,8 +35,8 @@ public class BillingPeriodsController : ControllerBase
         [FromQuery] string? billingPeriodId = null,
         [FromQuery] string? status = null)
     {
-        var billingPeriods = await _mediator.Send(new SearchBillingPeriod(billingPeriodId, status));
-        return Ok(billingPeriods);
+        var rows = await _mediator.Send(new SearchBillingPeriod(billingPeriodId, status));
+        return Ok(BillingPeriod.Map(rows));
     }
 
     [HttpPost]
@@ -46,8 +50,11 @@ public class BillingPeriodsController : ControllerBase
     [HttpPost("{billingPeriodId}/actions/close")]
     public async Task<IActionResult> CloseBillingPeriod([FromRoute] string billingPeriodId)
     {
-        var billingPeriod = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
-        if (billingPeriod is null) return NotFound();
+        var row = await _mediator.Send(new GetBillingPeriod(billingPeriodId));
+        if (row is null)
+        {
+            return NotFound();
+        }
         await _mediator.Send(new CloseBillingPeriod(billingPeriodId));
         return Accepted(billingPeriodId);
     }
