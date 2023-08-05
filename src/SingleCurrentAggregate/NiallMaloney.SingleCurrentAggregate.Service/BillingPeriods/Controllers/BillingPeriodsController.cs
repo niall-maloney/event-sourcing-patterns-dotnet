@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Commands;
+using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
-using BillingPeriod = NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models.BillingPeriod;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers;
 
@@ -35,7 +35,7 @@ public class BillingPeriodsController : ControllerBase
         [FromQuery] string? billingPeriodId = null,
         [FromQuery] string? status = null)
     {
-        var rows = await _mediator.Send(new SearchBillingPeriod(billingPeriodId, status));
+        var rows = await _mediator.Send(new SearchBillingPeriods(billingPeriodId, status));
         return Ok(BillingPeriod.Map(rows));
     }
 

@@ -1,9 +1,10 @@
 namespace NiallMaloney.SingleCurrentAggregate.Cassandra;
 
-public record BillingPeriodRow
+public record ChargeRow
 {
+    public string ChargeId { get; set; }
     public string BillingPeriodId { get; set; }
+    public decimal Amount { get; set; }
     public string Status { get; set; }
-    public decimal TotalAmount { get; set; }
     public ulong Version { get; set; }
 }

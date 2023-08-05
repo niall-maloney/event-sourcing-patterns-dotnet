@@ -7,14 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="12.1.1" />
-        <PackageReference Include="NiallMaloney.EventSourcing" Version="0.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="MediatR" Version="12.1.1"/>
+        <PackageReference Include="NiallMaloney.EventSourcing" Version="0.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj" />
-        <ProjectReference Include="..\NiallMaloney.SingleCurrentAggregate.Cassandra\NiallMaloney.SingleCurrentAggregate.Cassandra.csproj" />
+        <ProjectReference Include="..\..\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj"/>
+        <ProjectReference Include="..\NiallMaloney.SingleCurrentAggregate.Cassandra\NiallMaloney.SingleCurrentAggregate.Cassandra.csproj"/>
     </ItemGroup>
 
 </Project>

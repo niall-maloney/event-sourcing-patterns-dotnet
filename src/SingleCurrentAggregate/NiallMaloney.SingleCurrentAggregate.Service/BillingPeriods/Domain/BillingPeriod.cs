@@ -20,21 +20,30 @@ public class BillingPeriod : Aggregate
 
     public void Open()
     {
-        if (_opened) return;
+        if (_opened)
+        {
+            return;
+        }
 
         RaiseEvent(new BillingPeriodOpened(Id));
     }
 
     public void Close()
     {
-        if (_closed) return;
+        if (_closed)
+        {
+            return;
+        }
 
         RaiseEvent(new BillingPeriodClosed(Id, _charges.GetTotalAmount()));
     }
 
     public void AddCharge(string chargeId, decimal amount)
     {
-        if (_charges.Contains(chargeId) || _closed) return;
+        if (_charges.Contains(chargeId) || _closed)
+        {
+            return;
+        }
 
         var totalAmount = _charges.GetTotalAmount() + amount;
         RaiseEvent(new ChargeAdded(Id, chargeId, amount, totalAmount));
@@ -42,7 +51,10 @@ public class BillingPeriod : Aggregate
 
     public void RemoveCharge(string chargeId)
     {
-        if (!_charges.Contains(chargeId) || _closed) return;
+        if (!_charges.Contains(chargeId) || _closed)
+        {
+            return;
+        }
 
         var amount = _charges.GetChargeAmount(chargeId);
         var totalAmount = _charges.GetTotalAmount() - amount;

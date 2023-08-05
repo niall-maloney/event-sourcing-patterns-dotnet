@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Commands;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models;
+using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers;
 
@@ -16,6 +17,27 @@ public class ChargesController : ControllerBase
     {
         _logger = logger;
         _mediator = mediator;
+    }
+
+    [HttpGet("{chargeId}")]
+    public async Task<IActionResult> GetCharge([FromRoute] string chargeId)
+    {
+        var row = await _mediator.Send(new GetCharge(chargeId));
+        if (row is null)
+        {
+            return NotFound();
+        }
+        return Ok(Charge.Map(row));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchCharges(
+        [FromQuery] string? chargeId = null,
+        [FromQuery] string? billingPeriodId = null,
+        [FromQuery] string? status = null)
+    {
+        var rows = await _mediator.Send(new SearchCharges(chargeId, billingPeriodId, status));
+        return Ok(Charge.Map(rows));
     }
 
     [HttpPost]

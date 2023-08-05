@@ -30,14 +30,20 @@ public class BillingPeriodsProjection : Projection
             return;
         }
 
-        await _repository.AddBillingPeriod(new BillingPeriodRow(evnt.BillingPeriodId, "Open", 0,
-            metadata.StreamPosition));
+        await _repository.AddBillingPeriod(new BillingPeriodRow
+        {
+            BillingPeriodId = evnt.BillingPeriodId,
+            Status = "Open",
+            TotalAmount = 0,
+            Version = metadata.StreamPosition
+        });
     }
 
     private async Task Handle(BillingPeriodClosed evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (billingPeriod is null ||
+            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
         {
             return;
         }
@@ -55,7 +61,8 @@ public class BillingPeriodsProjection : Projection
     private async Task Handle(ChargeAdded evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (billingPeriod is null ||
+            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
         {
             return;
         }
@@ -70,7 +77,8 @@ public class BillingPeriodsProjection : Projection
     private async Task Handle(ChargeRemoved evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (billingPeriod is null ||
+            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
         {
             return;
         }

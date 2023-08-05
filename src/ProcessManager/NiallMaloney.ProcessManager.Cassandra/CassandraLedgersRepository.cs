@@ -45,7 +45,10 @@ public class CassandraLedgersRepository : ILedgersRepository
         }
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
-        if (r == false) throw new InvalidOperationException("Unexpected amount");
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected amount");
+        }
         return (true, updatedBalance);
     }
 

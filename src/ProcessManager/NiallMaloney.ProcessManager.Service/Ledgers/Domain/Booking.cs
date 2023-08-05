@@ -22,7 +22,10 @@ public class Booking : Aggregate
 
     public void Request(string ledger, decimal amount)
     {
-        if (_requested) return;
+        if (_requested)
+        {
+            return;
+        }
 
         RaiseEvent(new BookingRequested(Id, ledger, amount));
     }
@@ -31,9 +34,14 @@ public class Booking : Aggregate
     {
         if (_requested == false)
             //todo log error
+        {
             return;
+        }
 
-        if (_committed) return;
+        if (_committed)
+        {
+            return;
+        }
 
         RaiseEvent(new BookingCommitted(Id, Ledger, Amount, balance));
     }
@@ -42,9 +50,14 @@ public class Booking : Aggregate
     {
         if (_requested == false || _committed)
             //todo log error
+        {
             return;
+        }
 
-        if (_rejected) return;
+        if (_rejected)
+        {
+            return;
+        }
 
         RaiseEvent(new BookingRejected(Id, Ledger, Amount, balance));
     }

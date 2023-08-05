@@ -3,12 +3,12 @@ using NiallMaloney.SingleCurrentAggregate.Cassandra;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
-public class BillingPeriodQueryHandlers : IRequestHandler<GetBillingPeriod, BillingPeriodRow>,
-    IRequestHandler<SearchBillingPeriod, IEnumerable<BillingPeriodRow>>
+public class BillingPeriodsQueryHandlers : IRequestHandler<GetBillingPeriod, BillingPeriodRow>,
+    IRequestHandler<SearchBillingPeriods, IEnumerable<BillingPeriodRow>>
 {
     private readonly IBillingPeriodsRepository _repository;
 
-    public BillingPeriodQueryHandlers(IBillingPeriodsRepository repository)
+    public BillingPeriodsQueryHandlers(IBillingPeriodsRepository repository)
     {
         _repository = repository;
     }
@@ -17,6 +17,6 @@ public class BillingPeriodQueryHandlers : IRequestHandler<GetBillingPeriod, Bill
         _repository.GetBillingPeriod(request.BillingPeriodId);
 
     public Task<IEnumerable<BillingPeriodRow>>
-        Handle(SearchBillingPeriod request, CancellationToken cancellationToken) =>
+        Handle(SearchBillingPeriods request, CancellationToken cancellationToken) =>
         _repository.SearchBillingPeriods(request.BillingPeriodId, request.Status);
 }

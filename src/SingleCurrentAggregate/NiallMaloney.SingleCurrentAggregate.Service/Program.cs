@@ -15,6 +15,7 @@ builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<BillingPeriodsProcessManager>();
 builder.Services.AddSubscriber<BillingPeriodsProjection>();
+builder.Services.AddSubscriber<ChargesProjection>();
 
 builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingAssembly); });
 

@@ -3,4 +3,4 @@ using NiallMaloney.SingleCurrentAggregate.Cassandra;
 
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Queries;
 
-public record GetBillingPeriod(string BillingPeriodId) : IRequest<BillingPeriodRow>;
+public record GetCharge(string ChargeId) : IRequest<ChargeRow>;
