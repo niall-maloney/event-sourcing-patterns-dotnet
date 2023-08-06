@@ -22,26 +22,33 @@ public class CassandraLedgersRepository : ILedgersRepository
     public async Task<LedgerRow?> GetLedger(string ledger) =>
         await _mapper.SingleOrDefaultAsync<LedgerRow?>("SELECT * FROM ledgers WHERE ledger=?", ledger);
 
-    public async Task<decimal?> GetBalance(string ledger)
+    public async Task<(decimal?, decimal?)> GetBalance(string ledger)
     {
         var r = await GetLedger(ledger);
-        return r?.Amount;
+        return (r?.PendingAmount, r?.CommittedAmount);
     }
 
-    public async Task<(bool, decimal)> UpdateBalance(string ledger, decimal updatedBalance, decimal? currentBalance)
+    public async Task UpdateBalance(
+        string ledger,
+        decimal updatedPendingBalance,
+        decimal? currentPendingBalance,
+        decimal updatedCommittedBalance,
+        decimal? currentCommittedBalance)
     {
         Statement statement;
-        if (currentBalance is null)
+        if (currentCommittedBalance is null && currentPendingBalance is null)
         {
-            var query = "INSERT INTO ledgers (ledger, amount) VALUES (?, ?) IF NOT EXISTS";
+            var query = "INSERT INTO ledgers (ledger, pendingAmount, committedAmount) VALUES (?, ?, ?) IF NOT EXISTS";
             var prepared = await _session.PrepareAsync(query);
-            statement = prepared.Bind(ledger, updatedBalance);
+            statement = prepared.Bind(ledger, updatedPendingBalance, updatedCommittedBalance);
         }
         else
         {
-            var query = "UPDATE ledgers SET amount=? WHERE ledger =? IF amount=?";
+            var query =
+                "UPDATE ledgers SET pendingAmount=?, committedAmount=? WHERE ledger =? IF pendingAmount=? AND committedAmount=?";
             var prepared = await _session.PrepareAsync(query);
-            statement = prepared.Bind(updatedBalance, ledger, currentBalance);
+            statement = prepared.Bind(updatedPendingBalance, updatedCommittedBalance, ledger, currentPendingBalance,
+                currentCommittedBalance);
         }
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
@@ -49,13 +56,12 @@ public class CassandraLedgersRepository : ILedgersRepository
         {
             throw new InvalidOperationException("Unexpected amount");
         }
-        return (true, updatedBalance);
     }
 
     private void CreateTables()
     {
-        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint);
+        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, pendingAmount decimal, committedAmount decimal);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS ledgers ( ledger text PRIMARY KEY, amount varint)");
+            "CREATE TABLE IF NOT EXISTS ledgers ( ledger text PRIMARY KEY, pendingAmount decimal, committedAmount decimal)");
     }
 }

@@ -18,9 +18,12 @@ public class LedgersProcessManager : SubscriberBase
     {
         _repository = repository;
         _mediator = mediator;
+
         When<BookingRequested>(Handle);
+        When<BookingCommitted>(Handle);
     }
 
+    //todo: idempotency to protect against replayed events
     private async Task Handle(BookingRequested evnt, EventMetadata metadata)
     {
         var bookingId = evnt.BookingId;
@@ -41,15 +44,36 @@ public class LedgersProcessManager : SubscriberBase
         var ledger = evnt.Ledger;
         var amount = evnt.Amount;
 
-        var currentBalance = await _repository.GetBalance(ledger);
-        var balance = currentBalance ?? 0;
+        var (currentPendingBalance, currentCommittedBalance) = await _repository.GetBalance(ledger);
+        var pendingBalance = currentPendingBalance ?? 0;
+        var committedBalance = currentCommittedBalance ?? 0;
 
-        var updatedBalance = balance + amount;
+        var updatedPendingBalance = pendingBalance + amount;
+        var updatedBalance = committedBalance + updatedPendingBalance;
         if (updatedBalance < 0)
         {
-            return (false, balance);
+            return (false, committedBalance + pendingBalance);
         }
 
-        return await _repository.UpdateBalance(ledger, updatedBalance, currentBalance);
+        await _repository.UpdateBalance(ledger, updatedPendingBalance, currentPendingBalance, committedBalance,
+            currentCommittedBalance);
+
+        return (true, updatedBalance);
+    }
+
+    private async Task Handle(BookingCommitted evnt, EventMetadata metadata)
+    {
+        var ledger = evnt.Ledger;
+        var amount = evnt.Amount;
+
+        var (currentPendingBalance, currentCommittedBalance) = await _repository.GetBalance(ledger);
+        var pendingBalance = currentPendingBalance ?? 0;
+        var committedBalance = currentCommittedBalance ?? 0;
+
+        var updatedPendingBalance = pendingBalance - amount;
+        var updatedCommittedBalance = committedBalance + amount;
+
+        await _repository.UpdateBalance(ledger, updatedPendingBalance, currentPendingBalance, updatedCommittedBalance,
+            currentCommittedBalance);
     }
 }

@@ -1,3 +1,9 @@
 namespace NiallMaloney.ProcessManager.Cassandra;
 
-public record LedgerRow(string Ledger, decimal Amount);
+public record LedgerRow
+{
+    public string Ledger { get; set; }
+    public decimal PendingAmount { get; set; }
+    public decimal CommittedAmount { get; set; }
+    public ulong Version { get; set; }
+}
