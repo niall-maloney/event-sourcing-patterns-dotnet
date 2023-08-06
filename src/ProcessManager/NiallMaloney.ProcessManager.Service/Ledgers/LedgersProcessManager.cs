@@ -27,20 +27,6 @@ public class LedgersProcessManager : SubscriberBase
     private async Task Handle(BookingRequested evnt, EventMetadata metadata)
     {
         var bookingId = evnt.BookingId;
-
-        var (success, balance) = await UpdateBalance(evnt);
-        if (success)
-        {
-            await _mediator.Send(new CommitBooking(bookingId, balance));
-        }
-        else
-        {
-            await _mediator.Send(new RejectBooking(bookingId, balance));
-        }
-    }
-
-    private async Task<(bool, decimal)> UpdateBalance(BookingRequested evnt)
-    {
         var ledger = evnt.Ledger;
         var amount = evnt.Amount;
 
@@ -50,15 +36,16 @@ public class LedgersProcessManager : SubscriberBase
 
         var updatedPendingBalance = pendingBalance + amount;
         var updatedBalance = committedBalance + updatedPendingBalance;
-        if (updatedBalance < 0)
+        if (updatedBalance >= 0)
         {
-            return (false, committedBalance + pendingBalance);
+            await _repository.UpdatePendingBalance(ledger, updatedPendingBalance, currentPendingBalance);
+            await _mediator.Send(new CommitBooking(bookingId, updatedBalance));
         }
-
-        await _repository.UpdateBalance(ledger, updatedPendingBalance, currentPendingBalance, committedBalance,
-            currentCommittedBalance);
-
-        return (true, updatedBalance);
+        else
+        {
+            var currentBalance = committedBalance + pendingBalance;
+            await _mediator.Send(new RejectBooking(bookingId, currentBalance));
+        }
     }
 
     private async Task Handle(BookingCommitted evnt, EventMetadata metadata)

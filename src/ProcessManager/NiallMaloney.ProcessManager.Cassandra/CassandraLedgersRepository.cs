@@ -58,6 +58,54 @@ public class CassandraLedgersRepository : ILedgersRepository
         }
     }
 
+    public async Task UpdateCommittedBalance(string ledger, decimal updatedBalance, decimal? currentBalance)
+    {
+        Statement statement;
+        if (currentBalance is null)
+        {
+            var query = "INSERT INTO ledgers (ledger, pendingAmount, committedAmount) VALUES (?, ?, ?) IF NOT EXISTS";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(ledger, 0, updatedBalance);
+        }
+        else
+        {
+            var query =
+                "UPDATE ledgers SET committedAmount=? WHERE ledger =? IF committedAmount=?";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(updatedBalance, ledger, currentBalance);
+        }
+        var rs = await _session.ExecuteAsync(statement);
+        var r = rs.Single().GetValue<bool>(0);
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected committed amount");
+        }
+    }
+
+    public async Task UpdatePendingBalance(string ledger, decimal updatedBalance, decimal? currentBalance)
+    {
+        Statement statement;
+        if (currentBalance is null)
+        {
+            var query = "INSERT INTO ledgers (ledger, pendingAmount, committedAmount) VALUES (?, ?, ?) IF NOT EXISTS";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(ledger, updatedBalance, 0);
+        }
+        else
+        {
+            var query =
+                "UPDATE ledgers SET pendingAmount=? WHERE ledger =? IF pendingAmount=?";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(updatedBalance, ledger, currentBalance);
+        }
+        var rs = await _session.ExecuteAsync(statement);
+        var r = rs.Single().GetValue<bool>(0);
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected pending amount");
+        }
+    }
+
     private void CreateTables()
     {
         //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, pendingAmount decimal, committedAmount decimal);
