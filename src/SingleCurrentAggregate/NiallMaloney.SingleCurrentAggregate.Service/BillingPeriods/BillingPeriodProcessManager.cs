@@ -18,7 +18,6 @@ public class BillingPeriodsProcessManager : SubscriberBase
         When<BillingPeriodClosed>(Handle);
     }
 
-    //todo: idempotency so replayed events don't open new billing periods
     private Task Handle(BillingPeriodClosed evnt, EventMetadata metadata) =>
-        _mediator.Send(new OpenBillingPeriod(Ids.NewBillingPeriodId()));
+        _mediator.Send(new OpenBillingPeriod(Ids.NewBillingPeriodId(evnt.BillingPeriodId)));
 }
