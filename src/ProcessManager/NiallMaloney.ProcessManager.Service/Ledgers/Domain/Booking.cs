@@ -3,15 +3,12 @@ using NiallMaloney.ProcessManager.Service.Ledgers.Events;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Domain;
 
-[Category("ledgers.booking")]
+[Category("process_manager.booking")]
 public class Booking : Aggregate
 {
-    private bool _requested;
     private bool _committed;
     private bool _rejected;
-
-    private string Ledger { get; set; }
-    private decimal Amount { get; set; }
+    private bool _requested;
 
     public Booking()
     {
@@ -19,6 +16,9 @@ public class Booking : Aggregate
         When<BookingCommitted>(Apply);
         When<BookingRejected>(Apply);
     }
+
+    private string? Ledger { get; set; }
+    private decimal Amount { get; set; }
 
     public void Request(string ledger, decimal amount)
     {
@@ -32,9 +32,9 @@ public class Booking : Aggregate
 
     public void Commit(decimal balance)
     {
+        //todo: log error
         if (_requested == false)
         {
-            //todo log error
             return;
         }
 
@@ -43,14 +43,14 @@ public class Booking : Aggregate
             return;
         }
 
-        RaiseEvent(new BookingCommitted(Id, Ledger, Amount, balance));
+        RaiseEvent(new BookingCommitted(Id, Ledger!, Amount, balance));
     }
 
     public void Reject(decimal balance)
     {
+        //todo: log error
         if (_requested == false || _committed)
         {
-            //todo log error
             return;
         }
 
@@ -59,7 +59,7 @@ public class Booking : Aggregate
             return;
         }
 
-        RaiseEvent(new BookingRejected(Id, Ledger, Amount, balance));
+        RaiseEvent(new BookingRejected(Id, Ledger!, Amount, balance));
     }
 
     private void Apply(BookingRequested evnt)

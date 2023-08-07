@@ -1,3 +1,4 @@
+using System.Numerics;
 using Cassandra;
 using Cassandra.Mapping;
 
@@ -5,8 +6,8 @@ namespace NiallMaloney.ProcessManager.Cassandra;
 
 public class CassandraLedgersRepository : ILedgersRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraLedgersRepository()
     {
@@ -16,39 +17,34 @@ public class CassandraLedgersRepository : ILedgersRepository
         CreateTables();
     }
 
-    private void CreateTables()
-    {
-        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint);
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, amount varint)");
-    }
-
     public async Task<IEnumerable<LedgerRow>> GetLedgers() =>
         await _mapper.FetchAsync<LedgerRow>("SELECT * FROM ledgers");
 
     public async Task<LedgerRow?> GetLedger(string ledger) =>
         await _mapper.SingleOrDefaultAsync<LedgerRow?>("SELECT * FROM ledgers WHERE ledger=?", ledger);
 
-    public async Task<decimal?> GetBalance(string ledger)
-    {
-        var r = await GetLedger(ledger);
-        return r?.Amount;
-    }
-
-    public async Task<(bool, decimal)> UpdateBalance(string ledger, decimal updatedBalance, decimal? currentBalance)
+    public async Task UpdateBalance(
+        string ledger,
+        decimal newPendingBalance,
+        decimal newCommittedBalance,
+        ulong newStreamPosition,
+        ulong? lastStreamPosition)
     {
         Statement statement;
-        if (currentBalance is null)
+        if (lastStreamPosition is null)
         {
-            var query = "INSERT INTO ledgers (ledger, amount) VALUES (?, ?) IF NOT EXISTS";
+            var query =
+                "INSERT INTO ledgers (ledger, pendingAmount, committedAmount, lastStreamPosition) VALUES (?, ?, ?, ?) IF NOT EXISTS";
             var prepared = await _session.PrepareAsync(query);
-            statement = prepared.Bind(ledger, updatedBalance);
+            statement = prepared.Bind(ledger, newPendingBalance, newCommittedBalance, (BigInteger)newStreamPosition);
         }
         else
         {
-            var query = "UPDATE ledgers SET amount=? WHERE ledger =? IF amount=?";
+            var query =
+                "UPDATE ledgers SET pendingAmount=?, committedAmount=?, lastStreamPosition=? WHERE ledger =? IF lastStreamPosition=?";
             var prepared = await _session.PrepareAsync(query);
-            statement = prepared.Bind(updatedBalance, ledger, currentBalance);
+            statement = prepared.Bind(newPendingBalance, newCommittedBalance, (BigInteger)newStreamPosition, ledger,
+                (BigInteger)lastStreamPosition);
         }
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
@@ -56,6 +52,72 @@ public class CassandraLedgersRepository : ILedgersRepository
         {
             throw new InvalidOperationException("Unexpected amount");
         }
-        return (true, updatedBalance);
+    }
+
+    public async Task UpdateCommittedBalance(
+        string ledger,
+        decimal newBalance,
+        ulong newStreamPosition,
+        ulong? lastStreamPosition)
+    {
+        Statement statement;
+        if (lastStreamPosition is null)
+        {
+            var query =
+                "INSERT INTO ledgers (ledger, pendingAmount, committedAmount, lastStreamPosition) VALUES (?, ?, ?, ?) IF NOT EXISTS";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(ledger, 0m, newBalance, (BigInteger)newStreamPosition);
+        }
+        else
+        {
+            var query =
+                "UPDATE ledgers SET committedAmount=?, lastStreamPosition=? WHERE ledger =? IF lastStreamPosition=?";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(newBalance, (BigInteger)newStreamPosition, ledger,
+                (BigInteger)lastStreamPosition);
+        }
+        var rs = await _session.ExecuteAsync(statement);
+        var r = rs.Single().GetValue<bool>(0);
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected committed amount");
+        }
+    }
+
+    public async Task UpdatePendingBalance(
+        string ledger,
+        decimal newBalance,
+        ulong newStreamPosition,
+        ulong? lastStreamPosition)
+    {
+        Statement statement;
+        if (lastStreamPosition is null)
+        {
+            var query =
+                "INSERT INTO ledgers (ledger, pendingAmount, committedAmount, lastStreamPosition) VALUES (?, ?, ?, ?) IF NOT EXISTS";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(ledger, newBalance, 0m, (BigInteger)newStreamPosition);
+        }
+        else
+        {
+            var query =
+                "UPDATE ledgers SET pendingAmount=?, lastStreamPosition=? WHERE ledger =? IF lastStreamPosition=?";
+            var prepared = await _session.PrepareAsync(query);
+            statement = prepared.Bind(newBalance, (BigInteger)newStreamPosition, ledger,
+                (BigInteger)lastStreamPosition);
+        }
+        var rs = await _session.ExecuteAsync(statement);
+        var r = rs.Single().GetValue<bool>(0);
+        if (r == false)
+        {
+            throw new InvalidOperationException("Unexpected pending amount");
+        }
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS process_manager.ledgers ( ledger text PRIMARY KEY, pendingAmount decimal, committedAmount decimal, lastStreamPosition varint );
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS ledgers ( ledger text PRIMARY KEY, pendingAmount decimal, committedAmount decimal, lastStreamPosition varint )");
     }
 }

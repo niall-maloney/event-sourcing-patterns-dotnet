@@ -2,13 +2,14 @@ using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.ProcessManager.Cassandra;
 using NiallMaloney.ProcessManager.Service.Ledgers;
+using NiallMaloney.Shared.Cassandra;
 
 var builder = WebApplication.CreateBuilder(args);
 var executingAssembly = typeof(Program).Assembly;
 
 var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionString");
 builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Value), new[] { executingAssembly });
-builder.Services.AddSingleton<ISubscriptionCursorRepository, CassandraSubscriptionCursorRepository>();
+builder.Services.AddCassandraCursorRepository("process_manager");
 
 builder.Services.AddSingleton<ILedgersRepository, CassandraLedgersRepository>();
 builder.Services.AddSubscriber<LedgersProcessManager>();
