@@ -17,8 +17,8 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         CreateTables();
     }
 
-    public Task<BillingPeriodRow> GetBillingPeriod(string billingPeriodId) =>
-        _mapper.SingleOrDefaultAsync<BillingPeriodRow>("SELECT * FROM billing_periods where billingPeriodId=?",
+    public Task<BillingPeriodRow?> GetBillingPeriod(string billingPeriodId) =>
+        _mapper.SingleOrDefaultAsync<BillingPeriodRow?>("SELECT * FROM billing_periods where billingPeriodId=?",
             billingPeriodId);
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(

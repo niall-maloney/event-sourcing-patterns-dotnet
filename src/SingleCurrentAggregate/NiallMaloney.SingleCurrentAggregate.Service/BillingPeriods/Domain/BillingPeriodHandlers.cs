@@ -43,7 +43,7 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
         await _aggregateRepository.SaveAggregate(billingPeriod);
     }
 
-    public async Task Handle(RemoveCharge request, CancellationToken cancellationToken) =>
+    public Task Handle(RemoveCharge request, CancellationToken cancellationToken) =>
         throw new NotImplementedException();
 
     private async Task<string> GetCurrentBillingPeriodId()
@@ -53,7 +53,7 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
         {
             > 1 => throw new InvalidOperationException("Multiple open billing periods"),
             < 1 => throw new InvalidOperationException("No open billing period"),
-            _ => rows.Single().BillingPeriodId
+            _ => rows.Single().BillingPeriodId!
         };
     }
 }

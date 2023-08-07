@@ -11,8 +11,8 @@ namespace NiallMaloney.ProcessManager.Service.Ledgers;
 [Subscription("$ce-process_manager.booking")]
 public class LedgersProcessManager : SubscriberBase
 {
-    private readonly IMediator _mediator;
     private readonly ILogger<LedgersProcessManager> _logger;
+    private readonly IMediator _mediator;
     private readonly ILedgersRepository _repository;
 
     public LedgersProcessManager(

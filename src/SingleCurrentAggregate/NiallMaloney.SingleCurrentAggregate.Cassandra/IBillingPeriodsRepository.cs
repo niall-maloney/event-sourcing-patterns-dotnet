@@ -2,7 +2,7 @@ namespace NiallMaloney.SingleCurrentAggregate.Cassandra;
 
 public interface IBillingPeriodsRepository
 {
-    public Task<BillingPeriodRow> GetBillingPeriod(string billingPeriodId);
+    public Task<BillingPeriodRow?> GetBillingPeriod(string billingPeriodId);
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(
         string? billingPeriodId = null,
