@@ -36,8 +36,8 @@ public class ChargesController : ControllerBase
         [FromQuery] string? billingPeriodId = null,
         [FromQuery] string? status = null)
     {
-        var rows = await _mediator.Send(new SearchCharges(chargeId, billingPeriodId, status));
-        return Ok(Charge.Map(rows));
+        var charges = await _mediator.Send(new SearchCharges(chargeId, billingPeriodId, status));
+        return Ok(Charge.Map(charges));
     }
 
     [HttpPost]
@@ -49,9 +49,14 @@ public class ChargesController : ControllerBase
     }
 
     [HttpPost("{chargeId}/actions/remove")]
-    public async Task<IActionResult> CreateCharge(string chargeId)
+    public async Task<IActionResult> RemoveCharge(string chargeId)
     {
-        await _mediator.Send(new RemoveCharge(chargeId));
+        var charge = await _mediator.Send(new GetCharge(chargeId));
+        if (charge is null)
+        {
+            return NotFound();
+        }
+        await _mediator.Send(new RemoveCharge(chargeId, charge.BillingPeriodId!));
         return Accepted(chargeId);
     }
 }

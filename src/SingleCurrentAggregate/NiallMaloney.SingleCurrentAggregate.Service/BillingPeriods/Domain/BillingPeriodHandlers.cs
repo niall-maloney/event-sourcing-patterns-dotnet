@@ -12,13 +12,16 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
 {
     private readonly AggregateRepository _aggregateRepository;
     private readonly IBillingPeriodsRepository _billingPeriodsRepository;
+    private readonly IChargesRepository _chargesRepository;
 
     public BillingPeriodHandlers(
         AggregateRepository aggregateRepository,
-        IBillingPeriodsRepository billingPeriodsRepository)
+        IBillingPeriodsRepository billingPeriodsRepository,
+        IChargesRepository chargesRepository)
     {
         _aggregateRepository = aggregateRepository;
         _billingPeriodsRepository = billingPeriodsRepository;
+        _chargesRepository = chargesRepository;
     }
 
     public async Task Handle(AddCharge request, CancellationToken cancellationToken)
@@ -43,8 +46,17 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
         await _aggregateRepository.SaveAggregate(billingPeriod);
     }
 
-    public Task Handle(RemoveCharge request, CancellationToken cancellationToken) =>
-        throw new NotImplementedException();
+    public async Task Handle(RemoveCharge request, CancellationToken cancellationToken)
+    {
+        var charge = await _chargesRepository.GetCharge(request.ChargeId);
+        if (charge is null)
+        {
+            throw new InvalidOperationException("Charge not found in projection.");
+        }
+        var billingPeriod = await _aggregateRepository.LoadAggregate<BillingPeriod>(charge.BillingPeriodId!);
+        billingPeriod.RemoveCharge(request.ChargeId);
+        await _aggregateRepository.SaveAggregate(billingPeriod);
+    }
 
     private async Task<string> GetCurrentBillingPeriodId()
     {
