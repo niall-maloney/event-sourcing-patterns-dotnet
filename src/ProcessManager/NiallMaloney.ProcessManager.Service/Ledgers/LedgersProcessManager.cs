@@ -12,10 +12,15 @@ namespace NiallMaloney.ProcessManager.Service.Ledgers;
 public class LedgersProcessManager : SubscriberBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<LedgersProcessManager> _logger;
     private readonly ILedgersRepository _repository;
 
-    public LedgersProcessManager(ILedgersRepository repository, IMediator mediator)
+    public LedgersProcessManager(
+        ILogger<LedgersProcessManager> logger,
+        ILedgersRepository repository,
+        IMediator mediator)
     {
+        _logger = logger;
         _repository = repository;
         _mediator = mediator;
 
@@ -35,6 +40,8 @@ public class LedgersProcessManager : SubscriberBase
         var lastStreamPosition = row?.LastStreamPosition;
         if (lastStreamPosition >= newStreamPosition)
         {
+            _logger.LogInformation("Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                lastStreamPosition, newStreamPosition);
             return;
         }
 
@@ -66,6 +73,8 @@ public class LedgersProcessManager : SubscriberBase
         var lastStreamPosition = row?.LastStreamPosition;
         if (lastStreamPosition >= newStreamPosition)
         {
+            _logger.LogInformation("Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                lastStreamPosition, newStreamPosition);
             return;
         }
 
