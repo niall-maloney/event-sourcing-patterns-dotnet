@@ -23,27 +23,34 @@ public class LedgersProcessManager : SubscriberBase
         When<BookingCommitted>(Handle);
     }
 
-    //todo: idempotency to protect against replayed events
     private async Task Handle(BookingRequested evnt, EventMetadata metadata)
     {
         var bookingId = evnt.BookingId;
         var ledger = evnt.Ledger;
         var amount = evnt.Amount;
 
-        var (currentPendingBalance, currentCommittedBalance) = await _repository.GetBalance(ledger);
-        var pendingBalance = currentPendingBalance ?? 0;
-        var committedBalance = currentCommittedBalance ?? 0;
+        var row = await _repository.GetLedger(ledger);
 
-        var updatedPendingBalance = pendingBalance + amount;
-        var updatedBalance = committedBalance + updatedPendingBalance;
-        if (updatedBalance >= 0)
+        var newStreamPosition = metadata.AggregatedStreamPosition;
+        var lastStreamPosition = row?.LastStreamPosition;
+        if (lastStreamPosition >= newStreamPosition)
         {
-            await _repository.UpdatePendingBalance(ledger, updatedPendingBalance, currentPendingBalance);
-            await _mediator.Send(new CommitBooking(bookingId, updatedBalance));
+            return;
+        }
+
+        var currentPendingBalance = row?.PendingAmount ?? 0;
+        var currentCommittedBalance = row?.CommittedAmount ?? 0;
+
+        var newPendingBalance = currentPendingBalance + amount;
+        var newBalance = currentCommittedBalance + newPendingBalance;
+        if (newBalance >= 0)
+        {
+            await _repository.UpdatePendingBalance(ledger, newPendingBalance, newStreamPosition, lastStreamPosition);
+            await _mediator.Send(new CommitBooking(bookingId, newBalance));
         }
         else
         {
-            var currentBalance = committedBalance + pendingBalance;
+            var currentBalance = currentCommittedBalance + currentPendingBalance;
             await _mediator.Send(new RejectBooking(bookingId, currentBalance));
         }
     }
@@ -53,14 +60,22 @@ public class LedgersProcessManager : SubscriberBase
         var ledger = evnt.Ledger;
         var amount = evnt.Amount;
 
-        var (currentPendingBalance, currentCommittedBalance) = await _repository.GetBalance(ledger);
-        var pendingBalance = currentPendingBalance ?? 0;
-        var committedBalance = currentCommittedBalance ?? 0;
+        var row = await _repository.GetLedger(ledger);
 
-        var updatedPendingBalance = pendingBalance - amount;
-        var updatedCommittedBalance = committedBalance + amount;
+        var newStreamPosition = metadata.AggregatedStreamPosition;
+        var lastStreamPosition = row?.LastStreamPosition;
+        if (lastStreamPosition >= newStreamPosition)
+        {
+            return;
+        }
 
-        await _repository.UpdateBalance(ledger, updatedPendingBalance, currentPendingBalance, updatedCommittedBalance,
-            currentCommittedBalance);
+        var currentPendingBalance = row?.PendingAmount ?? 0;
+        var currentCommittedBalance = row?.CommittedAmount ?? 0;
+
+        var newPendingBalance = currentPendingBalance - amount;
+        var newCommittedBalance = currentCommittedBalance + amount;
+
+        await _repository.UpdateBalance(ledger, newPendingBalance, newCommittedBalance, newStreamPosition,
+            lastStreamPosition);
     }
 }
