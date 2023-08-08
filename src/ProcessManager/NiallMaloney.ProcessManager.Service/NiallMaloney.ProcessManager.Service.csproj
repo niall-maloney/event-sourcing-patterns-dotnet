@@ -17,4 +17,5 @@
         <ProjectReference Include="..\NiallMaloney.ProcessManager.Cassandra\NiallMaloney.ProcessManager.Cassandra.csproj"/>
     </ItemGroup>
 
+
 </Project>
