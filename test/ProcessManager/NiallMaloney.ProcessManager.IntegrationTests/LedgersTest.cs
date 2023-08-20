@@ -13,7 +13,10 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
 
-    public LedgersTest(WebApplicationFactory<Program> app) => _client = app.CreateClient();
+    public LedgersTest(WebApplicationFactory<Program> app)
+    {
+        _client = app.CreateClient();
+    }
 
     [Fact]
     public async Task Given_A_Booking_Request_When_Committed_Then_Balance_Is_Updated()

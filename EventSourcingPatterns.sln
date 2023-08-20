@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.IntegrationTests", "test\ProcessManager\NiallMaloney.ProcessManager.IntegrationTests\NiallMaloney.ProcessManager.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{AA9325F8-8D95-4F16-B5DB-CAB232D73930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.IntegrationTests", "test\SingleCurrentAggreagte\NiallMaloney.SingleCurrentAggregate.IntegrationTests\NiallMaloney.SingleCurrentAggregate.IntegrationTests.csproj", "{0E68A378-81D2-49B6-A254-CFE686552FF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +76,10 @@ Global
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
@@ -85,5 +93,7 @@ Global
 		{57299333-03C5-4472-8248-53DC3C23F6E5} = {2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}
 		{D74252AB-AAD8-49C4-A64F-2341DCFAC177} = {54AB39F2-5BB2-40D6-AD61-E7D2601C3205}
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF} = {D74252AB-AAD8-49C4-A64F-2341DCFAC177}
+		{AA9325F8-8D95-4F16-B5DB-CAB232D73930} = {54AB39F2-5BB2-40D6-AD61-E7D2601C3205}
+		{0E68A378-81D2-49B6-A254-CFE686552FF0} = {AA9325F8-8D95-4F16-B5DB-CAB232D73930}
 	EndGlobalSection
 EndGlobal

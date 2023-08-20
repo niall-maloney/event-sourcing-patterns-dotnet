@@ -44,8 +44,8 @@ public class ChargesController : ControllerBase
     public async Task<IActionResult> CreateCharge(ChargeDefinition definition)
     {
         var chargeId = Ids.NewChargeId();
-        await _mediator.Send(new AddCharge(chargeId, definition.Amount));
-        return Accepted(chargeId);
+        await _mediator.Send(new AddCharge(chargeId, definition.CustomerId, definition.Amount));
+        return Accepted(new ChargeReference(chargeId));
     }
 
     [HttpPost("{chargeId}/actions/remove")]
@@ -56,7 +56,7 @@ public class ChargesController : ControllerBase
         {
             return NotFound();
         }
-        await _mediator.Send(new RemoveCharge(chargeId, charge.BillingPeriodId!));
+        await _mediator.Send(new RemoveCharge(chargeId));
         return Accepted(chargeId);
     }
 }

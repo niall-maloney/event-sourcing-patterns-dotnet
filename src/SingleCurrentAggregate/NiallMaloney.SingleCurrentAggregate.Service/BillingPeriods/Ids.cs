@@ -9,4 +9,7 @@ public static class Ids
 
     public static string NewChargeId(params string[] idempotencyComponents) =>
         DeterministicIdFactory.NewId(idempotencyComponents);
+
+    public static string NewCustomerId(params string[] idempotencyComponents) =>
+        DeterministicIdFactory.NewId(idempotencyComponents);
 }

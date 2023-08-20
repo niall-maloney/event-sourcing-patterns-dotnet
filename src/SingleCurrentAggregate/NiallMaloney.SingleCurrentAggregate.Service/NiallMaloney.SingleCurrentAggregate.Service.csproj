@@ -18,4 +18,5 @@
         <ProjectReference Include="..\NiallMaloney.SingleCurrentAggregate.Cassandra\NiallMaloney.SingleCurrentAggregate.Cassandra.csproj"/>
     </ItemGroup>
 
+
 </Project>
