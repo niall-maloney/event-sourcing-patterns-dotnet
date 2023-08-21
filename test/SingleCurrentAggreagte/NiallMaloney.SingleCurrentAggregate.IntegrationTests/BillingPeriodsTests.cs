@@ -50,16 +50,74 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         var chargeReference = await AddCharge(customerId, amount);
         var chargeId = chargeReference.ChargeId;
 
-        var charge = await GetOrWaitForExpectedCharge(chargeId, expectedChargeStatus);
-        billingPeriod = await GetBillingPeriod(billingPeriodId);
-        billingPeriod.Should().NotBeNull();
-
         //Assert
+        var charge = await GetOrWaitForExpectedCharge(chargeId, expectedChargeStatus);
         charge.BillingPeriodId.Should().Be(billingPeriodId);
         charge.Amount.Should().Be(amount);
         charge.Status.Should().Be(expectedChargeStatus);
 
+        billingPeriod = await GetBillingPeriod(billingPeriodId);
+        billingPeriod.Should().NotBeNull();
         billingPeriod!.TotalAmount.Should().Be(amount);
+    }
+
+    [Fact]
+    public async Task Given_A_Charge_When_Removing_Charge_Then_Charge_Should_Be_Removed()
+    {
+        //Arrange
+        const decimal amount = 50m;
+        const string expectedChargeStatus = "Removed";
+
+        var customerReference = await AddCustomer();
+        var customerId = customerReference.CustomerId;
+
+        var billingPeriod = await GetOrWaitForSingleOpenBillingPeriod(customerId);
+        var billingPeriodId = billingPeriod.Id!;
+
+        var chargeReference = await AddCharge(customerId, amount);
+        var chargeId = chargeReference.ChargeId;
+        await GetOrWaitForExpectedCharge(chargeId, "Charged");
+
+        //Act
+        await RemoveCharge(chargeId);
+
+        //Assert
+        var charge = await GetOrWaitForExpectedCharge(chargeId, expectedChargeStatus);
+        charge.BillingPeriodId.Should().Be(billingPeriodId);
+        charge.Amount.Should().Be(amount);
+        charge.Status.Should().Be(expectedChargeStatus);
+
+        billingPeriod = await GetBillingPeriod(billingPeriodId);
+        billingPeriod.Should().NotBeNull();
+        billingPeriod!.TotalAmount.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task Given_An_Opening_Billing_Period_When_Closing_Then_A_New_Billing_Period_Is_Opened()
+    {
+        //Arrange
+        var customerReference = await AddCustomer();
+        var customerId = customerReference.CustomerId;
+
+        var firstBillingPeriod = await GetOrWaitForSingleOpenBillingPeriod(customerId);
+        var firstBillingPeriodId = firstBillingPeriod.Id!;
+
+        //Act
+        await CloseBillingPeriod(firstBillingPeriodId);
+        firstBillingPeriod = await GetOrWaitForExpectedBillingPeriod(firstBillingPeriodId, "Closed");
+        var secondBillingPeriod = await GetOrWaitForSingleOpenBillingPeriod(customerId);
+
+        //Assert
+        firstBillingPeriod.Status.Should().Be("Closed");
+        firstBillingPeriod.CustomerId.Should().Be(customerId);
+        firstBillingPeriod.TotalAmount.Should().Be(0);
+        firstBillingPeriod.Version.Should().Be(1);
+
+        secondBillingPeriod.Id.Should().NotBe(firstBillingPeriodId);
+        secondBillingPeriod.Status.Should().Be("Open");
+        secondBillingPeriod.CustomerId.Should().Be(customerId);
+        secondBillingPeriod.TotalAmount.Should().Be(0);
+        secondBillingPeriod.Version.Should().Be(0);
     }
 
     private async Task<BillingPeriod> GetOrWaitForSingleOpenBillingPeriod(string customerId)
@@ -70,14 +128,6 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         return billingPeriods.Single();
     }
 
-    private async Task<IEnumerable<BillingPeriod>> SearchBillingPeriods(string customerId, string status)
-    {
-        var getResponseMessage = await _client.GetAsync($"/billing-periods?customerId={customerId}&status={status}");
-        getResponseMessage.EnsureSuccessStatusCode();
-        return await getResponseMessage.Content.ReadFromJsonAsync<IEnumerable<BillingPeriod>>() ??
-               throw new InvalidOperationException();
-    }
-
     private async Task<BillingPeriod> GetOrWaitForExpectedBillingPeriod(
         string billingPeriodId,
         string? expectedStatus = null)
@@ -86,6 +136,14 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
             b => expectedStatus is null || b?.Status == expectedStatus);
         billingPeriod.Should().NotBeNull();
         return billingPeriod!;
+    }
+
+    private async Task<IEnumerable<BillingPeriod>> SearchBillingPeriods(string customerId, string status)
+    {
+        var getResponseMessage = await _client.GetAsync($"/billing-periods?customerId={customerId}&status={status}");
+        getResponseMessage.EnsureSuccessStatusCode();
+        return await getResponseMessage.Content.ReadFromJsonAsync<IEnumerable<BillingPeriod>>() ??
+               throw new InvalidOperationException();
     }
 
     private async Task<BillingPeriod?> GetBillingPeriod(string billingPeriodId)
@@ -114,16 +172,14 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         return reference!;
     }
 
-    private async Task<BillingPeriodReference> OpenBillingPeriod(bool assertSuccess = true)
+    private async Task CloseBillingPeriod(string billingPeriodId, bool assertSuccess = true)
     {
-        var postResponseMessage = await _client.PostAsJsonAsync("/billing-periods", new { });
+        var postResponseMessage =
+            await _client.PostAsJsonAsync($"/billing-periods/{billingPeriodId}/actions/close", new { });
         if (assertSuccess)
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
-        var reference = await postResponseMessage.Content.ReadFromJsonAsync<BillingPeriodReference>();
-        reference.Should().NotBeNull();
-        return reference!;
     }
 
     private async Task<Charge> GetOrWaitForExpectedCharge(
@@ -161,6 +217,15 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<ChargeReference>();
         reference.Should().NotBeNull();
         return reference!;
+    }
+
+    private async Task RemoveCharge(string chargeId, bool assertSuccess = true)
+    {
+        var postResponseMessage = await _client.PostAsJsonAsync($"/charges/{chargeId}/actions/remove", new { });
+        if (assertSuccess)
+        {
+            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+        }
     }
 
     private static async Task<T> RetryUntil<T>(
