@@ -23,6 +23,7 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(
         string? billingPeriodId = null,
+        string? customerId = null,
         string? status = null)
     {
         CqlQuery<BillingPeriodRow> billingPeriods = new Table<BillingPeriodRow>(_session);
@@ -31,7 +32,10 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         {
             billingPeriods = billingPeriods.Where(b => b.BillingPeriodId == billingPeriodId);
         }
-
+        if (!string.IsNullOrEmpty(customerId))
+        {
+            billingPeriods = billingPeriods.Where(b => b.CustomerId == customerId).AllowFiltering();
+        }
         if (!string.IsNullOrEmpty(status))
         {
             billingPeriods = billingPeriods.Where(b => b.Status == status).AllowFiltering();
@@ -46,8 +50,8 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
 
     private void CreateTables()
     {
-        //CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, status text, totalAmount decimal, version varint);
+        //CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, customerId text, status text, totalAmount decimal, version varint);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, status text, totalAmount decimal, version varint)");
+            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, customerId text, status text, totalAmount decimal, version varint)");
     }
 }

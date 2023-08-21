@@ -18,5 +18,5 @@ public class BillingPeriodsQueryHandlers : IRequestHandler<GetBillingPeriod, Bil
 
     public Task<IEnumerable<BillingPeriodRow>>
         Handle(SearchBillingPeriods request, CancellationToken cancellationToken) =>
-        _repository.SearchBillingPeriods(request.BillingPeriodId, request.Status);
+        _repository.SearchBillingPeriods(request.BillingPeriodId, request.CustomerId, request.Status);
 }

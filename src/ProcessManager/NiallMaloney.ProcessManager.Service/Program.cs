@@ -2,6 +2,7 @@ using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.ProcessManager.Cassandra;
 using NiallMaloney.ProcessManager.Service.Ledgers;
+using NiallMaloney.ProcessManager.Service.Ledgers.Projections;
 using NiallMaloney.Shared.Cassandra;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,8 @@ var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionS
 builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Value), new[] { executingAssembly });
 builder.Services.AddCassandraCursorRepository("process_manager");
 
-builder.Services.AddSingleton<ILedgersRepository, CassandraLedgersRepository>();
+builder.Services.AddCassandraRepositories();
+builder.Services.AddSubscriber<BookingsProjection>();
 builder.Services.AddSubscriber<LedgersProcessManager>();
 
 builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingAssembly); });
@@ -27,3 +29,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+// for tests
+public partial class Program
+{
+}

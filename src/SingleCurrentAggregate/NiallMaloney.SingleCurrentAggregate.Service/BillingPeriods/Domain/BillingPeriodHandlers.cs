@@ -26,7 +26,7 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
 
     public async Task Handle(AddCharge request, CancellationToken cancellationToken)
     {
-        var billingPeriodId = await GetCurrentBillingPeriodId();
+        var billingPeriodId = await GetCurrentBillingPeriodId(request.CustomerId);
         var billingPeriod = await _aggregateRepository.LoadAggregate<BillingPeriod>(billingPeriodId);
         billingPeriod.AddCharge(request.ChargeId, request.Amount);
         await _aggregateRepository.SaveAggregate(billingPeriod);
@@ -42,7 +42,7 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
     public async Task Handle(OpenBillingPeriod request, CancellationToken cancellationToken)
     {
         var billingPeriod = await _aggregateRepository.LoadAggregate<BillingPeriod>(request.BillingPeriodId);
-        billingPeriod.Open();
+        billingPeriod.Open(request.CustomerId);
         await _aggregateRepository.SaveAggregate(billingPeriod);
     }
 
@@ -58,9 +58,10 @@ public class BillingPeriodHandlers : IRequestHandler<OpenBillingPeriod>,
         await _aggregateRepository.SaveAggregate(billingPeriod);
     }
 
-    private async Task<string> GetCurrentBillingPeriodId()
+    private async Task<string> GetCurrentBillingPeriodId(string customerId)
     {
-        var rows = (await _billingPeriodsRepository.SearchBillingPeriods(status: "Open")).ToArray();
+        var rows = (await _billingPeriodsRepository.SearchBillingPeriods(customerId: customerId, status: "Open"))
+            .ToArray();
         return rows.Length switch
         {
             > 1 => throw new InvalidOperationException("Multiple open billing periods"),

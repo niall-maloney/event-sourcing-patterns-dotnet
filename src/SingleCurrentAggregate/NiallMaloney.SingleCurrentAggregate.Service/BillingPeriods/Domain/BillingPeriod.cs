@@ -8,6 +8,8 @@ public class BillingPeriod : Aggregate
 {
     private readonly Charges _charges = new();
     private bool _closed;
+    private string _customerId = string.Empty;
+
     private bool _opened;
 
     public BillingPeriod()
@@ -18,14 +20,19 @@ public class BillingPeriod : Aggregate
         When<ChargeRemoved>(Apply);
     }
 
-    public void Open()
+    public void Open(string customerId)
     {
         if (_opened)
         {
             return;
         }
 
-        RaiseEvent(new BillingPeriodOpened(Id));
+        if (string.IsNullOrEmpty(customerId))
+        {
+            throw new InvalidOperationException();
+        }
+
+        RaiseEvent(new BillingPeriodOpened(Id, customerId));
     }
 
     public void Close()
@@ -35,7 +42,7 @@ public class BillingPeriod : Aggregate
             return;
         }
 
-        RaiseEvent(new BillingPeriodClosed(Id, _charges.GetTotalAmount()));
+        RaiseEvent(new BillingPeriodClosed(Id, _customerId, _charges.GetTotalAmount()));
     }
 
     public void AddCharge(string chargeId, decimal amount)
@@ -64,6 +71,7 @@ public class BillingPeriod : Aggregate
     private void Apply(BillingPeriodOpened evnt)
     {
         _opened = true;
+        _customerId = evnt.CustomerId;
     }
 
     private void Apply(BillingPeriodClosed evnt)

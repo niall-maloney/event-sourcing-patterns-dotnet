@@ -10,6 +10,7 @@ public class CassandraMappings : Mappings
         For<BillingPeriodRow>()
             .TableName("billing_periods")
             .PartitionKey(u => u.BillingPeriodId)
+            .Column(u => u.CustomerId)
             .Column(u => u.Status)
             .Column(u => u.TotalAmount)
             .Column(u => u.Version, map => map.WithDbType<BigInteger>());

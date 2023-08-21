@@ -33,6 +33,7 @@ public class BillingPeriodsProjection : Projection
         await _repository.AddBillingPeriod(new BillingPeriodRow
         {
             BillingPeriodId = evnt.BillingPeriodId,
+            CustomerId = evnt.CustomerId,
             Status = "Open",
             TotalAmount = 0,
             Version = metadata.StreamPosition

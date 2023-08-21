@@ -1,3 +1,3 @@
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models;
 
-public record ChargeDefinition(decimal Amount);
+public record ChargeDefinition(string CustomerId, decimal Amount);

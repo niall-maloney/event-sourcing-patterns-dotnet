@@ -6,6 +6,7 @@ public interface IBillingPeriodsRepository
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(
         string? billingPeriodId = null,
+        string? customerId = null,
         string? status = null);
 
     public Task AddBillingPeriod(BillingPeriodRow billingPeriod);
