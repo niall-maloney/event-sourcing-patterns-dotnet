@@ -123,7 +123,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
     private async Task<BillingPeriod> GetOrWaitForSingleOpenBillingPeriod(string customerId)
     {
         var billingPeriods = await RetryUntil(
-            async () => await SearchBillingPeriods(customerId: customerId, status: "Open"),
+            async () => await SearchBillingPeriods(customerId, "Open"),
             b => b.Any());
         return billingPeriods.Single();
     }
