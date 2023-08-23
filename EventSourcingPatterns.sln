@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessManager", "{CBBE6F88-A883-4F32-9682-2CFA45183472}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Processor", "Processor", "{CBBE6F88-A883-4F32-9682-2CFA45183472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Service", "src\ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj", "{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Processor.Service", "src\Processor\NiallMaloney.Processor.Service\NiallMaloney.Processor.Service.csproj", "{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Cassandra", "src\ProcessManager\NiallMaloney.ProcessManager.Cassandra\NiallMaloney.ProcessManager.Cassandra.csproj", "{4E134E58-8170-4AED-8822-213585522605}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Processor.Cassandra", "src\Processor\NiallMaloney.Processor.Cassandra\NiallMaloney.Processor.Cassandra.csproj", "{4E134E58-8170-4AED-8822-213585522605}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB-BF47-4209-B7A0-F844230F0CEE}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,9 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{54AB39F2-5BB2-40D6-AD61-E7D2601C3205}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessManager", "{D74252AB-AAD8-49C4-A64F-2341DCFAC177}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Processor", "Processor", "{D74252AB-AAD8-49C4-A64F-2341DCFAC177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.IntegrationTests", "test\ProcessManager\NiallMaloney.ProcessManager.IntegrationTests\NiallMaloney.ProcessManager.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Processor.IntegrationTests", "test\Processor\NiallMaloney.Processor.IntegrationTests\NiallMaloney.Processor.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{AA9325F8-8D95-4F16-B5DB-CAB232D73930}"
 EndProject
