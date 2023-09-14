@@ -7,7 +7,7 @@ using NiallMaloney.ProcessManager.Service.Ledgers.Events;
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Projections;
 
 [SubscriberName("BookingsProjection")]
-[Subscription("$ce-processor.booking")]
+[Subscription("$ce-process_manager.booking")]
 public class BookingsProjection : Projection
 {
     private readonly IBookingsRepository _repository;

@@ -1,7 +1,6 @@
 using NiallMaloney.AggregateProcessManager.Service.Matching.Events;
 using NiallMaloney.AggregateProcessManager.Service.Payments.Events;
 using NiallMaloney.EventSourcing.Aggregates;
-using PaymentReserved = NiallMaloney.AggregateProcessManager.Service.Payments.Events.PaymentReserved;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Payments.Domain;
 
@@ -22,7 +21,7 @@ public class Payment : Aggregate
     public Payment()
     {
         When<PaymentReceived>(Apply);
-        When<PaymentReserved>(Apply);
+        When<PaymentMatching>(Apply);
         When<PaymentReleased>(Apply);
         When<PaymentMatched>(Apply);
         When<PaymentReservationRejected>(Apply);
@@ -47,7 +46,7 @@ public class Payment : Aggregate
         }
         else
         {
-            RaiseEvent(new PaymentReserved(Id, matchingId));
+            RaiseEvent(new PaymentMatching(Id, matchingId));
         }
     }
 
@@ -87,7 +86,7 @@ public class Payment : Aggregate
         Reference = evnt.Reference;
     }
 
-    private void Apply(PaymentReserved evnt)
+    private void Apply(PaymentMatching evnt)
     {
         _hasBeenReserved = true;
         MatchingId = evnt.MatchingId;

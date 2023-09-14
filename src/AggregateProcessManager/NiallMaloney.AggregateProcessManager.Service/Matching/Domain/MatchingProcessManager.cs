@@ -7,7 +7,6 @@ using NiallMaloney.AggregateProcessManager.Service.Payments.Commands;
 using NiallMaloney.AggregateProcessManager.Service.Payments.Events;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
-using PaymentReserved = NiallMaloney.AggregateProcessManager.Service.Payments.Events.PaymentReserved;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Matching.Domain;
 
@@ -42,7 +41,7 @@ public class MatchingProcessManager : SubscriberBase
 
         //payment events
         When<PaymentReceived>(Handle);
-        When<PaymentReserved>(Handle);
+        When<PaymentMatching>(Handle);
         When<PaymentMatched>(Handle);
     }
 
@@ -55,7 +54,7 @@ public class MatchingProcessManager : SubscriberBase
     private async Task Handle(PaymentReserving evnt, EventMetadata metadata) =>
         await _mediator.Send(new ReservePayment(evnt.PaymentId, evnt.MatchingId));
 
-    private async Task Handle(PaymentReserved evnt, EventMetadata metadata) =>
+    private async Task Handle(PaymentMatching evnt, EventMetadata metadata) =>
         await _mediator.Send(new AcknowledgePaymentReserved(evnt.MatchingId, evnt.PaymentId));
 
     private Task Handle(AggregateProcessManager.Service.Matching.Events.PaymentReserved evnt, EventMetadata metadata) => Task.CompletedTask;

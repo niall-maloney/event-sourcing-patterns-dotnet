@@ -3,7 +3,7 @@ using NiallMaloney.ProcessManager.Service.Ledgers.Events;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Domain;
 
-[Category("processor.booking")]
+[Category("process_manager.booking")]
 public class Booking : Aggregate
 {
     private bool _committed;
