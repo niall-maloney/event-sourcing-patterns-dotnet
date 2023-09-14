@@ -3,6 +3,7 @@ using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.Shared.Cassandra;
 using NiallMaloney.SingleCurrentAggregate.Cassandra;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods;
+using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Domain;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Val
 builder.Services.AddCassandraCursorRepository("single_current_aggregate");
 builder.Services.AddCassandraRepositories();
 
-builder.Services.AddSubscriber<BillingPeriodsProcessor>();
+builder.Services.AddSubscriber<BillingPeriodsProcessManager>();
 builder.Services.AddSubscriber<BillingPeriodsProjection>();
 builder.Services.AddSubscriber<ChargesProjection>();
 
