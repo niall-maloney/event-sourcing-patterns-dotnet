@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F67CFBF9-9AE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessManager", "{CBBE6F88-A883-4F32-9682-2CFA45183472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Service", "src\ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj", "{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Service", "ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj", "{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Cassandra", "src\ProcessManager\NiallMaloney.ProcessManager.Cassandra\NiallMaloney.ProcessManager.Cassandra.csproj", "{4E134E58-8170-4AED-8822-213585522605}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Cassandra", "ProcessManager\NiallMaloney.ProcessManager.Cassandra\NiallMaloney.ProcessManager.Cassandra.csproj", "{4E134E58-8170-4AED-8822-213585522605}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB-BF47-4209-B7A0-F844230F0CEE}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,29 +19,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{5337124F-4203-4550-9F2A-0BB26C03082E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Service", "src\SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Service\NiallMaloney.SingleCurrentAggregate.Service.csproj", "{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Service", "SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Service\NiallMaloney.SingleCurrentAggregate.Service.csproj", "{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.Cassandra", "src\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj", "{6A624084-583F-4368-B4E6-166E4FE6F971}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.Cassandra", "Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj", "{6A624084-583F-4368-B4E6-166E4FE6F971}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Cassandra", "src\SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Cassandra\NiallMaloney.SingleCurrentAggregate.Cassandra.csproj", "{77EB9F06-1981-4CF2-AD98-6F33112900F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Cassandra", "SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Cassandra\NiallMaloney.SingleCurrentAggregate.Cassandra.csproj", "{77EB9F06-1981-4CF2-AD98-6F33112900F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared", "src\Shared\NiallMaloney.Shared\NiallMaloney.Shared.csproj", "{57299333-03C5-4472-8248-53DC3C23F6E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared", "Shared\NiallMaloney.Shared\NiallMaloney.Shared.csproj", "{57299333-03C5-4472-8248-53DC3C23F6E5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{54AB39F2-5BB2-40D6-AD61-E7D2601C3205}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessManager", "{D74252AB-AAD8-49C4-A64F-2341DCFAC177}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.IntegrationTests", "test\ProcessManager\NiallMaloney.ProcessManager.IntegrationTests\NiallMaloney.ProcessManager.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{AA9325F8-8D95-4F16-B5DB-CAB232D73930}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.IntegrationTests", "test\SingleCurrentAggreagte\NiallMaloney.SingleCurrentAggregate.IntegrationTests\NiallMaloney.SingleCurrentAggregate.IntegrationTests.csproj", "{0E68A378-81D2-49B6-A254-CFE686552FF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.IntegrationTests", "ProcessManager\NiallMaloney.ProcessManager.IntegrationTests\NiallMaloney.ProcessManager.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AggregateProcessManager", "AggregateProcessManager", "{FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.AggregateProcessManager.Service", "src\AggregateProcessManager\NiallMaloney.AggregateProcessManager.Service\NiallMaloney.AggregateProcessManager.Service.csproj", "{194E4638-3316-4619-9840-30FD81C7EC53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.AggregateProcessManager.Service", "AggregateProcessManager\NiallMaloney.AggregateProcessManager.Service\NiallMaloney.AggregateProcessManager.Service.csproj", "{194E4638-3316-4619-9840-30FD81C7EC53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.IntegrationTests", "SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.IntegrationTests\NiallMaloney.SingleCurrentAggregate.IntegrationTests.csproj", "{494D60C5-785F-4036-82DA-A373BDEC6DC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,14 +74,14 @@ Global
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E68A378-81D2-49B6-A254-CFE686552FF0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{194E4638-3316-4619-9840-30FD81C7EC53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{194E4638-3316-4619-9840-30FD81C7EC53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194E4638-3316-4619-9840-30FD81C7EC53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{194E4638-3316-4619-9840-30FD81C7EC53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
@@ -99,11 +93,9 @@ Global
 		{6A624084-583F-4368-B4E6-166E4FE6F971} = {2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}
 		{77EB9F06-1981-4CF2-AD98-6F33112900F3} = {5337124F-4203-4550-9F2A-0BB26C03082E}
 		{57299333-03C5-4472-8248-53DC3C23F6E5} = {2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}
-		{D74252AB-AAD8-49C4-A64F-2341DCFAC177} = {54AB39F2-5BB2-40D6-AD61-E7D2601C3205}
-		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF} = {D74252AB-AAD8-49C4-A64F-2341DCFAC177}
-		{AA9325F8-8D95-4F16-B5DB-CAB232D73930} = {54AB39F2-5BB2-40D6-AD61-E7D2601C3205}
-		{0E68A378-81D2-49B6-A254-CFE686552FF0} = {AA9325F8-8D95-4F16-B5DB-CAB232D73930}
 		{FF9E080D-0BAD-4A74-8617-AA88DC25BAFE} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
 		{194E4638-3316-4619-9840-30FD81C7EC53} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
+		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF} = {CBBE6F88-A883-4F32-9682-2CFA45183472}
+		{494D60C5-785F-4036-82DA-A373BDEC6DC2} = {5337124F-4203-4550-9F2A-0BB26C03082E}
 	EndGlobalSection
 EndGlobal
