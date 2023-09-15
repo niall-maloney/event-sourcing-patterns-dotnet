@@ -1,4 +1,3 @@
-using NiallMaloney.AggregateProcessManager.Service.Matching.Events;
 using NiallMaloney.AggregateProcessManager.Service.Payments.Events;
 using NiallMaloney.EventSourcing.Aggregates;
 
@@ -24,7 +23,7 @@ public class Payment : Aggregate
         When<PaymentMatching>(Apply);
         When<PaymentReleased>(Apply);
         When<PaymentMatched>(Apply);
-        When<PaymentReservationRejected>(Apply);
+        When<PaymentMatchRejected>(Apply);
     }
 
 
@@ -42,7 +41,7 @@ public class Payment : Aggregate
     {
         if (_hasBeenReserved || _hasBeenMatched)
         {
-            RaiseEvent(new PaymentReservationRejected(Id, matchingId));
+            RaiseEvent(new PaymentMatchRejected(Id, matchingId));
         }
         else
         {
@@ -104,7 +103,7 @@ public class Payment : Aggregate
         ExpectationId = evnt.ExpectationId;
     }
 
-    private void Apply(PaymentReservationRejected evnt)
+    private void Apply(PaymentMatchRejected evnt)
     {
     }
 }

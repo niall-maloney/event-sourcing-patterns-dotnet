@@ -21,6 +21,7 @@ public class Expectation : Aggregate
         When<ExpectationCreated>(Apply);
         When<ExpectationMatching>(Apply);
         When<ExpectationMatched>(Apply);
+        When<ExpectationMatchRejected>(Apply);
     }
 
     public void Receive(string iban, decimal amount, string reference)
@@ -79,5 +80,9 @@ public class Expectation : Aggregate
     {
         _hasBeenMatched = true;
         Payment = evnt.PaymentId;
+    }
+
+    private void Apply(ExpectationMatchRejected evnt)
+    {
     }
 }

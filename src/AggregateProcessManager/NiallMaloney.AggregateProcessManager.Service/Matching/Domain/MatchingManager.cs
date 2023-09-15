@@ -49,6 +49,11 @@ public class MatchingManager : Aggregate
         RaiseEvent(new PaymentReserved(Id, _payment!.Id));
     }
 
+    public void AcknowledgePaymentReservationRejected()
+    {
+        RaiseEvent(new PaymentReservationRejected(Id, _payment!.Id));
+    }
+
     public void ReserveExpectation()
     {
         RaiseEvent(new ExpectationReserving(Id, _expectation!.Id));
@@ -57,6 +62,11 @@ public class MatchingManager : Aggregate
     public void AcknowledgeExpectationReserved()
     {
         RaiseEvent(new ExpectationReserved(Id, _expectation!.Id));
+    }
+
+    public void AcknowledgeExpectationReservationRejected()
+    {
+        RaiseEvent(new ExpectationReservationRejected(Id, _expectation!.Id, _payment!.Id));
     }
 
     public void ApplyPaymentMatch()
@@ -84,9 +94,9 @@ public class MatchingManager : Aggregate
         RaiseEvent(new MatchingCompleted(Id));
     }
 
-    public void Fail()
+    public void Fail(string reason)
     {
-        RaiseEvent(new MatchingFailed(Id));
+        RaiseEvent(new MatchingFailed(Id, reason));
     }
 
     private void Apply(MatchingStarted evnt)

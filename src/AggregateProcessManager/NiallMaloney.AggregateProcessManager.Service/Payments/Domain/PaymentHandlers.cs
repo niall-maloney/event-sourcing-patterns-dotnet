@@ -6,7 +6,8 @@ namespace NiallMaloney.AggregateProcessManager.Service.Payments.Domain;
 
 public class PaymentHandlers : IRequestHandler<ReceivePayment>,
     IRequestHandler<ReservePayment>,
-    IRequestHandler<MatchPayment>
+    IRequestHandler<MatchPayment>,
+    IRequestHandler<ReleasePayment>
 {
     private readonly AggregateRepository _repository;
 
@@ -33,6 +34,13 @@ public class PaymentHandlers : IRequestHandler<ReceivePayment>,
     {
         var payment = await _repository.LoadAggregate<Payment>(request.PaymentId);
         payment.Match(request.MatchingId, request.ExpectationId);
+        await _repository.SaveAggregate(payment);
+    }
+
+    public async Task Handle(ReleasePayment request, CancellationToken cancellationToken)
+    {
+        var payment = await _repository.LoadAggregate<Payment>(request.PaymentId);
+        payment.Release(request.MatchingId);
         await _repository.SaveAggregate(payment);
     }
 }
