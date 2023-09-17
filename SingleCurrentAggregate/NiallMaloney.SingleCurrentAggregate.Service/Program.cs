@@ -11,7 +11,7 @@ var executingAssembly = typeof(Program).Assembly;
 
 var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionString");
 builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Value), new[] { executingAssembly });
-builder.Services.AddCassandraCursorRepository("single_current_aggregate");
+builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
 builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<BillingPeriodsProcessManager>();

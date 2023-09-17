@@ -12,7 +12,7 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
     public CassandraBillingPeriodsRepository()
     {
         var cluster = Cluster.Builder().AddContactPoint("localhost").WithPort(9042).Build();
-        _session = cluster.Connect("single_current_aggregate");
+        _session = cluster.Connect(Configuration.Keyspace);
         _mapper = new Mapper(_session);
         CreateTables();
     }

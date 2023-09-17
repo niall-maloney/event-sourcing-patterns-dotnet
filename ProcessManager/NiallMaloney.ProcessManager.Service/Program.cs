@@ -10,7 +10,7 @@ var executingAssembly = typeof(NiallMaloney.ProcessManager.Service.Program).Asse
 
 var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionString");
 builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Value), new[] { executingAssembly });
-builder.Services.AddCassandraCursorRepository("process_manager");
+builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
 
 builder.Services.AddCassandraRepositories();
 builder.Services.AddSubscriber<BookingsProjection>();
