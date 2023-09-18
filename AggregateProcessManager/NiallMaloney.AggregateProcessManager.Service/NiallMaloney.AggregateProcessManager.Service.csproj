@@ -15,6 +15,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj" />
     <ProjectReference Include="..\..\Shared\NiallMaloney.Shared\NiallMaloney.Shared.csproj" />
+    <ProjectReference Include="..\NiallMaloney.AggregateProcessManager.Cassandra\NiallMaloney.AggregateProcessManager.Cassandra.csproj" />
+
+
+
+
   </ItemGroup>
 
 

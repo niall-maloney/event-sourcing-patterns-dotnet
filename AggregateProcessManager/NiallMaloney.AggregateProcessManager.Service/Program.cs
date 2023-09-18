@@ -1,4 +1,7 @@
+using NiallMaloney.AggregateProcessManager.Cassandra;
+using NiallMaloney.AggregateProcessManager.Service.Expectations.Projections;
 using NiallMaloney.AggregateProcessManager.Service.Matching.Domain;
+using NiallMaloney.AggregateProcessManager.Service.Payments.Projections;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.Shared.Cassandra;
@@ -8,10 +11,12 @@ var executingAssembly = typeof(Program).Assembly;
 
 var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionString");
 builder.Services.AddEventStore(new EventStoreClientOptions(eventStoreSection.Value), new[] { executingAssembly });
-builder.Services.AddCassandraCursorRepository("aggregate_process_manager");
-// builder.Services.AddCassandraRepositories();
+builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
+builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<MatchingProcessManager>();
+builder.Services.AddSubscriber<PaymentsProjection>();
+builder.Services.AddSubscriber<ExpectationsProjection>();
 
 builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingAssembly); });
 

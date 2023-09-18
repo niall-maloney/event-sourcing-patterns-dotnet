@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.AggregateProcessManager.Service.Expectations.Commands;
 using NiallMaloney.AggregateProcessManager.Service.Expectations.Controllers.Models;
+using NiallMaloney.AggregateProcessManager.Service.Expectations.Queries;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Expectations.Controllers;
 
@@ -16,6 +17,29 @@ public class ExpectationsController : ControllerBase
     {
         _logger = logger;
         _mediator = mediator;
+    }
+
+    [HttpGet("{expectationId}")]
+    public async Task<IActionResult> GetExpectation([FromRoute] string expectationId)
+    {
+        var row = await _mediator.Send(new GetExpectation(expectationId));
+        if (row is null)
+        {
+            return NotFound();
+        }
+        return Ok(Expectation.Map(row));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchExpectations(
+        [FromQuery] string? expectationId = null,
+        [FromQuery] string? iban = null,
+        [FromQuery] decimal? amount = null,
+        [FromQuery] string? reference = null,
+        [FromQuery] string? status = null)
+    {
+        var rows = await _mediator.Send(new SearchExpectations(expectationId, iban, amount, reference, status));
+        return Ok(Expectation.Map(rows));
     }
 
     [HttpPost]

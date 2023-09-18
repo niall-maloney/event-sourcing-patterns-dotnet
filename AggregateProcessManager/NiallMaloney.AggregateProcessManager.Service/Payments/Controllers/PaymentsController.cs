@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NiallMaloney.AggregateProcessManager.Service.Payments.Commands;
 using NiallMaloney.AggregateProcessManager.Service.Payments.Controllers.Models;
+using NiallMaloney.AggregateProcessManager.Service.Payments.Queries;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Payments.Controllers;
 
@@ -16,6 +17,29 @@ public class PaymentsController : ControllerBase
     {
         _logger = logger;
         _mediator = mediator;
+    }
+
+    [HttpGet("{paymentId}")]
+    public async Task<IActionResult> GetPayment([FromRoute] string paymentId)
+    {
+        var row = await _mediator.Send(new GetPayment(paymentId));
+        if (row is null)
+        {
+            return NotFound();
+        }
+        return Ok(Payment.Map(row));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchPayments(
+        [FromQuery] string? paymentId = null,
+        [FromQuery] string? iban = null,
+        [FromQuery] decimal? amount = null,
+        [FromQuery] string? reference = null,
+        [FromQuery] string? status = null)
+    {
+        var rows = await _mediator.Send(new SearchPayments(paymentId, iban, amount, reference, status));
+        return Ok(Payment.Map(rows));
     }
 
     [HttpPost]

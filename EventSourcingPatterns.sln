@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.AggregateProce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.IntegrationTests", "SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.IntegrationTests\NiallMaloney.SingleCurrentAggregate.IntegrationTests.csproj", "{494D60C5-785F-4036-82DA-A373BDEC6DC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.AggregateProcessManager.Cassandra", "AggregateProcessManager\NiallMaloney.AggregateProcessManager.Cassandra\NiallMaloney.AggregateProcessManager.Cassandra.csproj", "{E2B47D75-1A4D-4554-8930-C1906CFE2749}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{494D60C5-785F-4036-82DA-A373BDEC6DC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2B47D75-1A4D-4554-8930-C1906CFE2749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2B47D75-1A4D-4554-8930-C1906CFE2749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2B47D75-1A4D-4554-8930-C1906CFE2749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2B47D75-1A4D-4554-8930-C1906CFE2749}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
@@ -97,5 +103,6 @@ Global
 		{194E4638-3316-4619-9840-30FD81C7EC53} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
 		{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF} = {CBBE6F88-A883-4F32-9682-2CFA45183472}
 		{494D60C5-785F-4036-82DA-A373BDEC6DC2} = {5337124F-4203-4550-9F2A-0BB26C03082E}
+		{E2B47D75-1A4D-4554-8930-C1906CFE2749} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
 	EndGlobalSection
 EndGlobal
