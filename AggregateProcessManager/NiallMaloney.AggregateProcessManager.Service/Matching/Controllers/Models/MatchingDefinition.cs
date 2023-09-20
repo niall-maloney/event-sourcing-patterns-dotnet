@@ -5,4 +5,5 @@ public record MatchingDefinition(
     string PaymentId,
     string Iban,
     decimal Amount,
-    string Reference);
+    string Reference
+);

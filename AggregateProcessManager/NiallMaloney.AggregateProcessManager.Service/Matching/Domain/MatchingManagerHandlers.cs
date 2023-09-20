@@ -4,14 +4,15 @@ using NiallMaloney.EventSourcing.Aggregates;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Matching.Domain;
 
-public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
-    IRequestHandler<AcknowledgePaymentReserved>,
-    IRequestHandler<AcknowledgePaymentReservationRejected>,
-    IRequestHandler<AcknowledgeExpectationReserved>,
-    IRequestHandler<AcknowledgeExpectationReservationRejected>,
-    IRequestHandler<AcknowledgePaymentMatched>,
-    IRequestHandler<AcknowledgeExpectationMatched>,
-    IRequestHandler<AcknowledgePaymentReservationFailed>
+public class MatchingManagerHandlers
+    : IRequestHandler<BeginMatching>,
+        IRequestHandler<AcknowledgePaymentReserved>,
+        IRequestHandler<AcknowledgePaymentReservationRejected>,
+        IRequestHandler<AcknowledgeExpectationReserved>,
+        IRequestHandler<AcknowledgeExpectationReservationRejected>,
+        IRequestHandler<AcknowledgePaymentMatched>,
+        IRequestHandler<AcknowledgeExpectationMatched>,
+        IRequestHandler<AcknowledgePaymentReservationFailed>
 {
     private readonly AggregateRepository _repository;
 
@@ -23,12 +24,21 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
     public async Task Handle(BeginMatching request, CancellationToken cancellationToken)
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
-        manager.Begin(request.ExpectationId, request.PaymentId, request.Iban, request.Amount, request.Reference);
+        manager.Begin(
+            request.ExpectationId,
+            request.PaymentId,
+            request.Iban,
+            request.Amount,
+            request.Reference
+        );
         manager.ReservePayment();
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgePaymentReserved request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgePaymentReserved request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.AcknowledgePaymentReserved();
@@ -36,7 +46,10 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgePaymentReservationRejected request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgePaymentReservationRejected request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.AcknowledgePaymentReservationRejected();
@@ -44,7 +57,10 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgeExpectationReserved request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgeExpectationReserved request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.AcknowledgeExpectationReserved();
@@ -52,7 +68,10 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgeExpectationReservationRejected request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgeExpectationReservationRejected request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.AcknowledgeExpectationReservationRejected();
@@ -68,7 +87,10 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgeExpectationMatched request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgeExpectationMatched request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.AcknowledgeExpectationApplied();
@@ -76,7 +98,10 @@ public class MatchingManagerHandlers : IRequestHandler<BeginMatching>,
         await _repository.SaveAggregate(manager);
     }
 
-    public async Task Handle(AcknowledgePaymentReservationFailed request, CancellationToken cancellationToken)
+    public async Task Handle(
+        AcknowledgePaymentReservationFailed request,
+        CancellationToken cancellationToken
+    )
     {
         var manager = await _repository.LoadAggregate<MatchingManager>(request.MatchingId);
         manager.Fail(request.Reason);

@@ -16,7 +16,6 @@ public class Payment : Aggregate
     private bool _hasBeenReserved = false;
     private bool _hasBeenMatched = false;
 
-
     public Payment()
     {
         When<PaymentReceived>(Apply);
@@ -25,7 +24,6 @@ public class Payment : Aggregate
         When<PaymentMatched>(Apply);
         When<PaymentMatchRejected>(Apply);
     }
-
 
     public void Receive(string iban, decimal amount, string reference)
     {
@@ -103,7 +101,5 @@ public class Payment : Aggregate
         ExpectationId = evnt.ExpectationId;
     }
 
-    private void Apply(PaymentMatchRejected evnt)
-    {
-    }
+    private void Apply(PaymentMatchRejected evnt) { }
 }

@@ -31,15 +31,17 @@ public class PaymentsProjection : Projection
             return;
         }
 
-        await _repository.AddPayment(new PaymentRow
-        {
-            PaymentId = evnt.PaymentId,
-            Iban = evnt.Iban,
-            Amount = evnt.Amount,
-            Reference = evnt.Reference,
-            Status = "Received",
-            Version = metadata.StreamPosition
-        });
+        await _repository.AddPayment(
+            new PaymentRow
+            {
+                PaymentId = evnt.PaymentId,
+                Iban = evnt.Iban,
+                Amount = evnt.Amount,
+                Reference = evnt.Reference,
+                Status = "Received",
+                Version = metadata.StreamPosition
+            }
+        );
     }
 
     private async Task Handle(PaymentMatching evnt, EventMetadata metadata)
@@ -50,13 +52,9 @@ public class PaymentsProjection : Projection
             return;
         }
 
-        payment = payment with
-        {
-            Status = "Reserved"
-        };
+        payment = payment with { Status = "Reserved" };
         await _repository.UpdatePayment(payment);
     }
-
 
     private async Task Handle(PaymentReleased evnt, EventMetadata metadata)
     {
@@ -66,10 +64,7 @@ public class PaymentsProjection : Projection
             return;
         }
 
-        payment = payment with
-        {
-            Status = "Received"
-        };
+        payment = payment with { Status = "Received" };
         await _repository.UpdatePayment(payment);
     }
 
@@ -81,10 +76,7 @@ public class PaymentsProjection : Projection
             return;
         }
 
-        payment = payment with
-        {
-            Status = "Matched"
-        };
+        payment = payment with { Status = "Matched" };
         await _repository.UpdatePayment(payment);
     }
 
@@ -99,10 +91,7 @@ public class PaymentsProjection : Projection
         await _repository.UpdatePayment(payment);
     }
 
-    private bool TryUpdateVersion(
-        PaymentRow payment,
-        ulong newVersion,
-        out PaymentRow newPayment)
+    private bool TryUpdateVersion(PaymentRow payment, ulong newVersion, out PaymentRow newPayment)
     {
         var expectedVersion = newVersion - 1;
         var actualVersion = payment.Version;
@@ -113,12 +102,11 @@ public class PaymentsProjection : Projection
         }
         if (actualVersion != expectedVersion)
         {
-            throw new InvalidOperationException($"Version mismatch, expected {expectedVersion} actual {actualVersion}");
+            throw new InvalidOperationException(
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+            );
         }
-        newPayment = payment with
-        {
-            Version = newVersion
-        };
+        newPayment = payment with { Version = newVersion };
         return true;
     }
 }

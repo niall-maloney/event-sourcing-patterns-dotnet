@@ -12,7 +12,10 @@ public class ChargesProjection : Projection
 {
     private readonly IChargesRepository _repository;
 
-    public ChargesProjection(ILogger<BillingPeriodsProjection> logger, IChargesRepository repository)
+    public ChargesProjection(
+        ILogger<BillingPeriodsProjection> logger,
+        IChargesRepository repository
+    )
     {
         _repository = repository;
 
@@ -27,14 +30,16 @@ public class ChargesProjection : Projection
         {
             return;
         }
-        await _repository.AddCharge(new ChargeRow
-        {
-            ChargeId = evnt.ChargeId,
-            BillingPeriodId = evnt.BillingPeriodId,
-            Amount = evnt.Amount,
-            Status = "Charged",
-            Version = metadata.StreamPosition
-        });
+        await _repository.AddCharge(
+            new ChargeRow
+            {
+                ChargeId = evnt.ChargeId,
+                BillingPeriodId = evnt.BillingPeriodId,
+                Amount = evnt.Amount,
+                Status = "Charged",
+                Version = metadata.StreamPosition
+            }
+        );
     }
 
     private async Task Handle(ChargeRemoved evnt, EventMetadata metadata)
@@ -44,17 +49,11 @@ public class ChargesProjection : Projection
         {
             return;
         }
-        charge = charge with
-        {
-            Status = "Removed"
-        };
+        charge = charge with { Status = "Removed" };
         await _repository.UpdateCharge(charge);
     }
 
-    private bool TryUpdateVersion(
-        ChargeRow charge,
-        ulong newVersion,
-        out ChargeRow newCharge)
+    private bool TryUpdateVersion(ChargeRow charge, ulong newVersion, out ChargeRow newCharge)
     {
         var expectedVersion = newVersion - 1;
         var actualVersion = charge.Version;
@@ -65,12 +64,11 @@ public class ChargesProjection : Projection
         }
         if (actualVersion != expectedVersion)
         {
-            throw new InvalidOperationException($"Version mismatch, expected {expectedVersion} actual {actualVersion}");
+            throw new InvalidOperationException(
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+            );
         }
-        newCharge = charge with
-        {
-            Version = newVersion
-        };
+        newCharge = charge with { Version = newVersion };
         return true;
     }
 }

@@ -18,7 +18,8 @@ public class LedgersProcessManager : SubscriberBase
     public LedgersProcessManager(
         ILogger<LedgersProcessManager> logger,
         ILedgersRepository repository,
-        IMediator mediator)
+        IMediator mediator
+    )
     {
         _logger = logger;
         _repository = repository;
@@ -40,8 +41,11 @@ public class LedgersProcessManager : SubscriberBase
         var lastStreamPosition = row?.LastStreamPosition;
         if (lastStreamPosition >= newStreamPosition)
         {
-            _logger.LogInformation("Event already processed. Last stream position: ({0}), Event stream position: ({1})",
-                lastStreamPosition, newStreamPosition);
+            _logger.LogInformation(
+                "Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                lastStreamPosition,
+                newStreamPosition
+            );
             return;
         }
 
@@ -52,7 +56,12 @@ public class LedgersProcessManager : SubscriberBase
         var newBalance = currentCommittedBalance + newPendingBalance;
         if (newBalance >= 0)
         {
-            await _repository.UpdatePendingBalance(ledger, newPendingBalance, newStreamPosition, lastStreamPosition);
+            await _repository.UpdatePendingBalance(
+                ledger,
+                newPendingBalance,
+                newStreamPosition,
+                lastStreamPosition
+            );
             await _mediator.Send(new CommitBooking(bookingId, newBalance));
         }
         else
@@ -73,8 +82,11 @@ public class LedgersProcessManager : SubscriberBase
         var lastStreamPosition = row?.LastStreamPosition;
         if (lastStreamPosition >= newStreamPosition)
         {
-            _logger.LogInformation("Event already processed. Last stream position: ({0}), Event stream position: ({1})",
-                lastStreamPosition, newStreamPosition);
+            _logger.LogInformation(
+                "Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                lastStreamPosition,
+                newStreamPosition
+            );
             return;
         }
 
@@ -84,7 +96,12 @@ public class LedgersProcessManager : SubscriberBase
         var newPendingBalance = currentPendingBalance - amount;
         var newCommittedBalance = currentCommittedBalance + amount;
 
-        await _repository.UpdateBalance(ledger, newPendingBalance, newCommittedBalance, newStreamPosition,
-            lastStreamPosition);
+        await _repository.UpdateBalance(
+            ledger,
+            newPendingBalance,
+            newCommittedBalance,
+            newStreamPosition,
+            lastStreamPosition
+        );
     }
 }

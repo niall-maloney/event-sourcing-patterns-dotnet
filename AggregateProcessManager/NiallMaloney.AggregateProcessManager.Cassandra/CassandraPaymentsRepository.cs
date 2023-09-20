@@ -21,7 +21,8 @@ public class CassandraPaymentsRepository : IPaymentsRepository
     {
         //CREATE TABLE IF NOT EXISTS payments ( paymentId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS payments ( paymentId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)");
+            "CREATE TABLE IF NOT EXISTS payments ( paymentId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)"
+        );
     }
 
     public Task AddPayment(PaymentRow payment) => _mapper.InsertAsync(payment);
@@ -29,15 +30,18 @@ public class CassandraPaymentsRepository : IPaymentsRepository
     public Task UpdatePayment(PaymentRow payment) => _mapper.UpdateAsync(payment);
 
     public Task<PaymentRow?> GetPayment(string paymentId) =>
-        _mapper.SingleOrDefaultAsync<PaymentRow?>("SELECT * FROM payments where paymentId=?",
-            paymentId);
+        _mapper.SingleOrDefaultAsync<PaymentRow?>(
+            "SELECT * FROM payments where paymentId=?",
+            paymentId
+        );
 
     public Task<IEnumerable<PaymentRow>> SearchPayments(
         string? paymentId = null,
         string? iban = null,
         decimal? amount = null,
         string? reference = null,
-        string? status = null)
+        string? status = null
+    )
     {
         CqlQuery<PaymentRow> payments = new Table<PaymentRow>(_session);
 

@@ -34,7 +34,13 @@ public class MatchingManager : Aggregate
         When<MatchingFailed>(Apply);
     }
 
-    public void Begin(string expectationId, string paymentId, string iban, decimal amount, string reference)
+    public void Begin(
+        string expectationId,
+        string paymentId,
+        string iban,
+        decimal amount,
+        string reference
+    )
     {
         RaiseEvent(new MatchingStarted(Id, expectationId, paymentId, iban, amount, reference));
     }
@@ -106,9 +112,7 @@ public class MatchingManager : Aggregate
         _expectation = new Expectation(evnt.ExpectationId, evnt.Iban, evnt.Amount, evnt.Reference);
     }
 
-    private void Apply(ExpectationReserving evnt)
-    {
-    }
+    private void Apply(ExpectationReserving evnt) { }
 
     private void Apply(ExpectationReserved evnt)
     {
@@ -120,9 +124,7 @@ public class MatchingManager : Aggregate
         _expectation = null;
     }
 
-    private void Apply(PaymentReserving evnt)
-    {
-    }
+    private void Apply(PaymentReserving evnt) { }
 
     private void Apply(PaymentReserved evnt)
     {
@@ -134,19 +136,14 @@ public class MatchingManager : Aggregate
         _payment = null;
     }
 
-    private void Apply(ExpectationMatchApplying evnt)
-    {
-    }
+    private void Apply(ExpectationMatchApplying evnt) { }
 
     private void Apply(ExpectationMatchApplied evnt)
     {
         _expectation = _expectation! with { IsMatched = true };
     }
 
-
-    private void Apply(PaymentMatchApplying evnt)
-    {
-    }
+    private void Apply(PaymentMatchApplying evnt) { }
 
     private void Apply(PaymentMatchApplied evnt)
     {

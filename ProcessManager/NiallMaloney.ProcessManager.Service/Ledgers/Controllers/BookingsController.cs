@@ -42,7 +42,8 @@ public class BookingsController : ControllerBase
     public async Task<IActionResult> SearchBookings(
         [FromQuery] string? bookingId = null,
         [FromQuery] string? ledger = null,
-        [FromQuery] string? status = null)
+        [FromQuery] string? status = null
+    )
     {
         var bookings = await _mediator.Send(new SearchBookings(bookingId, ledger, status));
         return Ok(Booking.Map(bookings));

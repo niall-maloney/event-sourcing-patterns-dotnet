@@ -4,9 +4,10 @@ using NiallMaloney.ProcessManager.Service.Ledgers.Commands;
 
 namespace NiallMaloney.ProcessManager.Service.Ledgers.Domain;
 
-public class BookingHandlers : IRequestHandler<RequestBooking>,
-    IRequestHandler<CommitBooking>,
-    IRequestHandler<RejectBooking>
+public class BookingHandlers
+    : IRequestHandler<RequestBooking>,
+        IRequestHandler<CommitBooking>,
+        IRequestHandler<RejectBooking>
 {
     private readonly AggregateRepository _aggregateRepository;
 

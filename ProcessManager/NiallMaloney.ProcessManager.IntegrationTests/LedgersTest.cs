@@ -77,9 +77,13 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
     private async Task<BookingReference> RequestBooking(
         string ledger = "john:gbp",
         decimal amount = 100,
-        bool assertSuccess = true)
+        bool assertSuccess = true
+    )
     {
-        var postResponseMessage = await _client.PostAsJsonAsync("/bookings", new { Ledger = ledger, Amount = amount });
+        var postResponseMessage = await _client.PostAsJsonAsync(
+            "/bookings",
+            new { Ledger = ledger, Amount = amount }
+        );
         if (assertSuccess)
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
@@ -89,10 +93,15 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
         return reference!;
     }
 
-    private async Task<Booking> GetOrWaitForExpectedBooking(string bookingId, string? expectedStatus = null)
+    private async Task<Booking> GetOrWaitForExpectedBooking(
+        string bookingId,
+        string? expectedStatus = null
+    )
     {
-        var booking = await RetryUntil(async () => await GetBooking(bookingId),
-            b => expectedStatus is null || b?.Status == expectedStatus);
+        var booking = await RetryUntil(
+            async () => await GetBooking(bookingId),
+            b => expectedStatus is null || b?.Status == expectedStatus
+        );
         booking.Should().NotBeNull();
         return booking!;
     }
@@ -122,8 +131,13 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
         Func<Task<T>> action,
         Func<T, bool> retryUntilPredicate,
         int retryCount = 50,
-        int sleepDurationInMilliseconds = 100) =>
-        await Policy.HandleResult<T>(r => !retryUntilPredicate.Invoke(r))
-            .WaitAndRetryAsync(retryCount, _ => TimeSpan.FromMilliseconds(sleepDurationInMilliseconds))
+        int sleepDurationInMilliseconds = 100
+    ) =>
+        await Policy
+            .HandleResult<T>(r => !retryUntilPredicate.Invoke(r))
+            .WaitAndRetryAsync(
+                retryCount,
+                _ => TimeSpan.FromMilliseconds(sleepDurationInMilliseconds)
+            )
             .ExecuteAsync(action);
 }

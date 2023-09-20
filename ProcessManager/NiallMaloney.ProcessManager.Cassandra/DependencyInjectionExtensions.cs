@@ -8,7 +8,8 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddCassandraRepositories(this IServiceCollection services)
     {
         MappingConfiguration.Global.Define<CassandraMappings>();
-        return services.AddSingleton<ILedgersRepository, CassandraLedgersRepository>()
+        return services
+            .AddSingleton<ILedgersRepository, CassandraLedgersRepository>()
             .AddSingleton<IBookingsRepository, CassandraBookingRepository>();
     }
 }

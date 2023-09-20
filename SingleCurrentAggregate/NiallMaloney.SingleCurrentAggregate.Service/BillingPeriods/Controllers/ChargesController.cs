@@ -34,7 +34,8 @@ public class ChargesController : ControllerBase
     public async Task<IActionResult> SearchCharges(
         [FromQuery] string? chargeId = null,
         [FromQuery] string? billingPeriodId = null,
-        [FromQuery] string? status = null)
+        [FromQuery] string? status = null
+    )
     {
         var charges = await _mediator.Send(new SearchCharges(chargeId, billingPeriodId, status));
         return Ok(Charge.Map(charges));

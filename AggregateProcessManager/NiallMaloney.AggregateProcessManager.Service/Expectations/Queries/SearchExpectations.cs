@@ -8,4 +8,5 @@ public record SearchExpectations(
     string? Iban = null,
     decimal? Amount = null,
     string? Reference = null,
-    string? Status = null) : IRequest<IEnumerable<ExpectationRow>>;
+    string? Status = null
+) : IRequest<IEnumerable<ExpectationRow>>;

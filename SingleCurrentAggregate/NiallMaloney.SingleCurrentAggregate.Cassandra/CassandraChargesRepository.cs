@@ -23,7 +23,8 @@ public class CassandraChargesRepository : IChargesRepository
     public Task<IEnumerable<ChargeRow>> SearchCharges(
         string? chargeId = null,
         string? billingPeriodId = null,
-        string? status = null)
+        string? status = null
+    )
     {
         CqlQuery<ChargeRow> charges = new Table<ChargeRow>(_session);
 
@@ -53,6 +54,7 @@ public class CassandraChargesRepository : IChargesRepository
     {
         //CREATE TABLE IF NOT EXISTS charges ( chargeId text PRIMARY KEY, billingPeriodId text, status text, amount decimal, version varint);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS charges ( chargeId text PRIMARY KEY, billingPeriodId text, status text, amount decimal, version varint)");
+            "CREATE TABLE IF NOT EXISTS charges ( chargeId text PRIMARY KEY, billingPeriodId text, status text, amount decimal, version varint)"
+        );
     }
 }

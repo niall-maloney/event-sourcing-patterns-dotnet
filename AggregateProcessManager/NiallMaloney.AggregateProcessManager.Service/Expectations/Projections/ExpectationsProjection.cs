@@ -30,54 +30,56 @@ public class ExpectationsProjection : Projection
             return;
         }
 
-        await _repository.AddExpectation(new ExpectationRow
-        {
-            ExpectationId = evnt.ExpectationId,
-            Iban = evnt.Iban,
-            Amount = evnt.Amount,
-            Reference = evnt.Reference,
-            Status = "Created",
-            Version = metadata.StreamPosition
-        });
+        await _repository.AddExpectation(
+            new ExpectationRow
+            {
+                ExpectationId = evnt.ExpectationId,
+                Iban = evnt.Iban,
+                Amount = evnt.Amount,
+                Reference = evnt.Reference,
+                Status = "Created",
+                Version = metadata.StreamPosition
+            }
+        );
     }
 
     private async Task Handle(ExpectationMatching evnt, EventMetadata metadata)
     {
         var expectation = await _repository.GetExpectation(evnt.ExpectationId);
-        if (expectation is null ||
-            !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation))
+        if (
+            expectation is null
+            || !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation)
+        )
         {
             return;
         }
 
-        expectation = expectation with
-        {
-            Status = "Reserved"
-        };
+        expectation = expectation with { Status = "Reserved" };
         await _repository.UpdateExpectation(expectation);
     }
 
     private async Task Handle(ExpectationMatched evnt, EventMetadata metadata)
     {
         var expectation = await _repository.GetExpectation(evnt.ExpectationId);
-        if (expectation is null ||
-            !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation))
+        if (
+            expectation is null
+            || !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation)
+        )
         {
             return;
         }
 
-        expectation = expectation with
-        {
-            Status = "Matched"
-        };
+        expectation = expectation with { Status = "Matched" };
         await _repository.UpdateExpectation(expectation);
     }
 
     private async Task Handle(ExpectationMatchRejected evnt, EventMetadata metadata)
     {
         var expectation = await _repository.GetExpectation(evnt.ExpectationId);
-        if (expectation is null ||
-            !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation))
+        if (
+            expectation is null
+            || !TryUpdateVersion(expectation, metadata.StreamPosition, out expectation)
+        )
         {
             return;
         }
@@ -88,7 +90,8 @@ public class ExpectationsProjection : Projection
     private bool TryUpdateVersion(
         ExpectationRow expectation,
         ulong newVersion,
-        out ExpectationRow newExpectation)
+        out ExpectationRow newExpectation
+    )
     {
         var expectedVersion = newVersion - 1;
         var actualVersion = expectation.Version;
@@ -99,12 +102,11 @@ public class ExpectationsProjection : Projection
         }
         if (actualVersion != expectedVersion)
         {
-            throw new InvalidOperationException($"Version mismatch, expected {expectedVersion} actual {actualVersion}");
+            throw new InvalidOperationException(
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+            );
         }
-        newExpectation = expectation with
-        {
-            Version = newVersion
-        };
+        newExpectation = expectation with { Version = newVersion };
         return true;
     }
 }

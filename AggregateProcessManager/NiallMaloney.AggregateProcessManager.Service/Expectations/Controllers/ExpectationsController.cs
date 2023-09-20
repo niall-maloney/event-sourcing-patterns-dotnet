@@ -36,9 +36,12 @@ public class ExpectationsController : ControllerBase
         [FromQuery] string? iban = null,
         [FromQuery] decimal? amount = null,
         [FromQuery] string? reference = null,
-        [FromQuery] string? status = null)
+        [FromQuery] string? status = null
+    )
     {
-        var rows = await _mediator.Send(new SearchExpectations(expectationId, iban, amount, reference, status));
+        var rows = await _mediator.Send(
+            new SearchExpectations(expectationId, iban, amount, reference, status)
+        );
         return Ok(Expectation.Map(rows));
     }
 
@@ -46,8 +49,14 @@ public class ExpectationsController : ControllerBase
     public async Task<IActionResult> CreateExpectation([FromBody] ExpectationDefinition definition)
     {
         var expectationId = Ids.NewExpectationId();
-        await _mediator.Send(new CreateExpectation(expectationId, definition.Iban, definition.Amount,
-            definition.Reference));
+        await _mediator.Send(
+            new CreateExpectation(
+                expectationId,
+                definition.Iban,
+                definition.Amount,
+                definition.Reference
+            )
+        );
         return Accepted(new ExpectationReference(expectationId));
     }
 }

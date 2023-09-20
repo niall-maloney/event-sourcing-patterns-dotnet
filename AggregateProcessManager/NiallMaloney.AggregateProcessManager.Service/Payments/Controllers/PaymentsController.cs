@@ -36,9 +36,12 @@ public class PaymentsController : ControllerBase
         [FromQuery] string? iban = null,
         [FromQuery] decimal? amount = null,
         [FromQuery] string? reference = null,
-        [FromQuery] string? status = null)
+        [FromQuery] string? status = null
+    )
     {
-        var rows = await _mediator.Send(new SearchPayments(paymentId, iban, amount, reference, status));
+        var rows = await _mediator.Send(
+            new SearchPayments(paymentId, iban, amount, reference, status)
+        );
         return Ok(Payment.Map(rows));
     }
 
@@ -46,7 +49,9 @@ public class PaymentsController : ControllerBase
     public async Task<IActionResult> ReceivePayment(PaymentDefinition definition)
     {
         var paymentId = Ids.NewPaymentId();
-        await _mediator.Send(new ReceivePayment(paymentId, definition.Iban, definition.Amount, definition.Reference));
+        await _mediator.Send(
+            new ReceivePayment(paymentId, definition.Iban, definition.Amount, definition.Reference)
+        );
         return Accepted(new PaymentReference(paymentId));
     }
 }

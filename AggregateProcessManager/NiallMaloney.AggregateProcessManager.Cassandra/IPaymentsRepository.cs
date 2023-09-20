@@ -11,5 +11,6 @@ public interface IPaymentsRepository
         string? iban = null,
         decimal? amount = null,
         string? reference = null,
-        string? status = null);
+        string? status = null
+    );
 }

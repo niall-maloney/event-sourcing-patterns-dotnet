@@ -21,7 +21,8 @@ public class CassandraExpectationsRepository : IExpectationsRepository
     {
         //CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)");
+            "CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)"
+        );
     }
 
     public Task AddExpectation(ExpectationRow expectation) => _mapper.InsertAsync(expectation);
@@ -29,15 +30,18 @@ public class CassandraExpectationsRepository : IExpectationsRepository
     public Task UpdateExpectation(ExpectationRow expectation) => _mapper.UpdateAsync(expectation);
 
     public Task<ExpectationRow?> GetExpectation(string expectationId) =>
-        _mapper.SingleOrDefaultAsync<ExpectationRow?>("SELECT * FROM expectations where expectationId=?",
-            expectationId);
+        _mapper.SingleOrDefaultAsync<ExpectationRow?>(
+            "SELECT * FROM expectations where expectationId=?",
+            expectationId
+        );
 
     public Task<IEnumerable<ExpectationRow>> SearchExpectations(
         string? expectationId = null,
         string? iban = null,
         decimal? amount = null,
         string? reference = null,
-        string? status = null)
+        string? status = null
+    )
     {
         CqlQuery<ExpectationRow> expectations = new Table<ExpectationRow>(_session);
 

@@ -10,17 +10,20 @@ public interface ILedgersRepository
         decimal newPendingBalance,
         decimal newCommittedBalance,
         ulong newStreamPosition,
-        ulong? lastStreamPosition);
+        ulong? lastStreamPosition
+    );
 
     public Task UpdateCommittedBalance(
         string ledger,
         decimal newBalance,
         ulong newStreamPosition,
-        ulong? lastStreamPosition);
+        ulong? lastStreamPosition
+    );
 
     public Task UpdatePendingBalance(
         string ledger,
         decimal newBalance,
         ulong newStreamPosition,
-        ulong? lastStreamPosition);
+        ulong? lastStreamPosition
+    );
 }

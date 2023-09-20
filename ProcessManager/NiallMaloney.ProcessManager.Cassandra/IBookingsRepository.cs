@@ -9,5 +9,6 @@ public interface IBookingsRepository
     public Task<IEnumerable<BookingRow>> SearchBookings(
         string? bookingId = null,
         string? ledger = null,
-        string? status = null);
+        string? status = null
+    );
 }

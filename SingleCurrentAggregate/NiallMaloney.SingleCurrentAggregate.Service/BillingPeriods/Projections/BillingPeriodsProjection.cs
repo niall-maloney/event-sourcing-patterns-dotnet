@@ -12,7 +12,10 @@ public class BillingPeriodsProjection : Projection
 {
     private readonly IBillingPeriodsRepository _repository;
 
-    public BillingPeriodsProjection(ILogger<BillingPeriodsProjection> logger, IBillingPeriodsRepository repository)
+    public BillingPeriodsProjection(
+        ILogger<BillingPeriodsProjection> logger,
+        IBillingPeriodsRepository repository
+    )
     {
         _repository = repository;
 
@@ -30,71 +33,69 @@ public class BillingPeriodsProjection : Projection
             return;
         }
 
-        await _repository.AddBillingPeriod(new BillingPeriodRow
-        {
-            BillingPeriodId = evnt.BillingPeriodId,
-            CustomerId = evnt.CustomerId,
-            Status = "Open",
-            TotalAmount = 0,
-            Version = metadata.StreamPosition
-        });
+        await _repository.AddBillingPeriod(
+            new BillingPeriodRow
+            {
+                BillingPeriodId = evnt.BillingPeriodId,
+                CustomerId = evnt.CustomerId,
+                Status = "Open",
+                TotalAmount = 0,
+                Version = metadata.StreamPosition
+            }
+        );
     }
 
     private async Task Handle(BillingPeriodClosed evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null ||
-            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (
+            billingPeriod is null
+            || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod)
+        )
         {
             return;
         }
 
-        billingPeriod = billingPeriod with
-        {
-            Status = "Closed",
-            TotalAmount = evnt.TotalAmount
-        };
+        billingPeriod = billingPeriod with { Status = "Closed", TotalAmount = evnt.TotalAmount };
 
         await _repository.UpdateBillingPeriod(billingPeriod);
     }
 
-
     private async Task Handle(ChargeAdded evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null ||
-            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (
+            billingPeriod is null
+            || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod)
+        )
         {
             return;
         }
 
-        billingPeriod = billingPeriod with
-        {
-            TotalAmount = evnt.TotalAmount
-        };
+        billingPeriod = billingPeriod with { TotalAmount = evnt.TotalAmount };
         await _repository.UpdateBillingPeriod(billingPeriod);
     }
 
     private async Task Handle(ChargeRemoved evnt, EventMetadata metadata)
     {
         var billingPeriod = await _repository.GetBillingPeriod(evnt.BillingPeriodId);
-        if (billingPeriod is null ||
-            !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod))
+        if (
+            billingPeriod is null
+            || !TryUpdateVersion(billingPeriod, metadata.StreamPosition, out billingPeriod)
+        )
         {
             return;
         }
 
-        billingPeriod = billingPeriod with
-        {
-            TotalAmount = evnt.TotalAmount
-        };
+        billingPeriod = billingPeriod with { TotalAmount = evnt.TotalAmount };
         await _repository.UpdateBillingPeriod(billingPeriod);
     }
 
     private bool TryUpdateVersion(
         BillingPeriodRow billingPeriod,
         ulong newVersion,
-        out BillingPeriodRow newBillingPeriod)
+        out BillingPeriodRow newBillingPeriod
+    )
     {
         var expectedVersion = newVersion - 1;
         var actualVersion = billingPeriod.Version;
@@ -105,12 +106,11 @@ public class BillingPeriodsProjection : Projection
         }
         if (actualVersion != expectedVersion)
         {
-            throw new InvalidOperationException($"Version mismatch, expected {expectedVersion} actual {actualVersion}");
+            throw new InvalidOperationException(
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+            );
         }
-        newBillingPeriod = billingPeriod with
-        {
-            Version = newVersion
-        };
+        newBillingPeriod = billingPeriod with { Version = newVersion };
         return true;
     }
 }

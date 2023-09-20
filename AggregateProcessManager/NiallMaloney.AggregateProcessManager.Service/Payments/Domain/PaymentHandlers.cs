@@ -4,10 +4,11 @@ using NiallMaloney.EventSourcing.Aggregates;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Payments.Domain;
 
-public class PaymentHandlers : IRequestHandler<ReceivePayment>,
-    IRequestHandler<ReservePayment>,
-    IRequestHandler<MatchPayment>,
-    IRequestHandler<ReleasePayment>
+public class PaymentHandlers
+    : IRequestHandler<ReceivePayment>,
+        IRequestHandler<ReservePayment>,
+        IRequestHandler<MatchPayment>,
+        IRequestHandler<ReleasePayment>
 {
     private readonly AggregateRepository _repository;
 

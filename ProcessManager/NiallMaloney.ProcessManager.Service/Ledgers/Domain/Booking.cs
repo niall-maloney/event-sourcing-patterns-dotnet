@@ -69,7 +69,6 @@ public class Booking : Aggregate
         Amount = evnt.Amount;
     }
 
-
     private void Apply(BookingCommitted evnt)
     {
         _committed = true;

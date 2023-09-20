@@ -22,12 +22,16 @@ public class CassandraBookingRepository : IBookingsRepository
     public Task UpdateBooking(BookingRow booking) => _mapper.UpdateAsync(booking);
 
     public Task<BookingRow?> GetBooking(string bookingId) =>
-        _mapper.SingleOrDefaultAsync<BookingRow?>("SELECT * FROM bookings where bookingId=?", bookingId);
+        _mapper.SingleOrDefaultAsync<BookingRow?>(
+            "SELECT * FROM bookings where bookingId=?",
+            bookingId
+        );
 
     public Task<IEnumerable<BookingRow>> SearchBookings(
         string? bookingId = null,
         string? ledger = null,
-        string? status = null)
+        string? status = null
+    )
     {
         CqlQuery<BookingRow> bookings = new Table<BookingRow>(_session);
 
@@ -53,6 +57,7 @@ public class CassandraBookingRepository : IBookingsRepository
     {
         //CREATE TABLE IF NOT EXISTS process_manager.bookings ( bookingId text PRIMARY KEY, ledger text, amount decimal, status text, version varint );
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS bookings ( bookingId text PRIMARY KEY, ledger text, amount decimal, status text, version varint )");
+            "CREATE TABLE IF NOT EXISTS bookings ( bookingId text PRIMARY KEY, ledger text, amount decimal, status text, version varint )"
+        );
     }
 }

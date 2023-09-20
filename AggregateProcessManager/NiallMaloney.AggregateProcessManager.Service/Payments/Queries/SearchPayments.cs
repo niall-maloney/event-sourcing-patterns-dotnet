@@ -8,4 +8,5 @@ public record SearchPayments(
     string? Iban = null,
     decimal? Amount = null,
     string? Reference = null,
-    string? Status = null) : IRequest<IEnumerable<PaymentRow>>;
+    string? Status = null
+) : IRequest<IEnumerable<PaymentRow>>;

@@ -9,4 +9,5 @@ public record MatchingStarted(
     string PaymentId,
     string Iban,
     decimal Amount,
-    string Reference) : IEvent;
+    string Reference
+) : IEvent;

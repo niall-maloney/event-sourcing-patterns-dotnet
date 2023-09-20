@@ -18,13 +18,16 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
     }
 
     public Task<BillingPeriodRow?> GetBillingPeriod(string billingPeriodId) =>
-        _mapper.SingleOrDefaultAsync<BillingPeriodRow?>("SELECT * FROM billing_periods where billingPeriodId=?",
-            billingPeriodId);
+        _mapper.SingleOrDefaultAsync<BillingPeriodRow?>(
+            "SELECT * FROM billing_periods where billingPeriodId=?",
+            billingPeriodId
+        );
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(
         string? billingPeriodId = null,
         string? customerId = null,
-        string? status = null)
+        string? status = null
+    )
     {
         CqlQuery<BillingPeriodRow> billingPeriods = new Table<BillingPeriodRow>(_session);
 
@@ -44,14 +47,17 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         return billingPeriods.ExecuteAsync();
     }
 
-    public Task AddBillingPeriod(BillingPeriodRow billingPeriod) => _mapper.InsertAsync(billingPeriod);
+    public Task AddBillingPeriod(BillingPeriodRow billingPeriod) =>
+        _mapper.InsertAsync(billingPeriod);
 
-    public Task UpdateBillingPeriod(BillingPeriodRow billingPeriod) => _mapper.UpdateAsync(billingPeriod);
+    public Task UpdateBillingPeriod(BillingPeriodRow billingPeriod) =>
+        _mapper.UpdateAsync(billingPeriod);
 
     private void CreateTables()
     {
         //CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, customerId text, status text, totalAmount decimal, version varint);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, customerId text, status text, totalAmount decimal, version varint)");
+            "CREATE TABLE IF NOT EXISTS billing_periods ( billingPeriodId text PRIMARY KEY, customerId text, status text, totalAmount decimal, version varint)"
+        );
     }
 }

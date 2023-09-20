@@ -34,9 +34,12 @@ public class BillingPeriodsController : ControllerBase
     public async Task<IActionResult> SearchBillingPeriods(
         [FromQuery] string? billingPeriodId = null,
         [FromQuery] string? customerId = null,
-        [FromQuery] string? status = null)
+        [FromQuery] string? status = null
+    )
     {
-        var rows = await _mediator.Send(new SearchBillingPeriods(billingPeriodId, customerId, status));
+        var rows = await _mediator.Send(
+            new SearchBillingPeriods(billingPeriodId, customerId, status)
+        );
         return Ok(BillingPeriod.Map(rows));
     }
 

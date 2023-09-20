@@ -27,14 +27,16 @@ public class BookingsProjection : Projection
         {
             return;
         }
-        await _repository.AddBooking(new BookingRow
-        {
-            BookingId = evnt.BookingId,
-            Ledger = evnt.Ledger,
-            Amount = evnt.Amount,
-            Status = "Pending",
-            Version = metadata.StreamPosition
-        });
+        await _repository.AddBooking(
+            new BookingRow
+            {
+                BookingId = evnt.BookingId,
+                Ledger = evnt.Ledger,
+                Amount = evnt.Amount,
+                Status = "Pending",
+                Version = metadata.StreamPosition
+            }
+        );
     }
 
     private async Task Handle(BookingCommitted evnt, EventMetadata metadata)
@@ -44,10 +46,7 @@ public class BookingsProjection : Projection
         {
             return;
         }
-        booking = booking with
-        {
-            Status = "Committed"
-        };
+        booking = booking with { Status = "Committed" };
         await _repository.UpdateBooking(booking);
     }
 
@@ -58,17 +57,11 @@ public class BookingsProjection : Projection
         {
             return;
         }
-        booking = booking with
-        {
-            Status = "Rejected"
-        };
+        booking = booking with { Status = "Rejected" };
         await _repository.UpdateBooking(booking);
     }
 
-    private bool TryUpdateVersion(
-        BookingRow booking,
-        ulong newVersion,
-        out BookingRow newBooking)
+    private bool TryUpdateVersion(BookingRow booking, ulong newVersion, out BookingRow newBooking)
     {
         var expectedVersion = newVersion - 1;
         var actualVersion = booking.Version;
@@ -79,12 +72,11 @@ public class BookingsProjection : Projection
         }
         if (actualVersion != expectedVersion)
         {
-            throw new InvalidOperationException($"Version mismatch, expected {expectedVersion} actual {actualVersion}");
+            throw new InvalidOperationException(
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+            );
         }
-        newBooking = booking with
-        {
-            Version = newVersion
-        };
+        newBooking = booking with { Version = newVersion };
         return true;
     }
 }

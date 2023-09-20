@@ -8,4 +8,5 @@ public record BeginMatching(
     string PaymentId,
     string Iban,
     decimal Amount,
-    string Reference) : IRequest;
+    string Reference
+) : IRequest;

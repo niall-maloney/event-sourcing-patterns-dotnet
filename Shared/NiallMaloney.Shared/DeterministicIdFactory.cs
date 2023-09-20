@@ -10,5 +10,7 @@ public static class DeterministicIdFactory
     public static string NewId(params string[] components) =>
         !components.Any()
             ? GuidFactory.CreateRandom().ToString()
-            : GuidFactory.CreateSha1(Namespace, Encoding.UTF8.GetBytes(string.Join('-', components))).ToString();
+            : GuidFactory
+                .CreateSha1(Namespace, Encoding.UTF8.GetBytes(string.Join('-', components)))
+                .ToString();
 }

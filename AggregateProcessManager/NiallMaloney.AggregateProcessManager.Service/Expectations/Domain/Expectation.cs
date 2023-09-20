@@ -15,7 +15,6 @@ public class Expectation : Aggregate
     private bool _hasBeenReserved = false;
     private bool _hasBeenMatched = false;
 
-
     public Expectation()
     {
         When<ExpectationCreated>(Apply);
@@ -82,7 +81,5 @@ public class Expectation : Aggregate
         Payment = evnt.PaymentId;
     }
 
-    private void Apply(ExpectationMatchRejected evnt)
-    {
-    }
+    private void Apply(ExpectationMatchRejected evnt) { }
 }

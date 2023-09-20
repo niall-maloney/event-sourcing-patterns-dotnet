@@ -24,11 +24,16 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
     {
         var row = await _mapper.SingleOrDefaultAsync<SubscriptionCursorRow>(
             "SELECT * FROM subscription_cursors WHERE subscription=?",
-            $"{subscriberName}.{streamName}");
+            $"{subscriberName}.{streamName}"
+        );
         return row?.Position;
     }
 
-    public async Task UpsertSubscriptionCursor(string subscriberName, string streamName, ulong position)
+    public async Task UpsertSubscriptionCursor(
+        string subscriberName,
+        string streamName,
+        ulong position
+    )
     {
         var query = "INSERT INTO subscription_cursors (subscription, position) VALUES (?, ?)";
         var prepared = await _session.PrepareAsync(query);
@@ -40,6 +45,7 @@ public class CassandraSubscriptionCursorRepository : ISubscriptionCursorReposito
     {
         //CREATE TABLE IF NOT EXISTS process_manager.subscription_cursors ( subscription text PRIMARY KEY, position varint);
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS subscription_cursors ( subscription text PRIMARY KEY, position varint)");
+            "CREATE TABLE IF NOT EXISTS subscription_cursors ( subscription text PRIMARY KEY, position varint)"
+        );
     }
 }

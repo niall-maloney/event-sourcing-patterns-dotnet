@@ -6,4 +6,5 @@ public record Expectation(
     decimal Amount,
     string Reference,
     bool IsReserved = false,
-    bool IsMatched = false);
+    bool IsMatched = false
+);

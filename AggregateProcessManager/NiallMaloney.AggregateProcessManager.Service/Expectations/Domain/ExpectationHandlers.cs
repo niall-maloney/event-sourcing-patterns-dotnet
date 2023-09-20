@@ -4,9 +4,10 @@ using NiallMaloney.EventSourcing.Aggregates;
 
 namespace NiallMaloney.AggregateProcessManager.Service.Expectations.Domain;
 
-public class ExpectationHandlers : IRequestHandler<CreateExpectation>,
-    IRequestHandler<ReserveExpectation>,
-    IRequestHandler<MatchExpectation>
+public class ExpectationHandlers
+    : IRequestHandler<CreateExpectation>,
+        IRequestHandler<ReserveExpectation>,
+        IRequestHandler<MatchExpectation>
 {
     private readonly AggregateRepository _repository;
 
