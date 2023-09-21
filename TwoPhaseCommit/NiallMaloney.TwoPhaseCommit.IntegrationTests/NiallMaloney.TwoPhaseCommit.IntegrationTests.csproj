@@ -12,11 +12,11 @@
         <PackageReference Include="FluentAssertions" Version="6.11.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.20" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
-        <PackageReference Include="Polly" Version="7.2.4" />
         <PackageReference Include="xunit" Version="2.4.1"/>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj" />
       <ProjectReference Include="..\NiallMaloney.TwoPhaseCommit.Service\NiallMaloney.TwoPhaseCommit.Service.csproj" />
     </ItemGroup>
 

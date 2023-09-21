@@ -3,19 +3,14 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
+using NiallMaloney.Shared.TestUtils;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Controllers.Models;
-using Polly;
 
 namespace NiallMaloney.TwoPhaseCommit.IntegrationTests;
 
-public class PaymentTests : IClassFixture<WebApplicationFactory<Program>>
+public class PaymentTests : TestBase<Program>
 {
-    private readonly HttpClient _client;
-
-    public PaymentTests(WebApplicationFactory<Program> app)
-    {
-        _client = app.CreateClient();
-    }
+    public PaymentTests(WebApplicationFactory<Program> app) : base(app) { }
 
     [Fact]
     public async Task Given_A_Payment_Request_Then_Payment_Is_Received()
@@ -24,17 +19,18 @@ public class PaymentTests : IClassFixture<WebApplicationFactory<Program>>
         var iban = "GB97BARC20031869128817";
         var amount = 10m;
         var reference = "REF";
+        var expectedStatus = "Received";
 
         //Act
         var paymentRef = await ReceivePayment(iban, amount, reference);
         var paymentId = paymentRef.PaymentId;
-        var payment = await GetOrWaitForExpectedPayment(paymentId, "Received");
+        var payment = await GetOrWaitForExpectedPayment(paymentId, expectedStatus);
 
         //Assert
         using var scope = new AssertionScope();
 
         payment.Id.Should().Be(paymentId);
-        payment.Status.Should().Be("Received");
+        payment.Status.Should().Be(expectedStatus);
         payment.Amount.Should().Be(amount);
         payment.Reference.Should().Be(reference);
         payment.Version.Should().Be(0);
@@ -55,7 +51,7 @@ public class PaymentTests : IClassFixture<WebApplicationFactory<Program>>
 
     private async Task<Payment?> GetPayment(string paymentId)
     {
-        var getResponseMessage = await _client.GetAsync($"/payments/{paymentId}");
+        var getResponseMessage = await Client.GetAsync($"/payments/{paymentId}");
         if (getResponseMessage.IsSuccessStatusCode)
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<Payment>();
@@ -74,7 +70,7 @@ public class PaymentTests : IClassFixture<WebApplicationFactory<Program>>
         bool assertSuccess = true
     )
     {
-        var postResponseMessage = await _client.PostAsJsonAsync(
+        var postResponseMessage = await Client.PostAsJsonAsync(
             "/payments",
             new
             {
@@ -91,18 +87,4 @@ public class PaymentTests : IClassFixture<WebApplicationFactory<Program>>
         paymentRef.Should().NotBeNull();
         return paymentRef!;
     }
-
-    private static async Task<T> RetryUntil<T>(
-        Func<Task<T>> action,
-        Func<T, bool> retryUntilPredicate,
-        int retryCount = 50,
-        int sleepDurationInMilliseconds = 100
-    ) =>
-        await Policy
-            .HandleResult<T>(r => !retryUntilPredicate.Invoke(r))
-            .WaitAndRetryAsync(
-                retryCount,
-                _ => TimeSpan.FromMilliseconds(sleepDurationInMilliseconds)
-            )
-            .ExecuteAsync(action);
 }
