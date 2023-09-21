@@ -7,7 +7,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Expectations.Events;
 namespace NiallMaloney.TwoPhaseCommit.Service.Expectations.Projections;
 
 [SubscriberName("ExpectationsProjection")]
-[Subscription("$ce-aggregate_process_manager.expectation")]
+[Subscription("$ce-two_phase_commit.expectation")]
 public class ExpectationsProjection : Projection
 {
     private readonly IExpectationsRepository _repository;

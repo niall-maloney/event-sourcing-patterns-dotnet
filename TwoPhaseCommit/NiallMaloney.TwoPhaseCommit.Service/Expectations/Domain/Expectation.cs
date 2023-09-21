@@ -3,7 +3,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Expectations.Events;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Expectations.Domain;
 
-[Category("aggregate_process_manager.expectation")]
+[Category("two_phase_commit.expectation")]
 public class Expectation : Aggregate
 {
     private decimal Amount { get; set; } = 0;

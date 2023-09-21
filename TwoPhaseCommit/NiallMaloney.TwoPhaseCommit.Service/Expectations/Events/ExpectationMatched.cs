@@ -2,6 +2,6 @@ using NiallMaloney.EventSourcing;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Expectations.Events;
 
-[Event("aggregate_process_manager.expectation_matched")]
+[Event("two_phase_commit.expectation_matched")]
 public record ExpectationMatched(string ExpectationId, string PaymentId, string MatchingId)
     : IEvent;

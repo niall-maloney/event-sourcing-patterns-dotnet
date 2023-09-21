@@ -3,7 +3,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Domain;
 
-[Category("aggregate_process_manager.payment")]
+[Category("two_phase_commit.payment")]
 public class Payment : Aggregate
 {
     private decimal Amount { get; set; } = 0;

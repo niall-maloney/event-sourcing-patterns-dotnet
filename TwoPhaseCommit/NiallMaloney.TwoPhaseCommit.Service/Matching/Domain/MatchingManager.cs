@@ -3,7 +3,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Matching.Events;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Domain;
 
-[Category("aggregate_process_manager.matching_manager")]
+[Category("two_phase_commit.matching_manager")]
 public class MatchingManager : Aggregate
 {
     private bool _hasStarted;

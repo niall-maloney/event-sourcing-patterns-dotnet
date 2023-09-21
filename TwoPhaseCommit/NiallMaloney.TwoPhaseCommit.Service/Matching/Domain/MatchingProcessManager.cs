@@ -10,9 +10,9 @@ using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Domain;
 
 [SubscriberName("MatchingProcessManager")]
-[Subscription("$ce-aggregate_process_manager.matching_manager")]
-[Subscription("$ce-aggregate_process_manager.expectation")]
-[Subscription("$ce-aggregate_process_manager.payment")]
+[Subscription("$ce-two_phase_commit.matching_manager")]
+[Subscription("$ce-two_phase_commit.expectation")]
+[Subscription("$ce-two_phase_commit.payment")]
 public class MatchingProcessManager : SubscriberBase
 {
     public MatchingProcessManager(IMediator mediator)

@@ -1,6 +1,6 @@
 namespace NiallMaloney.TwoPhaseCommit.Cassandra;
 
-public class Configuration
+public static class Configuration
 {
-    public const string Keyspace = "aggregate_process_manager";
+    public const string Keyspace = "two_phase_commit";
 }

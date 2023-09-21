@@ -2,7 +2,7 @@ using NiallMaloney.EventSourcing;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Events;
 
-[Event("aggregate_process_manager.matching_started")]
+[Event("two_phase_commit.matching_started")]
 public record MatchingStarted(
     string MatchingId,
     string ExpectationId,

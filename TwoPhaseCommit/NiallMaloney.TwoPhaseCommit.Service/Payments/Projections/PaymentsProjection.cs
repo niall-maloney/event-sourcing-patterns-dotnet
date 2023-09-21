@@ -7,7 +7,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Projections;
 
 [SubscriberName("PaymentsProjection")]
-[Subscription("$ce-aggregate_process_manager.payment")]
+[Subscription("$ce-two_phase_commit.payment")]
 public class PaymentsProjection : Projection
 {
     private readonly IPaymentsRepository _repository;
