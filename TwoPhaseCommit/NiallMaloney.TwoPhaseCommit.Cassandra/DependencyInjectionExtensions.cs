@@ -10,6 +10,7 @@ public static class DependencyInjectionExtensions
         MappingConfiguration.Global.Define<CassandraMappings>();
         return services
             .AddSingleton<IPaymentsRepository, CassandraPaymentsRepository>()
-            .AddSingleton<IExpectationsRepository, CassandraExpectationsRepository>();
+            .AddSingleton<IExpectationsRepository, CassandraExpectationsRepository>()
+            .AddSingleton<IMatchingManagerRepository, CassandraMatchingManagerRepository>();
     }
 }

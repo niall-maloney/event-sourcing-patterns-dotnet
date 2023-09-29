@@ -5,6 +5,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Payments.Projections;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.Shared.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Service.Matching.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
 var executingAssembly = typeof(Program).Assembly;
@@ -18,6 +19,7 @@ builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
 builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<MatchingProcessManager>();
+builder.Services.AddSubscriber<MatchingManagerProjection>();
 builder.Services.AddSubscriber<PaymentsProjection>();
 builder.Services.AddSubscriber<ExpectationsProjection>();
 
