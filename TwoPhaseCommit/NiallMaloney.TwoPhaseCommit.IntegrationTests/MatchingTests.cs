@@ -1,22 +1,28 @@
 using System.Net;
 using System.Net.Http.Json;
+using EventStore.Client;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using NiallMaloney.Shared.TestUtils;
 using NiallMaloney.TwoPhaseCommit.Service.Expectations.Controllers.Models;
 using NiallMaloney.TwoPhaseCommit.Service.Matching.Controllers.Models;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Controllers.Models;
+using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
+using EventStoreClient = NiallMaloney.EventSourcing.EventStoreClient;
 
 namespace NiallMaloney.TwoPhaseCommit.IntegrationTests;
 
 public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    private readonly EventStoreClient _eventStore;
 
     public MatchingTests(WebApplicationFactory<Program> app)
     {
         _client = app.CreateClient();
+        _eventStore = app.Services.GetRequiredService<EventStoreClient>();
     }
 
     [Fact]
@@ -148,7 +154,13 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         expectation.Id.Should().Be(expectationId);
         expectation.Status.Should().Be("Matched");
 
-        //todo assert released event
+        //Assert that Payment is released
+        var eventEnvelopes = await _eventStore.ReadStreamAsync($"two_phase_commit.payment-{payment2Id}", StreamPosition.End, Direction.Backwards, 1);
+        var envelope = (await eventEnvelopes!.ToListAsync()).Single();
+
+        var lastEvent = envelope.Event.Should().BeOfType<PaymentReleased>().Subject;
+        lastEvent.PaymentId.Should().Be(payment2Id);
+        lastEvent.MatchingId.Should().Be(matching2Id);
     }
 
     private async Task<MatchingReference> BeginMatching(
