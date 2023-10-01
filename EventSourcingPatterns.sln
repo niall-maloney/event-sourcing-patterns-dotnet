@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.TwoPhaseCommit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.TwoPhaseCommit.IntegrationTests", "TwoPhaseCommit\NiallMaloney.TwoPhaseCommit.IntegrationTests\NiallMaloney.TwoPhaseCommit.IntegrationTests.csproj", "{37BE7872-E835-48B3-B70F-1EA1599D80C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.TestUtils", "NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj", "{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.TestUtils", "Shared\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj", "{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
