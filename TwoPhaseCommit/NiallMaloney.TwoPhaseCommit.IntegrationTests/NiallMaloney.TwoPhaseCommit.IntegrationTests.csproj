@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj" />
+      <ProjectReference Include="..\..\Shared\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj" />
       <ProjectReference Include="..\NiallMaloney.TwoPhaseCommit.Service\NiallMaloney.TwoPhaseCommit.Service.csproj" />
     </ItemGroup>
 

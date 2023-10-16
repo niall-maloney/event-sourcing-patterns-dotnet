@@ -42,7 +42,7 @@ public class LedgersProcessManager : SubscriberBase
         if (lastStreamPosition >= newStreamPosition)
         {
             _logger.LogInformation(
-                "Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                "Event already processed. Last stream position: ({LastStreamPosition}), Event stream position: ({EventStreamPosition})",
                 lastStreamPosition,
                 newStreamPosition
             );
@@ -83,7 +83,7 @@ public class LedgersProcessManager : SubscriberBase
         if (lastStreamPosition >= newStreamPosition)
         {
             _logger.LogInformation(
-                "Event already processed. Last stream position: ({0}), Event stream position: ({1})",
+                "Event already processed. Last stream position: ({LastStreamPosition}), Event stream position: ({EventStreamPosition})",
                 lastStreamPosition,
                 newStreamPosition
             );
