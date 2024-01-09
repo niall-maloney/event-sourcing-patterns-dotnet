@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 		cassandra-init.sh = cassandra-init.sh
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{5337124F-4203-4550-9F2A-0BB26C03082E}"
@@ -42,6 +43,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.TwoPhaseCommit.IntegrationTests", "TwoPhaseCommit\NiallMaloney.TwoPhaseCommit.IntegrationTests\NiallMaloney.TwoPhaseCommit.IntegrationTests.csproj", "{37BE7872-E835-48B3-B70F-1EA1599D80C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.TestUtils", "Shared\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj", "{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.TwoPhaseCommit.Dashboard", "TwoPhaseCommit\NiallMaloney.TwoPhaseCommit.Dashboard\NiallMaloney.TwoPhaseCommit.Dashboard.csproj", "{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +103,10 @@ Global
 		{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
@@ -118,5 +125,6 @@ Global
 		{E2B47D75-1A4D-4554-8930-C1906CFE2749} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
 		{37BE7872-E835-48B3-B70F-1EA1599D80C1} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
 		{45785A05-74E6-4CEF-8F9B-F8D212E9A58B} = {2164C3C1-B711-48DE-A88A-C72ABDD3AE6B}
+		{3E5AF9DF-1F9A-4E7C-97E5-5789FB38B829} = {FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}
 	EndGlobalSection
 EndGlobal

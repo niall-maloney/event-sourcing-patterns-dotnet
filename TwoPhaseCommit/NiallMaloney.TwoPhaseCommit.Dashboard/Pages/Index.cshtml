@@ -1,0 +1,131 @@
+﻿@page
+@using NiallMaloney.TwoPhaseCommit.Dashboard.Utils
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var managers = Model.Managers;
+    var payments = Model.Payments;
+    var expectations = Model.Expectations;
+}
+<div class="container container-lg">
+
+    <div class="row gy-3">
+        <div class="col col-md">
+            <div class="container container-sm">
+                <h3>Matching managers</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td class="text-start">ID</td>
+                        <td class="text-start">Payment</td>
+                        <td class="text-start">Expectation</td>
+                        <td class="text-start">Status</td>
+                        <td class="text-end">Version</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var manager in managers)
+                    {
+                        <tr>
+                            <td class="text-start">@manager.Id.Truncate()</td>
+                            <td class="text-start">@manager.PaymentId.Truncate()</td>
+                            <td class="text-start">@manager.ExpectationId.Truncate()</td>
+                            <td class="text-start">@manager.Status</td>
+                            <td class="text-end">@manager.Version</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <form asp-page-handler="match" method="post">
+        <div class="row mt-2">
+            <div class="col col-xs-2">
+                <div class="container container-sm">
+                    <select class="form-select" name="paymentId">
+                        <option selected>Select a payment...</option>
+                        @foreach (var payment in payments)
+                        {
+                            <option value="@payment.Id">@payment.Id.Truncate()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col col-xs-2">
+                <select class="form-select" name="expectationId">
+                    <option selected>Select an expectation...</option>
+                    @foreach (var expectation in expectations)
+                    {
+                        <option value="@expectation.Id">@expectation.Id.Truncate()</option>
+                    }
+                </select>
+            </div>
+            <div class="col col-xs-2">
+                <input class="btn btn-primary" type="submit" value="Match">
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-5">
+        <div class="col col-md">
+            <div class="container container-sm">
+                <h3>Payments</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td class="text-start">ID</td>
+                        <td class="text-start">Status</td>
+                        <td class="text-end">Version</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var payment in payments)
+                    {
+                        <tr>
+                            <td>@payment.Id.Truncate()</td>
+                            <td>@payment.Status</td>
+                            <td class="text-end">@payment.Version</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="container container-sm">
+                <form asp-page-handler="payment" method="post">
+                    <button class="btn btn-primary">Create payment</button>
+                </form>
+            </div>
+        </div>
+        <div class="col col-md">
+            <div class="container container-sm">
+                <h3>Expectations</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td class="text-start">ID</td>
+                        <td class="text-start">Status</td>
+                        <td class="text-end">Version</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var expectation in expectations)
+                    {
+                        <tr>
+                            <td class="text-start">@expectation.Id.Truncate()</td>
+                            <td class="text-start">@expectation.Status</td>
+                            <td class="text-end">@expectation.Version</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="container container-sm">
+                <form asp-page-handler="expectation" method="post">
+                    <button class="btn btn-primary">Create expectation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
