@@ -1,4 +1,4 @@
-namespace NiallMaloney.TwoPhaseCommit.Cassandra;
+namespace NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 public interface IPaymentsRepository
 {

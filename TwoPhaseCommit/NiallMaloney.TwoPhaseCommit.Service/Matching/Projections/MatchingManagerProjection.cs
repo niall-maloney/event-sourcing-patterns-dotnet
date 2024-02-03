@@ -2,6 +2,7 @@ using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Projections;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 using NiallMaloney.TwoPhaseCommit.Service.Matching.Events;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Projections;

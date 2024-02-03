@@ -1,4 +1,5 @@
 using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Controllers.Models;
 

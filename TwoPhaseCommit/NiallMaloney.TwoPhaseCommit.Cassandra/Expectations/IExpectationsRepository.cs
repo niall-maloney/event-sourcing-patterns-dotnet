@@ -1,4 +1,4 @@
-namespace NiallMaloney.TwoPhaseCommit.Cassandra;
+namespace NiallMaloney.TwoPhaseCommit.Cassandra.Expectations;
 
 public interface IExpectationsRepository
 {
