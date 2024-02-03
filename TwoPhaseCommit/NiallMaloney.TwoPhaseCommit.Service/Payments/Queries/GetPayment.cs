@@ -1,5 +1,6 @@
 using MediatR;
 using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Queries;
 

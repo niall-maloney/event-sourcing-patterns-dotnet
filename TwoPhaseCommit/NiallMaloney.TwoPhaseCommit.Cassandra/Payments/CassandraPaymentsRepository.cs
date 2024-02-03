@@ -2,7 +2,7 @@ using Cassandra;
 using Cassandra.Data.Linq;
 using Cassandra.Mapping;
 
-namespace NiallMaloney.TwoPhaseCommit.Cassandra;
+namespace NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 public class CassandraPaymentsRepository : IPaymentsRepository
 {

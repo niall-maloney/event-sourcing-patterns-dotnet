@@ -1,4 +1,5 @@
 using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Controllers.Models;
 

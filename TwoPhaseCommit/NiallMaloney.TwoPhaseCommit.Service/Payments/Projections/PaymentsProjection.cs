@@ -2,6 +2,7 @@ using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Projections;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Projections;
@@ -100,12 +101,14 @@ public class PaymentsProjection : Projection
             newPayment = payment;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newPayment = payment with { Version = newVersion };
         return true;
     }

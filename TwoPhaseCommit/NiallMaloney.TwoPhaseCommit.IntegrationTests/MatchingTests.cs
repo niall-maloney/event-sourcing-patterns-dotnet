@@ -227,12 +227,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         string? expectedStatus = null
     )
     {
-        var booking = await TestHelpers.RetryUntil(
+        var expectation = await TestHelpers.RetryUntil(
             async () => await GetExpectation(expectationId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        booking.Should().NotBeNull();
-        return booking!;
+        expectation.Should().NotBeNull();
+        return expectation!;
     }
 
     private async Task<Expectation?> GetExpectation(string expectationId)
@@ -283,12 +283,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         string? expectedStatus = null
     )
     {
-        var booking = await TestHelpers.RetryUntil(
+        var payment = await TestHelpers.RetryUntil(
             async () => await GetPayment(paymentId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        booking.Should().NotBeNull();
-        return booking!;
+        payment.Should().NotBeNull();
+        return payment!;
     }
 
     private async Task<Payment?> GetPayment(string paymentId)
