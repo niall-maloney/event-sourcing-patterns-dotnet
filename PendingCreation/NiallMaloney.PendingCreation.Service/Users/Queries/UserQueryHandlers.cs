@@ -17,5 +17,5 @@ public class UserQueryHandlers : IRequestHandler<GetUser, UserRow?>, IRequestHan
         _repository.GetUser(query.UserId);
 
     public Task<IEnumerable<UserRow>> Handle(SearchUsers query, CancellationToken cancellationToken) =>
-        _repository.SearchUsers(query.Status);
+        _repository.SearchUsers(query.EmailAddress, query.Status);
 }

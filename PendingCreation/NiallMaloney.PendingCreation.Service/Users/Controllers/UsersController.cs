@@ -31,9 +31,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> SearchUsers()
+    public async Task<IActionResult> SearchUsers(
+        [FromQuery] string? emailAddress = null,
+        [FromQuery] string? status = null)
     {
-        var rows = await _mediator.Send(new SearchUsers());
+        var rows = await _mediator.Send(new SearchUsers(emailAddress, status));
         return Ok(Models.User.Map(rows));
     }
 

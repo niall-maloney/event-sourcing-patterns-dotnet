@@ -35,10 +35,14 @@ public class CassandraUsersRepository : IUsersRepository
             userId
         );
 
-    public Task<IEnumerable<UserRow>> SearchUsers(string? status)
+    public Task<IEnumerable<UserRow>> SearchUsers(string? emailAddress, string? status)
     {
         CqlQuery<UserRow> users = new Table<UserRow>(_session);
 
+        if (!string.IsNullOrEmpty(emailAddress))
+        {
+            users = users.Where(b => b.EmailAddress == emailAddress).AllowFiltering();
+        }
         if (!string.IsNullOrEmpty(status))
         {
             users = users.Where(b => b.Status == status).AllowFiltering();
