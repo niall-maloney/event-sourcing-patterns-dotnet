@@ -17,15 +17,23 @@ public class CassandraBookingRepository : IBookingsRepository
         CreateTables();
     }
 
-    public Task AddBooking(BookingRow booking) => _mapper.InsertAsync(booking);
+    public Task AddBooking(BookingRow booking)
+    {
+        return _mapper.InsertAsync(booking);
+    }
 
-    public Task UpdateBooking(BookingRow booking) => _mapper.UpdateAsync(booking);
+    public Task UpdateBooking(BookingRow booking)
+    {
+        return _mapper.UpdateAsync(booking);
+    }
 
-    public Task<BookingRow?> GetBooking(string bookingId) =>
-        _mapper.SingleOrDefaultAsync<BookingRow?>(
+    public Task<BookingRow?> GetBooking(string bookingId)
+    {
+        return _mapper.SingleOrDefaultAsync<BookingRow?>(
             "SELECT * FROM bookings where bookingId=?",
             bookingId
         );
+    }
 
     public Task<IEnumerable<BookingRow>> SearchBookings(
         string? bookingId = null,

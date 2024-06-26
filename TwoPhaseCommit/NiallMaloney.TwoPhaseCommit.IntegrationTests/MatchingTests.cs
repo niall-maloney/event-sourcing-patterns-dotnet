@@ -155,7 +155,8 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         expectation.Status.Should().Be("Matched");
 
         //Assert that Payment is released
-        var eventEnvelopes = await _eventStore.ReadStreamAsync($"two_phase_commit.payment-{payment2Id}", StreamPosition.End, Direction.Backwards, 1);
+        var eventEnvelopes = await _eventStore.ReadStreamAsync($"two_phase_commit.payment-{payment2Id}",
+            StreamPosition.End, Direction.Backwards, 1);
         var envelope = (await eventEnvelopes!.ToListAsync()).Single();
 
         var lastEvent = envelope.Event.Should().BeOfType<PaymentReleased>().Subject;
@@ -180,13 +181,14 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
                 ExpectationId = expectationId,
                 Iban = iban,
                 Amount = amount,
-                Reference = reference
+                Reference = reference,
             }
         );
         if (assertSuccess)
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
+
         var matchingRef = await postResponseMessage.Content.ReadFromJsonAsync<MatchingReference>();
         matchingRef.Should().NotBeNull();
         return matchingRef!;
@@ -212,10 +214,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<MatchingManager>();
         }
+
         if (getResponseMessage.StatusCode is HttpStatusCode.NotFound)
         {
             return null;
         }
+
         throw new HttpRequestException();
     }
 
@@ -242,10 +246,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<Expectation>();
         }
+
         if (getResponseMessage.StatusCode is HttpStatusCode.NotFound)
         {
             return null;
         }
+
         throw new HttpRequestException();
     }
 
@@ -262,13 +268,14 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
             {
                 Iban = iban,
                 Amount = amount,
-                Reference = reference
+                Reference = reference,
             }
         );
         if (assertSuccess)
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
+
         var expectationRef = await postResponseMessage.Content.ReadFromJsonAsync<ExpectationReference>();
         expectationRef.Should().NotBeNull();
         return expectationRef!;
@@ -298,10 +305,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<Payment>();
         }
+
         if (getResponseMessage.StatusCode is HttpStatusCode.NotFound)
         {
             return null;
         }
+
         throw new HttpRequestException();
     }
 
@@ -318,13 +327,14 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
             {
                 Iban = iban,
                 Amount = amount,
-                Reference = reference
+                Reference = reference,
             }
         );
         if (assertSuccess)
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
+
         var paymentRef = await postResponseMessage.Content.ReadFromJsonAsync<PaymentReference>();
         paymentRef.Should().NotBeNull();
         return paymentRef!;

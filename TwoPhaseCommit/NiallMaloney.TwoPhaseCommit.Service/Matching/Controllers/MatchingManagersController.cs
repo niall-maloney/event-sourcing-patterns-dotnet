@@ -30,6 +30,7 @@ public class MatchingManagersController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(MatchingManager.Map(row));
     }
 

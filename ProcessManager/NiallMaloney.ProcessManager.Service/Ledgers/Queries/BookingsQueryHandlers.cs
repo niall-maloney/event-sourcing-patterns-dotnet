@@ -14,11 +14,16 @@ public class BookingsQueryHandlers
         _repository = repository;
     }
 
-    public Task<BookingRow?> Handle(GetBooking request, CancellationToken cancellationToken) =>
-        _repository.GetBooking(request.BookingId);
+    public Task<BookingRow?> Handle(GetBooking request, CancellationToken cancellationToken)
+    {
+        return _repository.GetBooking(request.BookingId);
+    }
 
     public Task<IEnumerable<BookingRow>> Handle(
         SearchBookings request,
         CancellationToken cancellationToken
-    ) => _repository.SearchBookings(request.BookingId, request.Ledger, request.Status);
+    )
+    {
+        return _repository.SearchBookings(request.BookingId, request.Ledger, request.Status);
+    }
 }

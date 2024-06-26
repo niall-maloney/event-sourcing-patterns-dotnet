@@ -21,12 +21,18 @@ public class BillingPeriodsProcessManager : SubscriberBase
         When<CustomerAdded>(Handle);
     }
 
-    private Task Handle(CustomerAdded evnt, EventMetadata metadata) =>
-        OpenBillingPeriod(evnt.CustomerId, evnt.CustomerId);
+    private Task Handle(CustomerAdded evnt, EventMetadata metadata)
+    {
+        return OpenBillingPeriod(evnt.CustomerId, evnt.CustomerId);
+    }
 
-    private Task Handle(BillingPeriodClosed evnt, EventMetadata metadata) =>
-        OpenBillingPeriod(evnt.BillingPeriodId, evnt.CustomerId);
+    private Task Handle(BillingPeriodClosed evnt, EventMetadata metadata)
+    {
+        return OpenBillingPeriod(evnt.BillingPeriodId, evnt.CustomerId);
+    }
 
-    private Task OpenBillingPeriod(string idempotencyKey, string customerId) =>
-        _mediator.Send(new OpenBillingPeriod(Ids.NewBillingPeriodId(idempotencyKey), customerId));
+    private Task OpenBillingPeriod(string idempotencyKey, string customerId)
+    {
+        return _mediator.Send(new OpenBillingPeriod(Ids.NewBillingPeriodId(idempotencyKey), customerId));
+    }
 }

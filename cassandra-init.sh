@@ -10,4 +10,5 @@ cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS process_manager WITH replicati
 cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS single_current_aggregate WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
 cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS two_phase_commit WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
 cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS pending_creation WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
+cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS fat_events WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
 echo "Keyspaces created."

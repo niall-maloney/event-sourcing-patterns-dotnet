@@ -31,7 +31,7 @@ public class UserProcessManager : SubscriberBase
         await _repository.AddUser(new UserDataRow
         {
             UserId = evnt.UserId,
-            EmailAddress = evnt.EmailAddress
+            EmailAddress = evnt.EmailAddress,
         });
 
         if (alreadyExists)

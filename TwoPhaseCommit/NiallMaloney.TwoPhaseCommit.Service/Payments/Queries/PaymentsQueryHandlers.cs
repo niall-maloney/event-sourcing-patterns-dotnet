@@ -1,5 +1,4 @@
 using MediatR;
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Queries;
@@ -15,18 +14,22 @@ public class PaymentsQueryHandlers
         _repository = repository;
     }
 
-    public Task<PaymentRow?> Handle(GetPayment request, CancellationToken cancellationToken) =>
-        _repository.GetPayment(request.PaymentId);
+    public Task<PaymentRow?> Handle(GetPayment request, CancellationToken cancellationToken)
+    {
+        return _repository.GetPayment(request.PaymentId);
+    }
 
     public Task<IEnumerable<PaymentRow>> Handle(
         SearchPayments request,
         CancellationToken cancellationToken
-    ) =>
-        _repository.SearchPayments(
+    )
+    {
+        return _repository.SearchPayments(
             request.PaymentId,
             request.Iban,
             request.Amount,
             request.Reference,
             request.Status
         );
+    }
 }

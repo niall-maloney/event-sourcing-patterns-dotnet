@@ -27,6 +27,7 @@ public class PaymentsController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(Payment.Map(row));
     }
 

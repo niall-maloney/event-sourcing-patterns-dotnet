@@ -17,7 +17,6 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
-
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetUser([FromRoute] string userId)
     {

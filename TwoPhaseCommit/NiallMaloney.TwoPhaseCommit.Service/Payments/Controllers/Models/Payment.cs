@@ -1,4 +1,3 @@
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Controllers.Models;
@@ -12,11 +11,15 @@ public record Payment(
     ulong Version
 )
 {
-    public static Payment Map(PaymentRow r) =>
-        new(r.PaymentId, r.Iban, r.Amount, r.Reference, r.Status, r.Version);
+    public static Payment Map(PaymentRow r)
+    {
+        return new Payment(r.PaymentId, r.Iban, r.Amount, r.Reference, r.Status, r.Version);
+    }
 
-    public static IEnumerable<Payment> Map(IEnumerable<PaymentRow> rs) =>
-        rs.Select(
+    public static IEnumerable<Payment> Map(IEnumerable<PaymentRow> rs)
+    {
+        return rs.Select(
             r => new Payment(r.PaymentId, r.Iban, r.Amount, r.Reference, r.Status, r.Version)
         );
+    }
 }

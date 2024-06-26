@@ -8,7 +8,6 @@ public class CassandraExpectationsMapping : Mappings
 {
     public CassandraExpectationsMapping()
     {
-        
         For<ExpectationRow>()
             .TableName("expectations")
             .PartitionKey(u => u.ExpectationId)

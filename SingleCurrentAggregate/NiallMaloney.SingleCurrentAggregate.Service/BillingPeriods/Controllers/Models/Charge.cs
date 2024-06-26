@@ -10,9 +10,13 @@ public record Charge(
     ulong Version
 )
 {
-    public static Charge Map(ChargeRow r) =>
-        new(r.ChargeId, r.BillingPeriodId, r.Status, r.Amount, r.Version);
+    public static Charge Map(ChargeRow r)
+    {
+        return new Charge(r.ChargeId, r.BillingPeriodId, r.Status, r.Amount, r.Version);
+    }
 
-    public static IEnumerable<Charge> Map(IEnumerable<ChargeRow> rs) =>
-        rs.Select(r => new Charge(r.ChargeId, r.BillingPeriodId, r.Status, r.Amount, r.Version));
+    public static IEnumerable<Charge> Map(IEnumerable<ChargeRow> rs)
+    {
+        return rs.Select(r => new Charge(r.ChargeId, r.BillingPeriodId, r.Status, r.Amount, r.Version));
+    }
 }

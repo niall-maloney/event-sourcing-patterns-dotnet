@@ -61,6 +61,7 @@ public class BillingPeriodHandlers
         {
             throw new InvalidOperationException("Charge not found in projection.");
         }
+
         var billingPeriod = await _aggregateRepository.LoadAggregate<BillingPeriod>(
             charge.BillingPeriodId!
         );
@@ -80,7 +81,7 @@ public class BillingPeriodHandlers
         {
             > 1 => throw new InvalidOperationException("Multiple open billing periods"),
             < 1 => throw new InvalidOperationException("No open billing period"),
-            _ => rows.Single().BillingPeriodId!
+            _   => rows.Single().BillingPeriodId!,
         };
     }
 }

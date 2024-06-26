@@ -6,8 +6,8 @@ namespace NiallMaloney.PendingCreation.Cassandra.Users;
 
 public class CassandraDuplicateUserTrackingRepository : IDuplicateUserTrackingRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraDuplicateUserTrackingRepository()
     {
@@ -15,14 +15,6 @@ public class CassandraDuplicateUserTrackingRepository : IDuplicateUserTrackingRe
         _session = cluster.Connect(Configuration.Keyspace);
         _mapper = new Mapper(_session);
         CreateTables();
-    }
-
-    private void CreateTables()
-    {
-        //CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)"
-        );
     }
 
     public async Task<bool> HasUserWithEmailAddress(string emailAddress)
@@ -33,7 +25,18 @@ public class CassandraDuplicateUserTrackingRepository : IDuplicateUserTrackingRe
         return count > 0;
     }
 
-    public Task AddUser(UserDataRow userDataRow) => _mapper.InsertAsync(userDataRow);
+    public Task AddUser(UserDataRow userDataRow)
+    {
+        return _mapper.InsertAsync(userDataRow);
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)"
+        );
+    }
 }
 
 public interface IDuplicateUserTrackingRepository
@@ -44,6 +47,6 @@ public interface IDuplicateUserTrackingRepository
 
 public record UserDataRow
 {
-    public string UserId { get; init; }
-    public string EmailAddress { get; init; }
+    public string? UserId { get; init; }
+    public string? EmailAddress { get; init; }
 }

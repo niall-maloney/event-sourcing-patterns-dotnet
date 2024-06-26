@@ -1,5 +1,4 @@
 using MediatR;
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Expectations;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Expectations.Queries;
@@ -18,17 +17,22 @@ public class ExpectationsQueryHandlers
     public Task<ExpectationRow?> Handle(
         GetExpectation request,
         CancellationToken cancellationToken
-    ) => _repository.GetExpectation(request.ExpectationId);
+    )
+    {
+        return _repository.GetExpectation(request.ExpectationId);
+    }
 
     public Task<IEnumerable<ExpectationRow>> Handle(
         SearchExpectations request,
         CancellationToken cancellationToken
-    ) =>
-        _repository.SearchExpectations(
+    )
+    {
+        return _repository.SearchExpectations(
             request.ExpectationId,
             request.Iban,
             request.Amount,
             request.Reference,
             request.Status
         );
+    }
 }

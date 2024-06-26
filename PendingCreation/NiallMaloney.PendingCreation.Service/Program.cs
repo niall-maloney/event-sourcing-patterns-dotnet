@@ -25,7 +25,9 @@ builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingA
 builder.Services.AddControllers();
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment()) { }
+if (app.Environment.IsDevelopment())
+{
+}
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
@@ -33,4 +35,6 @@ app.MapControllers();
 app.Run();
 
 // for tests
-public partial class Program { }
+public partial class Program
+{
+}

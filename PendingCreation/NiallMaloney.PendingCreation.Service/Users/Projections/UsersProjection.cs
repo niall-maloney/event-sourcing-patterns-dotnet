@@ -36,7 +36,7 @@ public class UsersProjection : Projection
             Forename = evnt.Forename,
             Surname = evnt.Surname,
             Status = "Pending",
-            Version = metadata.StreamPosition
+            Version = metadata.StreamPosition,
         });
     }
 

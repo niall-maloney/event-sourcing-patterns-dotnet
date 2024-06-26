@@ -8,8 +8,10 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddCassandraCursorRepository(
         this IServiceCollection services,
         string keyspace
-    ) =>
-        services.AddSingleton<ISubscriptionCursorRepository>(
+    )
+    {
+        return services.AddSingleton<ISubscriptionCursorRepository>(
             new CassandraSubscriptionCursorRepository(keyspace)
         );
+    }
 }

@@ -40,7 +40,7 @@ public class BillingPeriodsProjection : Projection
                 CustomerId = evnt.CustomerId,
                 Status = "Open",
                 TotalAmount = 0,
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }
@@ -104,12 +104,14 @@ public class BillingPeriodsProjection : Projection
             newBillingPeriod = billingPeriod;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newBillingPeriod = billingPeriod with { Version = newVersion };
         return true;
     }

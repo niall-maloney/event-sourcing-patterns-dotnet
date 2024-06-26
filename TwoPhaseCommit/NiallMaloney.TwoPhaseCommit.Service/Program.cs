@@ -1,11 +1,11 @@
-using NiallMaloney.TwoPhaseCommit.Cassandra;
-using NiallMaloney.TwoPhaseCommit.Service.Expectations.Projections;
-using NiallMaloney.TwoPhaseCommit.Service.Matching.Domain;
-using NiallMaloney.TwoPhaseCommit.Service.Payments.Projections;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Subscriptions;
 using NiallMaloney.Shared.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Cassandra;
+using NiallMaloney.TwoPhaseCommit.Service.Expectations.Projections;
+using NiallMaloney.TwoPhaseCommit.Service.Matching.Domain;
 using NiallMaloney.TwoPhaseCommit.Service.Matching.Projections;
+using NiallMaloney.TwoPhaseCommit.Service.Payments.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
 var executingAssembly = typeof(Program).Assembly;
@@ -23,17 +23,16 @@ builder.Services.AddSubscriber<MatchingManagerProjection>();
 builder.Services.AddSubscriber<PaymentsProjection>();
 builder.Services.AddSubscriber<ExpectationsProjection>();
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(executingAssembly);
-});
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingAssembly); });
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) { }
+if (app.Environment.IsDevelopment())
+{
+}
 
 app.UseHttpsRedirection();
 
@@ -44,4 +43,6 @@ app.MapControllers();
 app.Run();
 
 // for tests
-public partial class Program { }
+public partial class Program
+{
+}

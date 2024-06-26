@@ -19,6 +19,7 @@ public class Customer : Aggregate
         {
             return;
         }
+
         RaiseEvent(new CustomerAdded(Id));
     }
 

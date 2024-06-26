@@ -6,8 +6,8 @@ namespace NiallMaloney.TwoPhaseCommit.Cassandra.Expectations;
 
 public class CassandraExpectationsRepository : IExpectationsRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraExpectationsRepository()
     {
@@ -17,23 +17,23 @@ public class CassandraExpectationsRepository : IExpectationsRepository
         CreateTables();
     }
 
-    private void CreateTables()
+    public Task AddExpectation(ExpectationRow expectation)
     {
-        //CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)"
-        );
+        return _mapper.InsertAsync(expectation);
     }
 
-    public Task AddExpectation(ExpectationRow expectation) => _mapper.InsertAsync(expectation);
+    public Task UpdateExpectation(ExpectationRow expectation)
+    {
+        return _mapper.UpdateAsync(expectation);
+    }
 
-    public Task UpdateExpectation(ExpectationRow expectation) => _mapper.UpdateAsync(expectation);
-
-    public Task<ExpectationRow?> GetExpectation(string expectationId) =>
-        _mapper.SingleOrDefaultAsync<ExpectationRow?>(
+    public Task<ExpectationRow?> GetExpectation(string expectationId)
+    {
+        return _mapper.SingleOrDefaultAsync<ExpectationRow?>(
             "SELECT * FROM expectations where expectationId=?",
             expectationId
         );
+    }
 
     public Task<IEnumerable<ExpectationRow>> SearchExpectations(
         string? expectationId = null,
@@ -49,23 +49,35 @@ public class CassandraExpectationsRepository : IExpectationsRepository
         {
             expectations = expectations.Where(b => b.ExpectationId == expectationId);
         }
+
         if (!string.IsNullOrEmpty(iban))
         {
             expectations = expectations.Where(b => b.Iban == iban).AllowFiltering();
         }
+
         if (amount.HasValue)
         {
             expectations = expectations.Where(b => b.Amount == amount.Value).AllowFiltering();
         }
+
         if (!string.IsNullOrEmpty(reference))
         {
             expectations = expectations.Where(b => b.Reference == reference).AllowFiltering();
         }
+
         if (!string.IsNullOrEmpty(status))
         {
             expectations = expectations.Where(b => b.Status == status).AllowFiltering();
         }
 
         return expectations.ExecuteAsync();
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS expectations ( expectationId text PRIMARY KEY, iban text, status text, amount decimal, reference text, version varint)"
+        );
     }
 }

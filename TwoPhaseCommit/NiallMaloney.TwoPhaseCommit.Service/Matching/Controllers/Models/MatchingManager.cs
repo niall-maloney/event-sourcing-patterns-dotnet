@@ -1,4 +1,3 @@
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Controllers.Models;
@@ -14,11 +13,17 @@ public record MatchingManager(
     ulong Version
 )
 {
-    public static MatchingManager Map(MatchingManagerRow r) =>
-        new(r.MatchingId, r.PaymentId, r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status, r.Version);
+    public static MatchingManager Map(MatchingManagerRow r)
+    {
+        return new MatchingManager(r.MatchingId, r.PaymentId, r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status,
+            r.Version);
+    }
 
-    public static IEnumerable<MatchingManager> Map(IEnumerable<MatchingManagerRow> rs) =>
-        rs.Select(
-            r => new MatchingManager(r.MatchingId, r.PaymentId, r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status, r.Version)
+    public static IEnumerable<MatchingManager> Map(IEnumerable<MatchingManagerRow> rs)
+    {
+        return rs.Select(
+            r => new MatchingManager(r.MatchingId, r.PaymentId, r.ExpectationId, r.Iban, r.Amount, r.Reference,
+                r.Status, r.Version)
         );
+    }
 }
