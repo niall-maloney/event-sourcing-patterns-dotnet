@@ -1,7 +1,6 @@
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Projections;
 using NiallMaloney.EventSourcing.Subscriptions;
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 using NiallMaloney.TwoPhaseCommit.Service.Matching.Events;
 
@@ -49,7 +48,7 @@ public class MatchingManagerProjection : Projection
                 Amount = evnt.Amount,
                 Reference = evnt.Reference,
                 Status = "Pending",
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }
@@ -205,12 +204,14 @@ public class MatchingManagerProjection : Projection
             newManager = manager;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newManager = manager with { Version = newVersion };
         return true;
     }

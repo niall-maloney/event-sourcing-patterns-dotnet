@@ -35,6 +35,7 @@ public class BookingsController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(Booking.Map(booking));
     }
 

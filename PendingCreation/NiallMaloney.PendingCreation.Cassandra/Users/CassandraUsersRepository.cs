@@ -6,8 +6,8 @@ namespace NiallMaloney.PendingCreation.Cassandra.Users;
 
 public class CassandraUsersRepository : IUsersRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraUsersRepository()
     {
@@ -17,23 +17,23 @@ public class CassandraUsersRepository : IUsersRepository
         CreateTables();
     }
 
-    private void CreateTables()
+    public Task AddUser(UserRow user)
     {
-        //CREATE TABLE IF NOT EXISTS users ( userId text PRIMARY KEY, emailAddress text, forename text, surname text, status text, version varint)
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS users ( userId text PRIMARY KEY, emailAddress text, forename text, surname text, status text, version varint)"
-        );
+        return _mapper.InsertAsync(user);
     }
 
-    public Task AddUser(UserRow user) => _mapper.InsertAsync(user);
+    public Task UpdateUser(UserRow user)
+    {
+        return _mapper.UpdateAsync(user);
+    }
 
-    public Task UpdateUser(UserRow user) => _mapper.UpdateAsync(user);
-
-    public Task<UserRow?> GetUser(string userId) =>
-        _mapper.SingleOrDefaultAsync<UserRow?>(
+    public Task<UserRow?> GetUser(string userId)
+    {
+        return _mapper.SingleOrDefaultAsync<UserRow?>(
             "SELECT * FROM users where userId=?",
             userId
         );
+    }
 
     public Task<IEnumerable<UserRow>> SearchUsers(string? emailAddress, string? status)
     {
@@ -43,11 +43,20 @@ public class CassandraUsersRepository : IUsersRepository
         {
             users = users.Where(b => b.EmailAddress == emailAddress).AllowFiltering();
         }
+
         if (!string.IsNullOrEmpty(status))
         {
             users = users.Where(b => b.Status == status).AllowFiltering();
         }
 
         return users.ExecuteAsync();
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS users ( userId text PRIMARY KEY, emailAddress text, forename text, surname text, status text, version varint)
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS users ( userId text PRIMARY KEY, emailAddress text, forename text, surname text, status text, version varint)"
+        );
     }
 }

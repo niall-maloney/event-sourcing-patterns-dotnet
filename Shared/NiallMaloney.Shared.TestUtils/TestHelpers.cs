@@ -9,12 +9,14 @@ public abstract class TestHelpers
         Func<T, bool> retryUntilPredicate,
         int retryCount = 50,
         int sleepDurationInMilliseconds = 100
-    ) =>
-        await Policy
+    )
+    {
+        return await Policy
             .HandleResult<T>(r => !retryUntilPredicate.Invoke(r))
             .WaitAndRetryAsync(
                 retryCount,
                 _ => TimeSpan.FromMilliseconds(sleepDurationInMilliseconds)
             )
             .ExecuteAsync(action);
+    }
 }

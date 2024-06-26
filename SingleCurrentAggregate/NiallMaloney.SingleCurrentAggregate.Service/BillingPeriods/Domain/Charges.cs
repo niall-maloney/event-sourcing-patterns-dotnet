@@ -4,11 +4,20 @@ public class Charges
 {
     private readonly Dictionary<string, decimal> _charges = new();
 
-    public bool Contains(string chargeId) => _charges.ContainsKey(chargeId);
+    public bool Contains(string chargeId)
+    {
+        return _charges.ContainsKey(chargeId);
+    }
 
-    public decimal GetChargeAmount(string chargeId) => _charges[chargeId];
+    public decimal GetChargeAmount(string chargeId)
+    {
+        return _charges[chargeId];
+    }
 
-    public decimal GetTotalAmount() => _charges.Sum(c => c.Value);
+    public decimal GetTotalAmount()
+    {
+        return _charges.Sum(c => c.Value);
+    }
 
     public void Add(string chargeId, decimal amount)
     {

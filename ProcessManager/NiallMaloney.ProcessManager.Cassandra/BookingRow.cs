@@ -2,9 +2,9 @@ namespace NiallMaloney.ProcessManager.Cassandra;
 
 public record BookingRow
 {
-    public string BookingId { get; set; }
-    public string Ledger { get; set; }
-    public decimal Amount { get; set; }
-    public string Status { get; set; }
-    public ulong Version { get; set; }
+    public string? BookingId { get; init; }
+    public string? Ledger { get; init; }
+    public decimal Amount { get; init; }
+    public string? Status { get; init; }
+    public ulong Version { get; init; }
 }

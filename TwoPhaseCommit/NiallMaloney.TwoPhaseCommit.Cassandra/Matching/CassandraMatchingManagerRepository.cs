@@ -6,8 +6,8 @@ namespace NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 
 public class CassandraMatchingManagerRepository : IMatchingManagerRepository
 {
-    private readonly ISession _session;
     private readonly Mapper _mapper;
+    private readonly ISession _session;
 
     public CassandraMatchingManagerRepository()
     {
@@ -17,23 +17,23 @@ public class CassandraMatchingManagerRepository : IMatchingManagerRepository
         CreateTables();
     }
 
-    private void CreateTables()
+    public Task AddManager(MatchingManagerRow manager)
     {
-        //CREATE TABLE IF NOT EXISTS matching_managers ( matchingId text PRIMARY KEY, paymentId text, expectationId text, iban text, status text, amount decimal, reference text, version varint
-        _session.Execute(
-            "CREATE TABLE IF NOT EXISTS matching_managers ( matchingId text PRIMARY KEY, paymentId text, expectationId text, iban text, status text, amount decimal, reference text, version varint)"
-        );
+        return _mapper.InsertAsync(manager);
     }
 
-    public Task AddManager(MatchingManagerRow manager) => _mapper.InsertAsync(manager);
+    public Task UpdateManager(MatchingManagerRow manager)
+    {
+        return _mapper.UpdateAsync(manager);
+    }
 
-    public Task UpdateManager(MatchingManagerRow manager) => _mapper.UpdateAsync(manager);
-
-    public Task<MatchingManagerRow?> GetManager(string matchingId) =>
-        _mapper.SingleOrDefaultAsync<MatchingManagerRow?>(
+    public Task<MatchingManagerRow?> GetManager(string matchingId)
+    {
+        return _mapper.SingleOrDefaultAsync<MatchingManagerRow?>(
             "SELECT * FROM matching_managers where matchingId=?",
             matchingId
         );
+    }
 
     public Task<IEnumerable<MatchingManagerRow>> SearchManagers(
         string? matchingId = null,
@@ -48,15 +48,25 @@ public class CassandraMatchingManagerRepository : IMatchingManagerRepository
         {
             managers = managers.Where(b => b.MatchingId == matchingId).AllowFiltering();
         }
+
         if (!string.IsNullOrEmpty(paymentId))
         {
             managers = managers.Where(b => b.PaymentId == paymentId);
         }
+
         if (!string.IsNullOrEmpty(expectationId))
         {
             managers = managers.Where(b => b.ExpectationId == expectationId).AllowFiltering();
         }
 
         return managers.ExecuteAsync();
+    }
+
+    private void CreateTables()
+    {
+        //CREATE TABLE IF NOT EXISTS matching_managers ( matchingId text PRIMARY KEY, paymentId text, expectationId text, iban text, status text, amount decimal, reference text, version varint
+        _session.Execute(
+            "CREATE TABLE IF NOT EXISTS matching_managers ( matchingId text PRIMARY KEY, paymentId text, expectationId text, iban text, status text, amount decimal, reference text, version varint)"
+        );
     }
 }

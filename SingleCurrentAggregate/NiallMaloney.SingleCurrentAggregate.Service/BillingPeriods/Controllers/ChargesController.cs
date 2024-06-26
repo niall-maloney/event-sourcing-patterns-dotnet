@@ -27,6 +27,7 @@ public class ChargesController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(Charge.Map(row));
     }
 
@@ -57,6 +58,7 @@ public class ChargesController : ControllerBase
         {
             return NotFound();
         }
+
         await _mediator.Send(new RemoveCharge(chargeId));
         return Accepted(chargeId);
     }

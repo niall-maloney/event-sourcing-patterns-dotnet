@@ -27,6 +27,7 @@ public class BillingPeriodsController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(BillingPeriod.Map(row));
     }
 
@@ -59,6 +60,7 @@ public class BillingPeriodsController : ControllerBase
         {
             return NotFound();
         }
+
         await _mediator.Send(new CloseBillingPeriod(billingPeriodId));
         return Accepted(billingPeriodId);
     }

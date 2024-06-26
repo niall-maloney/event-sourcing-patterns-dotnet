@@ -4,7 +4,7 @@ using NiallMaloney.TwoPhaseCommit.Cassandra.Matching;
 
 namespace NiallMaloney.TwoPhaseCommit.Cassandra;
 
-public class CassandraMatchingMappings: Mappings
+public class CassandraMatchingMappings : Mappings
 {
     public CassandraMatchingMappings()
     {

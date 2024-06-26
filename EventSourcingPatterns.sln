@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProcessManager", "ProcessManager", "{CBBE6F88-A883-4F32-9682-2CFA45183472}"
+	ProjectSection(SolutionItems) = preProject
+		ProcessManager\README.md = ProcessManager\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.Service", "ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj", "{B8208F3D-33DB-427C-A959-EF7B5BC1EA8B}"
 EndProject
@@ -18,6 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEEB42CB
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SingleCurrentAggregate", "SingleCurrentAggregate", "{5337124F-4203-4550-9F2A-0BB26C03082E}"
+	ProjectSection(SolutionItems) = preProject
+		SingleCurrentAggregate\README.md = SingleCurrentAggregate\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.SingleCurrentAggregate.Service", "SingleCurrentAggregate\NiallMaloney.SingleCurrentAggregate.Service\NiallMaloney.SingleCurrentAggregate.Service.csproj", "{9CB6EE1C-B9E1-4E19-92F3-673C0428F857}"
 EndProject
@@ -32,6 +38,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.ProcessManager.IntegrationTests", "ProcessManager\NiallMaloney.ProcessManager.IntegrationTests\NiallMaloney.ProcessManager.IntegrationTests.csproj", "{C13EFF78-4E83-4E86-AE14-4FE5BCE2BBCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TwoPhaseCommit", "TwoPhaseCommit", "{FF9E080D-0BAD-4A74-8617-AA88DC25BAFE}"
+	ProjectSection(SolutionItems) = preProject
+		TwoPhaseCommit\README.md = TwoPhaseCommit\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.TwoPhaseCommit.Service", "TwoPhaseCommit\NiallMaloney.TwoPhaseCommit.Service\NiallMaloney.TwoPhaseCommit.Service.csproj", "{194E4638-3316-4619-9840-30FD81C7EC53}"
 EndProject
@@ -44,12 +53,26 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.Shared.TestUtils", "Shared\NiallMaloney.Shared.TestUtils\NiallMaloney.Shared.TestUtils.csproj", "{45785A05-74E6-4CEF-8F9B-F8D212E9A58B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PendingCreation", "PendingCreation", "{A65761FC-1E81-4EEE-A252-98935AA9FC3A}"
+	ProjectSection(SolutionItems) = preProject
+		PendingCreation\README.md = PendingCreation\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.PendingCreation.Service", "PendingCreation\NiallMaloney.PendingCreation.Service\NiallMaloney.PendingCreation.Service.csproj", "{3A872A82-23EA-4A95-AFC4-A420CD175945}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.PendingCreation.Cassandra", "PendingCreation\NiallMaloney.PendingCreation.Cassandra\NiallMaloney.PendingCreation.Cassandra.csproj", "{3F04F3C5-164A-4B9D-8283-0DF69CCBBFC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.PendingCreation.IntegrationTests", "PendingCreation\NiallMaloney.PendingCreation.IntegrationTests\NiallMaloney.PendingCreation.IntegrationTests.csproj", "{8ECE933F-7AE1-4810-B49E-EEA662CE7FD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FatEvents", "FatEvents", "{D336D486-A456-44F3-8654-4FF54D8F5DF7}"
+	ProjectSection(SolutionItems) = preProject
+		FatEvents\README.md = FatEvents\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.FatEvents.Cassandra", "FatEvents\NiallMaloney.FatEvents.Cassandra\NiallMaloney.FatEvents.Cassandra.csproj", "{407CFA5A-FEC2-4114-B1C8-A4582177BE98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.FatEvents.IntegrationTests", "FatEvents\NiallMaloney.FatEvents.IntegrationTests\NiallMaloney.FatEvents.IntegrationTests.csproj", "{C89A04EA-E377-4258-B651-39CABB7D11CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiallMaloney.FatEvents.Service", "FatEvents\NiallMaloney.FatEvents.Service\NiallMaloney.FatEvents.Service.csproj", "{C801AAAC-2501-4A28-94E7-1299D8ADEF44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,6 +143,18 @@ Global
 		{8ECE933F-7AE1-4810-B49E-EEA662CE7FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ECE933F-7AE1-4810-B49E-EEA662CE7FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ECE933F-7AE1-4810-B49E-EEA662CE7FD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{407CFA5A-FEC2-4114-B1C8-A4582177BE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{407CFA5A-FEC2-4114-B1C8-A4582177BE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{407CFA5A-FEC2-4114-B1C8-A4582177BE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{407CFA5A-FEC2-4114-B1C8-A4582177BE98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C89A04EA-E377-4258-B651-39CABB7D11CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89A04EA-E377-4258-B651-39CABB7D11CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89A04EA-E377-4258-B651-39CABB7D11CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89A04EA-E377-4258-B651-39CABB7D11CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C801AAAC-2501-4A28-94E7-1299D8ADEF44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C801AAAC-2501-4A28-94E7-1299D8ADEF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C801AAAC-2501-4A28-94E7-1299D8ADEF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C801AAAC-2501-4A28-94E7-1299D8ADEF44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CBBE6F88-A883-4F32-9682-2CFA45183472} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
@@ -142,5 +177,9 @@ Global
 		{3A872A82-23EA-4A95-AFC4-A420CD175945} = {A65761FC-1E81-4EEE-A252-98935AA9FC3A}
 		{3F04F3C5-164A-4B9D-8283-0DF69CCBBFC0} = {A65761FC-1E81-4EEE-A252-98935AA9FC3A}
 		{8ECE933F-7AE1-4810-B49E-EEA662CE7FD3} = {A65761FC-1E81-4EEE-A252-98935AA9FC3A}
+		{D336D486-A456-44F3-8654-4FF54D8F5DF7} = {F67CFBF9-9AE9-4D48-96A5-6D4A1DA77E59}
+		{407CFA5A-FEC2-4114-B1C8-A4582177BE98} = {D336D486-A456-44F3-8654-4FF54D8F5DF7}
+		{C89A04EA-E377-4258-B651-39CABB7D11CD} = {D336D486-A456-44F3-8654-4FF54D8F5DF7}
+		{C801AAAC-2501-4A28-94E7-1299D8ADEF44} = {D336D486-A456-44F3-8654-4FF54D8F5DF7}
 	EndGlobalSection
 EndGlobal

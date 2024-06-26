@@ -27,6 +27,7 @@ public class BookingsProjection : Projection
         {
             return;
         }
+
         await _repository.AddBooking(
             new BookingRow
             {
@@ -34,7 +35,7 @@ public class BookingsProjection : Projection
                 Ledger = evnt.Ledger,
                 Amount = evnt.Amount,
                 Status = "Pending",
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }
@@ -46,6 +47,7 @@ public class BookingsProjection : Projection
         {
             return;
         }
+
         booking = booking with { Status = "Committed" };
         await _repository.UpdateBooking(booking);
     }
@@ -57,6 +59,7 @@ public class BookingsProjection : Projection
         {
             return;
         }
+
         booking = booking with { Status = "Rejected" };
         await _repository.UpdateBooking(booking);
     }
@@ -70,12 +73,14 @@ public class BookingsProjection : Projection
             newBooking = booking;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newBooking = booking with { Version = newVersion };
         return true;
     }

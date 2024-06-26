@@ -1,7 +1,6 @@
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Projections;
 using NiallMaloney.EventSourcing.Subscriptions;
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Expectations;
 using NiallMaloney.TwoPhaseCommit.Service.Expectations.Events;
 
@@ -39,7 +38,7 @@ public class ExpectationsProjection : Projection
                 Amount = evnt.Amount,
                 Reference = evnt.Reference,
                 Status = "Created",
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }
@@ -101,12 +100,14 @@ public class ExpectationsProjection : Projection
             newExpectation = expectation;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newExpectation = expectation with { Version = newVersion };
         return true;
     }

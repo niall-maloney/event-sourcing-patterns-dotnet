@@ -27,6 +27,7 @@ public class ExpectationsController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(Expectation.Map(row));
     }
 

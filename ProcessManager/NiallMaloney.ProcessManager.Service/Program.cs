@@ -19,15 +19,14 @@ builder.Services.AddCassandraRepositories();
 builder.Services.AddSubscriber<BookingsProjection>();
 builder.Services.AddSubscriber<LedgersProcessManager>();
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(executingAssembly);
-});
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssembly(executingAssembly); });
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment()) { }
+if (app.Environment.IsDevelopment())
+{
+}
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
@@ -37,5 +36,7 @@ app.Run();
 // for tests
 namespace NiallMaloney.ProcessManager.Service
 {
-    public partial class Program { }
+    public class Program
+    {
+    }
 }

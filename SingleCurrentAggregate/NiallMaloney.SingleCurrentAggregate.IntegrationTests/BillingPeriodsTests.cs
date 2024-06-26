@@ -155,7 +155,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         );
         getResponseMessage.EnsureSuccessStatusCode();
         return await getResponseMessage.Content.ReadFromJsonAsync<IEnumerable<BillingPeriod>>()
-            ?? throw new InvalidOperationException();
+               ?? throw new InvalidOperationException();
     }
 
     private async Task<BillingPeriod?> GetBillingPeriod(string billingPeriodId)
@@ -165,10 +165,12 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<BillingPeriod>();
         }
+
         if (getResponseMessage.StatusCode is HttpStatusCode.NotFound)
         {
             return null;
         }
+
         throw new HttpRequestException();
     }
 
@@ -179,6 +181,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
+
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<CustomerReference>();
         reference.Should().NotBeNull();
         return reference!;
@@ -216,10 +219,12 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             return await getResponseMessage.Content.ReadFromJsonAsync<Charge>();
         }
+
         if (getResponseMessage.StatusCode is HttpStatusCode.NotFound)
         {
             return null;
         }
+
         throw new HttpRequestException();
     }
 
@@ -237,6 +242,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
+
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<ChargeReference>();
         reference.Should().NotBeNull();
         return reference!;
@@ -259,12 +265,14 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         Func<T, bool> retryUntilPredicate,
         int retryCount = 50,
         int sleepDurationInMilliseconds = 100
-    ) =>
-        await Policy
+    )
+    {
+        return await Policy
             .HandleResult<T>(r => !retryUntilPredicate.Invoke(r))
             .WaitAndRetryAsync(
                 retryCount,
                 _ => TimeSpan.FromMilliseconds(sleepDurationInMilliseconds)
             )
             .ExecuteAsync(action);
+    }
 }

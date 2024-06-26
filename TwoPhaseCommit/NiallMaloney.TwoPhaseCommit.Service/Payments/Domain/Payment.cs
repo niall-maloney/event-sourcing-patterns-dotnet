@@ -6,15 +6,10 @@ namespace NiallMaloney.TwoPhaseCommit.Service.Payments.Domain;
 [Category("two_phase_commit.payment")]
 public class Payment : Aggregate
 {
-    private decimal Amount { get; set; } = 0;
-    private string ExpectationId { get; set; } = string.Empty;
-    private string Iban { get; set; } = string.Empty;
-    private string MatchingId { get; set; } = string.Empty;
-    private string Reference { get; set; } = string.Empty;
+    private bool _hasBeenMatched;
 
-    private bool _hasBeenReceived = false;
-    private bool _hasBeenReserved = false;
-    private bool _hasBeenMatched = false;
+    private bool _hasBeenReceived;
+    private bool _hasBeenReserved;
 
     public Payment()
     {
@@ -24,6 +19,12 @@ public class Payment : Aggregate
         When<PaymentMatched>(Apply);
         When<PaymentMatchRejected>(Apply);
     }
+
+    private decimal Amount { get; set; }
+    private string ExpectationId { get; set; } = string.Empty;
+    private string Iban { get; set; } = string.Empty;
+    private string MatchingId { get; set; } = string.Empty;
+    private string Reference { get; set; } = string.Empty;
 
     public void Receive(string iban, decimal amount, string reference)
     {
@@ -101,5 +102,7 @@ public class Payment : Aggregate
         ExpectationId = evnt.ExpectationId;
     }
 
-    private void Apply(PaymentMatchRejected evnt) { }
+    private void Apply(PaymentMatchRejected evnt)
+    {
+    }
 }

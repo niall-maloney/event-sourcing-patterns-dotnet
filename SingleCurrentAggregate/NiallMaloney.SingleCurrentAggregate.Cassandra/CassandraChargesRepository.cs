@@ -17,8 +17,10 @@ public class CassandraChargesRepository : IChargesRepository
         CreateTables();
     }
 
-    public Task<ChargeRow> GetCharge(string chargeId) =>
-        _mapper.SingleOrDefaultAsync<ChargeRow>("SELECT * FROM charges where chargeId=?", chargeId);
+    public Task<ChargeRow> GetCharge(string chargeId)
+    {
+        return _mapper.SingleOrDefaultAsync<ChargeRow>("SELECT * FROM charges where chargeId=?", chargeId);
+    }
 
     public Task<IEnumerable<ChargeRow>> SearchCharges(
         string? chargeId = null,
@@ -46,9 +48,15 @@ public class CassandraChargesRepository : IChargesRepository
         return charges.ExecuteAsync();
     }
 
-    public Task AddCharge(ChargeRow charge) => _mapper.InsertAsync(charge);
+    public Task AddCharge(ChargeRow charge)
+    {
+        return _mapper.InsertAsync(charge);
+    }
 
-    public Task UpdateCharge(ChargeRow charge) => _mapper.UpdateAsync(charge);
+    public Task UpdateCharge(ChargeRow charge)
+    {
+        return _mapper.UpdateAsync(charge);
+    }
 
     private void CreateTables()
     {

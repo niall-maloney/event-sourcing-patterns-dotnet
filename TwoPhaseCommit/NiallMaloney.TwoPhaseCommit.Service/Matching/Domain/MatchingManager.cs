@@ -6,16 +6,12 @@ namespace NiallMaloney.TwoPhaseCommit.Service.Matching.Domain;
 [Category("two_phase_commit.matching_manager")]
 public class MatchingManager : Aggregate
 {
-    private bool _hasStarted;
-    private bool _hasFinished;
-    private bool _wasSuccessful;
-
     private decimal? _amount;
     private Expectation? _expectation;
+    private bool _hasFinished;
+    private bool _hasStarted;
     private Payment? _payment;
-
-    public Expectation Expectation => _expectation ?? throw new InvalidOperationException();
-    public Payment Payment => _payment ?? throw new InvalidOperationException();
+    private bool _wasSuccessful;
 
     public MatchingManager()
     {
@@ -33,6 +29,9 @@ public class MatchingManager : Aggregate
         When<MatchingCompleted>(Apply);
         When<MatchingFailed>(Apply);
     }
+
+    public Expectation Expectation => _expectation ?? throw new InvalidOperationException();
+    public Payment Payment => _payment ?? throw new InvalidOperationException();
 
     public void Begin(
         string expectationId,
@@ -112,7 +111,9 @@ public class MatchingManager : Aggregate
         _expectation = new Expectation(evnt.ExpectationId, evnt.Iban, evnt.Amount, evnt.Reference);
     }
 
-    private void Apply(ExpectationReserving evnt) { }
+    private void Apply(ExpectationReserving evnt)
+    {
+    }
 
     private void Apply(ExpectationReserved evnt)
     {
@@ -124,7 +125,9 @@ public class MatchingManager : Aggregate
         _expectation = null;
     }
 
-    private void Apply(PaymentReserving evnt) { }
+    private void Apply(PaymentReserving evnt)
+    {
+    }
 
     private void Apply(PaymentReserved evnt)
     {
@@ -136,14 +139,18 @@ public class MatchingManager : Aggregate
         _payment = null;
     }
 
-    private void Apply(ExpectationMatchApplying evnt) { }
+    private void Apply(ExpectationMatchApplying evnt)
+    {
+    }
 
     private void Apply(ExpectationMatchApplied evnt)
     {
         _expectation = _expectation! with { IsMatched = true };
     }
 
-    private void Apply(PaymentMatchApplying evnt) { }
+    private void Apply(PaymentMatchApplying evnt)
+    {
+    }
 
     private void Apply(PaymentMatchApplied evnt)
     {

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.3.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4"/>
+        <PackageReference Include="NiallMaloney.EventSourcing" Version="0.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Shared\NiallMaloney.Shared\NiallMaloney.Shared.csproj"/>
+        <ProjectReference Include="..\NiallMaloney.FatEvents.Cassandra\NiallMaloney.FatEvents.Cassandra.csproj"/>
+    </ItemGroup>
+
+</Project>

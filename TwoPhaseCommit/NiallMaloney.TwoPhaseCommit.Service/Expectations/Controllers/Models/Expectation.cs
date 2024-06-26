@@ -1,4 +1,3 @@
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Expectations;
 
 namespace NiallMaloney.TwoPhaseCommit.Service.Expectations.Controllers.Models;
@@ -12,12 +11,16 @@ public record Expectation(
     ulong Version
 )
 {
-    public static Expectation Map(ExpectationRow r) =>
-        new(r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status, r.Version);
+    public static Expectation Map(ExpectationRow r)
+    {
+        return new Expectation(r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status, r.Version);
+    }
 
-    public static IEnumerable<Expectation> Map(IEnumerable<ExpectationRow> rs) =>
-        rs.Select(
+    public static IEnumerable<Expectation> Map(IEnumerable<ExpectationRow> rs)
+    {
+        return rs.Select(
             r =>
                 new Expectation(r.ExpectationId, r.Iban, r.Amount, r.Reference, r.Status, r.Version)
         );
+    }
 }

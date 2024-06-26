@@ -30,6 +30,7 @@ public class ChargesProjection : Projection
         {
             return;
         }
+
         await _repository.AddCharge(
             new ChargeRow
             {
@@ -37,7 +38,7 @@ public class ChargesProjection : Projection
                 BillingPeriodId = evnt.BillingPeriodId,
                 Amount = evnt.Amount,
                 Status = "Charged",
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }
@@ -49,6 +50,7 @@ public class ChargesProjection : Projection
         {
             return;
         }
+
         charge = charge with { Status = "Removed" };
         await _repository.UpdateCharge(charge);
     }
@@ -62,12 +64,14 @@ public class ChargesProjection : Projection
             newCharge = charge;
             return false;
         }
+
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
                 $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
             );
         }
+
         newCharge = charge with { Version = newVersion };
         return true;
     }

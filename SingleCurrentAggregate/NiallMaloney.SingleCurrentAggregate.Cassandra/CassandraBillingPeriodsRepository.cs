@@ -17,11 +17,13 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         CreateTables();
     }
 
-    public Task<BillingPeriodRow?> GetBillingPeriod(string billingPeriodId) =>
-        _mapper.SingleOrDefaultAsync<BillingPeriodRow?>(
+    public Task<BillingPeriodRow?> GetBillingPeriod(string billingPeriodId)
+    {
+        return _mapper.SingleOrDefaultAsync<BillingPeriodRow?>(
             "SELECT * FROM billing_periods where billingPeriodId=?",
             billingPeriodId
         );
+    }
 
     public Task<IEnumerable<BillingPeriodRow>> SearchBillingPeriods(
         string? billingPeriodId = null,
@@ -35,10 +37,12 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         {
             billingPeriods = billingPeriods.Where(b => b.BillingPeriodId == billingPeriodId);
         }
+
         if (!string.IsNullOrEmpty(customerId))
         {
             billingPeriods = billingPeriods.Where(b => b.CustomerId == customerId).AllowFiltering();
         }
+
         if (!string.IsNullOrEmpty(status))
         {
             billingPeriods = billingPeriods.Where(b => b.Status == status).AllowFiltering();
@@ -47,11 +51,15 @@ public class CassandraBillingPeriodsRepository : IBillingPeriodsRepository
         return billingPeriods.ExecuteAsync();
     }
 
-    public Task AddBillingPeriod(BillingPeriodRow billingPeriod) =>
-        _mapper.InsertAsync(billingPeriod);
+    public Task AddBillingPeriod(BillingPeriodRow billingPeriod)
+    {
+        return _mapper.InsertAsync(billingPeriod);
+    }
 
-    public Task UpdateBillingPeriod(BillingPeriodRow billingPeriod) =>
-        _mapper.UpdateAsync(billingPeriod);
+    public Task UpdateBillingPeriod(BillingPeriodRow billingPeriod)
+    {
+        return _mapper.UpdateAsync(billingPeriod);
+    }
 
     private void CreateTables()
     {

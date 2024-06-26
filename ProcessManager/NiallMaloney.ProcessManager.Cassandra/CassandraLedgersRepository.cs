@@ -17,14 +17,18 @@ public class CassandraLedgersRepository : ILedgersRepository
         CreateTables();
     }
 
-    public async Task<IEnumerable<LedgerRow>> GetLedgers() =>
-        await _mapper.FetchAsync<LedgerRow>("SELECT * FROM ledgers");
+    public async Task<IEnumerable<LedgerRow>> GetLedgers()
+    {
+        return await _mapper.FetchAsync<LedgerRow>("SELECT * FROM ledgers");
+    }
 
-    public async Task<LedgerRow?> GetLedger(string ledger) =>
-        await _mapper.SingleOrDefaultAsync<LedgerRow?>(
+    public async Task<LedgerRow?> GetLedger(string ledger)
+    {
+        return await _mapper.SingleOrDefaultAsync<LedgerRow?>(
             "SELECT * FROM ledgers WHERE ledger=?",
             ledger
         );
+    }
 
     public async Task UpdateBalance(
         string ledger,
@@ -60,6 +64,7 @@ public class CassandraLedgersRepository : ILedgersRepository
                 (BigInteger)lastStreamPosition
             );
         }
+
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
         if (r == false)
@@ -95,6 +100,7 @@ public class CassandraLedgersRepository : ILedgersRepository
                 (BigInteger)lastStreamPosition
             );
         }
+
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
         if (r == false)
@@ -130,6 +136,7 @@ public class CassandraLedgersRepository : ILedgersRepository
                 (BigInteger)lastStreamPosition
             );
         }
+
         var rs = await _session.ExecuteAsync(statement);
         var r = rs.Single().GetValue<bool>(0);
         if (r == false)

@@ -23,17 +23,17 @@ public class ExpectationHandlers
         await _repository.SaveAggregate(expectation);
     }
 
-    public async Task Handle(ReserveExpectation request, CancellationToken cancellationToken)
-    {
-        var expectation = await _repository.LoadAggregate<Expectation>(request.ExpectationId);
-        expectation.Reserve(request.MatchingId);
-        await _repository.SaveAggregate(expectation);
-    }
-
     public async Task Handle(MatchExpectation request, CancellationToken cancellationToken)
     {
         var expectation = await _repository.LoadAggregate<Expectation>(request.ExpectationId);
         expectation.Match(request.MatchingId, request.ExpectationId);
+        await _repository.SaveAggregate(expectation);
+    }
+
+    public async Task Handle(ReserveExpectation request, CancellationToken cancellationToken)
+    {
+        var expectation = await _repository.LoadAggregate<Expectation>(request.ExpectationId);
+        expectation.Reserve(request.MatchingId);
         await _repository.SaveAggregate(expectation);
     }
 }

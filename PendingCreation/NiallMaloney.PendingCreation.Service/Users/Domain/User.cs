@@ -6,13 +6,10 @@ namespace NiallMaloney.PendingCreation.Service.Users.Domain;
 [Category("pending_creation.user")]
 public class User : Aggregate
 {
-    public string Forename { get; private set; } = string.Empty;
-    public string Surname { get; private set; } = string.Empty;
-    public string EmailAddress { get; private set; } = string.Empty;
+    private bool _hasBeenAccepted;
+    private bool _hasBeenRejected;
 
-    private bool _hasBeenRequested = false;
-    private bool _hasBeenAccepted = false;
-    private bool _hasBeenRejected = false;
+    private bool _hasBeenRequested;
 
     public User()
     {
@@ -20,6 +17,10 @@ public class User : Aggregate
         When<UserAccepted>(Apply);
         When<UserRejected>(Apply);
     }
+
+    public string Forename { get; private set; } = string.Empty;
+    public string Surname { get; private set; } = string.Empty;
+    public string EmailAddress { get; private set; } = string.Empty;
 
     public void Request(string emailAddress, string forename, string surname)
     {

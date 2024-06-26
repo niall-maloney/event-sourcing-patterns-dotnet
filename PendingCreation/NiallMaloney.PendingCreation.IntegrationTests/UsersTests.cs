@@ -110,7 +110,7 @@ public class UsersTests : IClassFixture<WebApplicationFactory<Program>>
             {
                 EmailAddress = emailAddress,
                 Forename = forename,
-                Surname = surname
+                Surname = surname,
             }
         );
         if (assertSuccess)

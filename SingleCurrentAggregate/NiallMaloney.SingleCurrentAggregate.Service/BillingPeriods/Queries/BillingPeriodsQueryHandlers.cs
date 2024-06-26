@@ -17,15 +17,20 @@ public class BillingPeriodsQueryHandlers
     public Task<BillingPeriodRow?> Handle(
         GetBillingPeriod request,
         CancellationToken cancellationToken
-    ) => _repository.GetBillingPeriod(request.BillingPeriodId);
+    )
+    {
+        return _repository.GetBillingPeriod(request.BillingPeriodId);
+    }
 
     public Task<IEnumerable<BillingPeriodRow>> Handle(
         SearchBillingPeriods request,
         CancellationToken cancellationToken
-    ) =>
-        _repository.SearchBillingPeriods(
+    )
+    {
+        return _repository.SearchBillingPeriods(
             request.BillingPeriodId,
             request.CustomerId,
             request.Status
         );
+    }
 }

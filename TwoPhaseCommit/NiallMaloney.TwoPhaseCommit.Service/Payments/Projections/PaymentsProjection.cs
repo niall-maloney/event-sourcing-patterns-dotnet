@@ -1,7 +1,6 @@
 using NiallMaloney.EventSourcing;
 using NiallMaloney.EventSourcing.Projections;
 using NiallMaloney.EventSourcing.Subscriptions;
-using NiallMaloney.TwoPhaseCommit.Cassandra;
 using NiallMaloney.TwoPhaseCommit.Cassandra.Payments;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
 
@@ -40,7 +39,7 @@ public class PaymentsProjection : Projection
                 Amount = evnt.Amount,
                 Reference = evnt.Reference,
                 Status = "Received",
-                Version = metadata.StreamPosition
+                Version = metadata.StreamPosition,
             }
         );
     }

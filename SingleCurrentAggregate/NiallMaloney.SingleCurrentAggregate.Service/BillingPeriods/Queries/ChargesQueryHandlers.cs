@@ -14,18 +14,22 @@ public class ChargesQueryHandlers
         _repository = repository;
     }
 
-    public async Task<ChargeRow?> Handle(GetCharge request, CancellationToken cancellationToken) =>
-        await _repository.GetCharge(request.ChargeId);
+    public async Task<ChargeRow?> Handle(GetCharge request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetCharge(request.ChargeId);
+    }
 
     public async Task<IEnumerable<ChargeRow>> Handle(
         SearchCharges request,
         CancellationToken cancellationToken
-    ) =>
-        (
+    )
+    {
+        return (
             await _repository.SearchCharges(
                 request.ChargeId,
                 request.BillingPeriodId,
                 request.Status
             )
         ).ToList();
+    }
 }
