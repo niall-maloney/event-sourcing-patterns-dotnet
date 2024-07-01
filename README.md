@@ -11,3 +11,6 @@ This example of a single active aggregate is a billing period that accrues charg
 
 - [Two Phase Commit](./TwoPhaseCommit/README.md)
 This example of two phase commit is a process manager that matches payments to expectations.
+
+- [Fat Events](./FatEvents/README.md)
+This example of fat events is a user service that contains all user properties on all events.
