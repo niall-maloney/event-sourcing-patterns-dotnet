@@ -9,15 +9,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="6.12.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.20"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
-        <PackageReference Include="Polly" Version="7.2.4"/>
-        <PackageReference Include="xunit" Version="2.4.1"/>
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Polly" />
+        <PackageReference Include="xunit" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj"/>
+        <ProjectReference Include="..\..\ProcessManager\NiallMaloney.ProcessManager.Service\NiallMaloney.ProcessManager.Service.csproj" />
     </ItemGroup>
 
 </Project>
