@@ -8,8 +8,8 @@ using NiallMaloney.FatEvents.Service.Users.Events;
 namespace NiallMaloney.FatEvents.Service.Notifications.Domain;
 
 [SubscriberName("NotificationProcessManager")]
-[Subscription("$ce-fat_events.user")]
-[Subscription("$ce-fat_events.notification")]
+[Subscription("$ce-fat_events.user", begin: CursorFromStream.End)]
+[Subscription("$ce-fat_events.notification", begin: CursorFromStream.End)]
 public class NotificationProcessManager : SubscriberBase
 {
     private readonly IMediator _mediator;

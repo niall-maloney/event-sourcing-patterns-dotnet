@@ -34,7 +34,7 @@ public class CassandraDuplicateUserTrackingRepository : IDuplicateUserTrackingRe
     {
         //CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)
         _session.Execute(
-            "CREATE TABLE IF NOT EXISTS duplicateUserTracking ( userId text PRIMARY KEY, emailAddress text)"
+            "CREATE TABLE IF NOT EXISTS duplicate_user_tracking ( userId text PRIMARY KEY, emailAddress text)"
         );
     }
 }
