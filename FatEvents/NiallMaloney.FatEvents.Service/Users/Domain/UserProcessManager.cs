@@ -7,7 +7,7 @@ using NiallMaloney.FatEvents.Service.Users.Events;
 namespace NiallMaloney.FatEvents.Service.Users.Domain;
 
 [SubscriberName("UserProcessManager")]
-[Subscription("$ce-fat_events.user")]
+[Subscription("$ce-fat_events.user", begin: CursorFromStream.End)]
 public class UserProcessManager : SubscriberBase
 {
     private readonly IMediator _mediator;

@@ -8,8 +8,8 @@ using NiallMaloney.SingleCurrentAggregate.Service.Customers.Events;
 namespace NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Domain;
 
 [SubscriberName("BillingPeriodsProcessManager")]
-[Subscription("$ce-single_current_aggregate.customer")]
-[Subscription("$ce-single_current_aggregate.billing_period")]
+[Subscription("$ce-single_current_aggregate.customer", begin: CursorFromStream.End)]
+[Subscription("$ce-single_current_aggregate.billing_period", begin: CursorFromStream.End)]
 public class BillingPeriodsProcessManager : SubscriberBase
 {
     private readonly IMediator _mediator;
