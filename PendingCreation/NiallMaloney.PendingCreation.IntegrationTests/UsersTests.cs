@@ -1,12 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NiallMaloney.EventSourcing;
 using NiallMaloney.PendingCreation.Service.Users.Controllers.Models;
 using NiallMaloney.Shared.TestUtils;
+using Shouldly;
 
 namespace NiallMaloney.PendingCreation.IntegrationTests;
 
@@ -34,13 +33,12 @@ public class UsersTests : IClassFixture<WebApplicationFactory<Program>>
         var user = await GetOrWaitForExpectedUser(userId, "Active");
 
         //Assert
-        using var scope = new AssertionScope();
-
-        user.Should().NotBeNull();
-        user.EmailAddress.Should().Be(emailAddress);
-        user.Forename.Should().Be(forename);
-        user.Surname.Should().Be(surname);
-        user.Status.Should().Be("Active");
+        user.ShouldSatisfyAllConditions(
+            () => user.ShouldNotBeNull(),
+            () => user.EmailAddress.ShouldBe(emailAddress),
+            () => user.Forename.ShouldBe(forename),
+            () => user.Surname.ShouldBe(surname),
+            () => user.Status.ShouldBe("Active"));
     }
 
     [Fact]
@@ -62,10 +60,9 @@ public class UsersTests : IClassFixture<WebApplicationFactory<Program>>
         var secondUser = await GetOrWaitForExpectedUser(secondUserId, "Rejected");
 
         //Assert
-        using var scope = new AssertionScope();
-
-        firstUser.Status.Should().Be("Active");
-        secondUser.Status.Should().Be("Rejected");
+        firstUser.ShouldSatisfyAllConditions(
+            () => firstUser.Status.ShouldBe("Active"),
+            () => secondUser.Status.ShouldBe("Rejected"));
     }
 
     private async Task<User> GetOrWaitForExpectedUser(
@@ -77,8 +74,8 @@ public class UsersTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetUser(userId),
             u => expectedStatus is null || u?.Status == expectedStatus
         );
-        user.Should().NotBeNull();
-        return user!;
+        user.ShouldNotBeNull();
+        return user;
     }
 
     private async Task<User?> GetUser(string userId)
@@ -115,11 +112,11 @@ public class UsersTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var userRef = await postResponseMessage.Content.ReadFromJsonAsync<UserReference>();
-        userRef.Should().NotBeNull();
-        return userRef!;
+        userRef.ShouldNotBeNull();
+        return userRef;
     }
 }

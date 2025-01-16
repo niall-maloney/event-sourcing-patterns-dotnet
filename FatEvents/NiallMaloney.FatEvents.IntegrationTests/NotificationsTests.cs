@@ -1,7 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NiallMaloney.EventSourcing;
@@ -9,6 +7,7 @@ using NiallMaloney.FatEvents.Service;
 using NiallMaloney.FatEvents.Service.Notifications.Domain;
 using NiallMaloney.FatEvents.Service.Users.Controllers.Models;
 using NiallMaloney.Shared.TestUtils;
+using Shouldly;
 using Notification = NiallMaloney.FatEvents.Service.Notifications.Controllers.Models.Notification;
 
 namespace NiallMaloney.FatEvents.IntegrationTests;
@@ -41,17 +40,17 @@ public class NotificationsTests : IClassFixture<WebApplicationFactory<Program>>
         var notification = await GetOrWaitForExpectedNotification(notificationId, "Sent");
 
         //Assert
-        using var scope = new AssertionScope();
+        user.ShouldSatisfyAllConditions(
+            () => user.ShouldNotBeNull(),
+            () => user.EmailAddress.ShouldBe(emailAddress),
+            () => user.Forename.ShouldBe(forename),
+            () => user.Surname.ShouldBe(surname),
+            () => user.Status.ShouldBe("Active"));
 
-        user.Should().NotBeNull();
-        user.EmailAddress.Should().Be(emailAddress);
-        user.Forename.Should().Be(forename);
-        user.Surname.Should().Be(surname);
-        user.Status.Should().Be("Active");
-
-        notification.Should().NotBeNull();
-        notification.Type.Should().Be(NotificationTypes.UserAccepted);
-        notification.Status.Should().Be("Sent");
+        notification.ShouldSatisfyAllConditions(
+            () => notification.ShouldNotBeNull(),
+            () => notification.Type.ShouldBe(NotificationTypes.UserAccepted),
+            () => notification.Status.ShouldBe("Sent"));
     }
 
     private async Task<Notification> GetOrWaitForExpectedNotification(
@@ -63,8 +62,8 @@ public class NotificationsTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetNotification(notificationId),
             u => expectedStatus is null || u?.Status == expectedStatus
         );
-        notification.Should().NotBeNull();
-        return notification!;
+        notification.ShouldNotBeNull();
+        return notification;
     }
 
     private async Task<Notification?> GetNotification(string notificationId)
@@ -92,8 +91,8 @@ public class NotificationsTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetUser(userId),
             u => expectedStatus is null || u?.Status == expectedStatus
         );
-        user.Should().NotBeNull();
-        return user!;
+        user.ShouldNotBeNull();
+        return user;
     }
 
     private async Task<User?> GetUser(string userId)
@@ -130,11 +129,11 @@ public class NotificationsTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var userRef = await postResponseMessage.Content.ReadFromJsonAsync<UserReference>();
-        userRef.Should().NotBeNull();
-        return userRef!;
+        userRef.ShouldNotBeNull();
+        return userRef;
     }
 }
