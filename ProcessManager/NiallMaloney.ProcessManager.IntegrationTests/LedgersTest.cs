@@ -1,12 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NiallMaloney.ProcessManager.Cassandra;
 using NiallMaloney.ProcessManager.Service;
 using NiallMaloney.ProcessManager.Service.Ledgers.Controllers.Models;
 using Polly;
+using Shouldly;
 
 namespace NiallMaloney.ProcessManager.IntegrationTests;
 
@@ -33,17 +32,17 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
         var balance = await GetBalance(ledger);
 
         //Assert
-        using var scope = new AssertionScope();
+        booking.ShouldSatisfyAllConditions(
+            () => booking.Id.ShouldBe(bookingId),
+            () => booking.Status.ShouldBe("Committed"),
+            () => booking.Ledger.ShouldBe(ledger),
+            () => booking.Amount.ShouldBe(amount),
+            () => booking.Version.ShouldBe(1ul));
 
-        booking.Id.Should().Be(bookingId);
-        booking.Status.Should().Be("Committed");
-        booking.Ledger.Should().Be(ledger);
-        booking.Amount.Should().Be(amount);
-        booking.Version.Should().Be(1);
-
-        balance.Ledger.Should().Be(ledger);
-        balance.CommittedAmount.Should().Be(10);
-        balance.PendingAmount.Should().Be(0);
+        balance.ShouldSatisfyAllConditions(
+            () => balance.Ledger.ShouldBe(ledger),
+            () => balance.CommittedAmount.ShouldBe(10),
+            () => balance.PendingAmount.ShouldBe(0));
     }
 
     [Fact]
@@ -61,17 +60,17 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
         var balance = await GetBalance(ledger);
 
         //Assert
-        using var scope = new AssertionScope();
+        booking.ShouldSatisfyAllConditions(
+            () => booking.Id.ShouldBe(bookingId),
+            () => booking.Status.ShouldBe("Rejected"),
+            () => booking.Ledger.ShouldBe(ledger),
+            () => booking.Amount.ShouldBe(amount),
+            () => booking.Version.ShouldBe(1ul));
 
-        booking.Id.Should().Be(bookingId);
-        booking.Status.Should().Be("Rejected");
-        booking.Ledger.Should().Be(ledger);
-        booking.Amount.Should().Be(amount);
-        booking.Version.Should().Be(1);
-
-        balance.Ledger.Should().Be(ledger);
-        balance.CommittedAmount.Should().Be(99);
-        balance.PendingAmount.Should().Be(0);
+        balance.ShouldSatisfyAllConditions(
+            () => balance.Ledger.ShouldBe(ledger),
+            () => balance.CommittedAmount.ShouldBe(99),
+            () => balance.PendingAmount.ShouldBe(0));
     }
 
     private async Task<BookingReference> RequestBooking(
@@ -86,12 +85,12 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<BookingReference>();
-        reference.Should().NotBeNull();
-        return reference!;
+        reference.ShouldNotBeNull();
+        return reference;
     }
 
     private async Task<Booking> GetOrWaitForExpectedBooking(
@@ -103,8 +102,8 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetBooking(bookingId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        booking.Should().NotBeNull();
-        return booking!;
+        booking.ShouldNotBeNull();
+        return booking;
     }
 
     private async Task<Booking?> GetBooking(string bookingId)
@@ -126,8 +125,8 @@ public class LedgersTest : IClassFixture<WebApplicationFactory<Program>>
     private async Task<LedgerRow> GetBalance(string ledger)
     {
         var balance = await _client.GetFromJsonAsync<LedgerRow?>($"/balances/{ledger}");
-        balance.Should().NotBeNull();
-        return balance!;
+        balance.ShouldNotBeNull();
+        return balance;
     }
 
     private static async Task<T> RetryUntil<T>(

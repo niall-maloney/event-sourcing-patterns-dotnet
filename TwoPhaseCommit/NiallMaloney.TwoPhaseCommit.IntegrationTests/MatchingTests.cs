@@ -1,8 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using EventStore.Client;
-using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NiallMaloney.Shared.TestUtils;
@@ -10,6 +8,7 @@ using NiallMaloney.TwoPhaseCommit.Service.Expectations.Controllers.Models;
 using NiallMaloney.TwoPhaseCommit.Service.Matching.Controllers.Models;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Controllers.Models;
 using NiallMaloney.TwoPhaseCommit.Service.Payments.Events;
+using Shouldly;
 using EventStoreClient = NiallMaloney.EventSourcing.EventStoreClient;
 
 namespace NiallMaloney.TwoPhaseCommit.IntegrationTests;
@@ -49,18 +48,19 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         var expectation = await GetOrWaitForExpectedExpectation(expectationId);
 
         //Assert
-        using var scope = new AssertionScope();
+        manager.ShouldSatisfyAllConditions(
+            () => manager.Id.ShouldBe(matchingId),
+            () => manager.PaymentId.ShouldBe(paymentId),
+            () => manager.ExpectationId.ShouldBe(expectationId),
+            () => manager.Status.ShouldBe("Completed"));
 
-        manager.Id.Should().Be(matchingId);
-        manager.PaymentId.Should().Be(paymentId);
-        manager.ExpectationId.Should().Be(expectationId);
-        manager.Status.Should().Be("Completed");
+        payment.ShouldSatisfyAllConditions(
+            () => payment.Id.ShouldBe(paymentId),
+            () => payment.Status.ShouldBe("Matched"));
 
-        payment.Id.Should().Be(paymentId);
-        payment.Status.Should().Be("Matched");
-
-        expectation.Id.Should().Be(expectationId);
-        expectation.Status.Should().Be("Matched");
+        expectation.ShouldSatisfyAllConditions(
+            () => expectation.Id.ShouldBe(expectationId),
+            () => expectation.Status.ShouldBe("Matched"));
     }
 
     [Fact]
@@ -95,18 +95,19 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         var expectation2 = await GetOrWaitForExpectedExpectation(expectation2Id);
 
         //Assert
-        using var scope = new AssertionScope();
+        manager2.ShouldSatisfyAllConditions(
+            () => manager2.Id.ShouldBe(matching2Id),
+            () => manager2.PaymentId.ShouldBe(paymentId),
+            () => manager2.ExpectationId.ShouldBe(expectation2Id),
+            () => manager2.Status.ShouldBe("Failed"));
 
-        manager2.Id.Should().Be(matching2Id);
-        manager2.PaymentId.Should().Be(paymentId);
-        manager2.ExpectationId.Should().Be(expectation2Id);
-        manager2.Status.Should().Be("Failed");
+        payment.ShouldSatisfyAllConditions(
+            () => payment.Id.ShouldBe(paymentId),
+            () => payment.Status.ShouldBe("Matched"));
 
-        payment.Id.Should().Be(paymentId);
-        payment.Status.Should().Be("Matched");
-
-        expectation2.Id.Should().Be(expectation2Id);
-        expectation2.Status.Should().Be("Created");
+        expectation2.ShouldSatisfyAllConditions(
+            () => expectation2.Id.ShouldBe(expectation2Id),
+            () => expectation2.Status.ShouldBe("Created"));
     }
 
     [Fact]
@@ -141,27 +142,29 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         var expectation = await GetOrWaitForExpectedExpectation(expectationId);
 
         //Assert
-        using var scope = new AssertionScope();
+        manager2.ShouldSatisfyAllConditions(
+            () => manager2.Id.ShouldBe(matching2Id),
+            () => manager2.PaymentId.ShouldBe(payment2Id),
+            () => manager2.ExpectationId.ShouldBe(expectationId),
+            () => manager2.Status.ShouldBe("Failed"));
 
-        manager2.Id.Should().Be(matching2Id);
-        manager2.PaymentId.Should().Be(payment2Id);
-        manager2.ExpectationId.Should().Be(expectationId);
-        manager2.Status.Should().Be("Failed");
+        payment2.ShouldSatisfyAllConditions(
+            () => payment2.Id.ShouldBe(payment2Id),
+            () => payment2.Status.ShouldBe("Received"));
 
-        payment2.Id.Should().Be(payment2Id);
-        payment2.Status.Should().Be("Received");
-
-        expectation.Id.Should().Be(expectationId);
-        expectation.Status.Should().Be("Matched");
+        expectation.ShouldSatisfyAllConditions(
+            () => expectation.Id.ShouldBe(expectationId),
+            () => expectation.Status.ShouldBe("Matched"));
 
         //Assert that Payment is released
         var eventEnvelopes = await _eventStore.ReadStreamAsync($"two_phase_commit.payment-{payment2Id}",
             StreamPosition.End, Direction.Backwards, 1);
         var envelope = (await eventEnvelopes!.ToListAsync()).Single();
 
-        var lastEvent = envelope.Event.Should().BeOfType<PaymentReleased>().Subject;
-        lastEvent.PaymentId.Should().Be(payment2Id);
-        lastEvent.MatchingId.Should().Be(matching2Id);
+        var lastEvent = envelope.Event as PaymentReleased;
+        lastEvent.ShouldNotBeNull();
+        lastEvent.PaymentId.ShouldBe(payment2Id);
+        lastEvent.MatchingId.ShouldBe(matching2Id);
     }
 
     private async Task<MatchingReference> BeginMatching(
@@ -186,12 +189,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var matchingRef = await postResponseMessage.Content.ReadFromJsonAsync<MatchingReference>();
-        matchingRef.Should().NotBeNull();
-        return matchingRef!;
+        matchingRef.ShouldNotBeNull();
+        return matchingRef;
     }
 
     private async Task<MatchingManager> GetOrWaitForExpectedManager(
@@ -203,8 +206,8 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetManager(matchingId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        manager.Should().NotBeNull();
-        return manager!;
+        manager.ShouldNotBeNull();
+        return manager;
     }
 
     private async Task<MatchingManager?> GetManager(string matchingId)
@@ -235,8 +238,8 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetExpectation(expectationId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        expectation.Should().NotBeNull();
-        return expectation!;
+        expectation.ShouldNotBeNull();
+        return expectation;
     }
 
     private async Task<Expectation?> GetExpectation(string expectationId)
@@ -273,12 +276,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var expectationRef = await postResponseMessage.Content.ReadFromJsonAsync<ExpectationReference>();
-        expectationRef.Should().NotBeNull();
-        return expectationRef!;
+        expectationRef.ShouldNotBeNull();
+        return expectationRef;
     }
 
     #endregion
@@ -294,8 +297,8 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetPayment(paymentId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        payment.Should().NotBeNull();
-        return payment!;
+        payment.ShouldNotBeNull();
+        return payment;
     }
 
     private async Task<Payment?> GetPayment(string paymentId)
@@ -332,12 +335,12 @@ public class MatchingTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var paymentRef = await postResponseMessage.Content.ReadFromJsonAsync<PaymentReference>();
-        paymentRef.Should().NotBeNull();
-        return paymentRef!;
+        paymentRef.ShouldNotBeNull();
+        return paymentRef;
     }
 
     #endregion

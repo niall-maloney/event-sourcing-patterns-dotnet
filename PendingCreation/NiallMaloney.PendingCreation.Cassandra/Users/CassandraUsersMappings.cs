@@ -17,7 +17,7 @@ public class CassandraUsersMappings : Mappings
             .Column(u => u.Version, map => map.WithDbType<BigInteger>());
 
         For<UserDataRow>()
-            .TableName("duplicateUserTracking")
+            .TableName("duplicate_user_tracking")
             .PartitionKey(u => u.UserId)
             .Column(u => u.EmailAddress);
     }

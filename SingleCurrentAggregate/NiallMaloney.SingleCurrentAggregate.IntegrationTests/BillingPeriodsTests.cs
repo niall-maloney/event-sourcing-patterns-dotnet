@@ -1,10 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NiallMaloney.SingleCurrentAggregate.Service.BillingPeriods.Controllers.Models;
 using NiallMaloney.SingleCurrentAggregate.Service.Customers.Controllers.Models;
 using Polly;
+using Shouldly;
 
 namespace NiallMaloney.SingleCurrentAggregate.IntegrationTests;
 
@@ -29,9 +29,9 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         var billingPeriod = await GetOrWaitForSingleOpenBillingPeriod(customerId);
 
         //Assert
-        billingPeriod.Status.Should().Be(expectedStatus);
-        billingPeriod.TotalAmount.Should().Be(0);
-        billingPeriod.Version.Should().Be(0);
+        billingPeriod.Status.ShouldBe(expectedStatus);
+        billingPeriod.TotalAmount.ShouldBe(0);
+        billingPeriod.Version.ShouldBe(0ul);
     }
 
     [Fact]
@@ -52,13 +52,13 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
 
         //Assert
         var charge = await GetOrWaitForExpectedCharge(chargeId, expectedChargeStatus);
-        charge.BillingPeriodId.Should().Be(billingPeriodId);
-        charge.Amount.Should().Be(amount);
-        charge.Status.Should().Be(expectedChargeStatus);
+        charge.BillingPeriodId.ShouldBe(billingPeriodId);
+        charge.Amount.ShouldBe(amount);
+        charge.Status.ShouldBe(expectedChargeStatus);
 
         billingPeriod = await GetBillingPeriod(billingPeriodId);
-        billingPeriod.Should().NotBeNull();
-        billingPeriod!.TotalAmount.Should().Be(amount);
+        billingPeriod.ShouldNotBeNull();
+        billingPeriod.TotalAmount.ShouldBe(amount);
     }
 
     [Fact]
@@ -83,13 +83,13 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
 
         //Assert
         var charge = await GetOrWaitForExpectedCharge(chargeId, expectedChargeStatus);
-        charge.BillingPeriodId.Should().Be(billingPeriodId);
-        charge.Amount.Should().Be(amount);
-        charge.Status.Should().Be(expectedChargeStatus);
+        charge.BillingPeriodId.ShouldBe(billingPeriodId);
+        charge.Amount.ShouldBe(amount);
+        charge.Status.ShouldBe(expectedChargeStatus);
 
         billingPeriod = await GetBillingPeriod(billingPeriodId);
-        billingPeriod.Should().NotBeNull();
-        billingPeriod!.TotalAmount.Should().Be(0);
+        billingPeriod.ShouldNotBeNull();
+        billingPeriod.TotalAmount.ShouldBe(0);
     }
 
     [Fact]
@@ -111,16 +111,16 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         var secondBillingPeriod = await GetOrWaitForSingleOpenBillingPeriod(customerId);
 
         //Assert
-        firstBillingPeriod.Status.Should().Be("Closed");
-        firstBillingPeriod.CustomerId.Should().Be(customerId);
-        firstBillingPeriod.TotalAmount.Should().Be(0);
-        firstBillingPeriod.Version.Should().Be(1);
+        firstBillingPeriod.Status.ShouldBe("Closed");
+        firstBillingPeriod.CustomerId.ShouldBe(customerId);
+        firstBillingPeriod.TotalAmount.ShouldBe(0);
+        firstBillingPeriod.Version.ShouldBe(1ul);
 
-        secondBillingPeriod.Id.Should().NotBe(firstBillingPeriodId);
-        secondBillingPeriod.Status.Should().Be("Open");
-        secondBillingPeriod.CustomerId.Should().Be(customerId);
-        secondBillingPeriod.TotalAmount.Should().Be(0);
-        secondBillingPeriod.Version.Should().Be(0);
+        secondBillingPeriod.Id.ShouldNotBe(firstBillingPeriodId);
+        secondBillingPeriod.Status.ShouldBe("Open");
+        secondBillingPeriod.CustomerId.ShouldBe(customerId);
+        secondBillingPeriod.TotalAmount.ShouldBe(0);
+        secondBillingPeriod.Version.ShouldBe(0ul);
     }
 
     private async Task<BillingPeriod> GetOrWaitForSingleOpenBillingPeriod(string customerId)
@@ -141,8 +141,8 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetBillingPeriod(billingPeriodId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        billingPeriod.Should().NotBeNull();
-        return billingPeriod!;
+        billingPeriod.ShouldNotBeNull();
+        return billingPeriod;
     }
 
     private async Task<IEnumerable<BillingPeriod>> SearchBillingPeriods(
@@ -179,12 +179,12 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         var postResponseMessage = await _client.PostAsJsonAsync("/customers", new { });
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<CustomerReference>();
-        reference.Should().NotBeNull();
-        return reference!;
+        reference.ShouldNotBeNull();
+        return reference;
     }
 
     private async Task CloseBillingPeriod(string billingPeriodId, bool assertSuccess = true)
@@ -195,7 +195,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
     }
 
@@ -208,8 +208,8 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
             async () => await GetCharge(chargeId),
             b => expectedStatus is null || b?.Status == expectedStatus
         );
-        charge.Should().NotBeNull();
-        return charge!;
+        charge.ShouldNotBeNull();
+        return charge;
     }
 
     private async Task<Charge?> GetCharge(string chargeId)
@@ -240,12 +240,12 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
 
         var reference = await postResponseMessage.Content.ReadFromJsonAsync<ChargeReference>();
-        reference.Should().NotBeNull();
-        return reference!;
+        reference.ShouldNotBeNull();
+        return reference;
     }
 
     private async Task RemoveCharge(string chargeId, bool assertSuccess = true)
@@ -256,7 +256,7 @@ public class BillingPeriodsTests : IClassFixture<WebApplicationFactory<Program>>
         );
         if (assertSuccess)
         {
-            postResponseMessage.IsSuccessStatusCode.Should().BeTrue();
+            postResponseMessage.IsSuccessStatusCode.ShouldBeTrue();
         }
     }
 
