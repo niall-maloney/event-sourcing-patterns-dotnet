@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using EventStore.Client;
+using KurrentDB.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NiallMaloney.Shared.TestUtils;

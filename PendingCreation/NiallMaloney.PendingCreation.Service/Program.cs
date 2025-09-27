@@ -8,10 +8,10 @@ using NiallMaloney.Shared.Cassandra;
 var builder = WebApplication.CreateBuilder(args);
 var executingAssembly = typeof(Program).Assembly;
 
-var eventStoreSection = builder.Configuration.GetSection("EventStore:ConnectionString");
+var kurrentDBSection = builder.Configuration.GetSection("KurrentDB:ConnectionString");
 builder.Services.AddEventStore(
-    new EventStoreClientOptions(eventStoreSection.Value),
-    new[] { executingAssembly }
+    new KurrentDBClientOptions(kurrentDBSection.Value),
+    [executingAssembly]
 );
 
 builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
