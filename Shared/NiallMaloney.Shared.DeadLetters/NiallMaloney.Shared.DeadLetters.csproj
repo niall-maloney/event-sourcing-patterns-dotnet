@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\NiallMaloney.Shared.Cassandra\NiallMaloney.Shared.Cassandra.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" />
+    <PackageReference Include="NiallMaloney.EventSourcing" />
   </ItemGroup>
 </Project>

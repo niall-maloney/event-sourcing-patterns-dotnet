@@ -15,6 +15,7 @@ builder.Services.AddEventStore(
 );
 
 builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
+builder.Services.AddCassandraDeadLetterRepository(Configuration.Keyspace);
 builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<UsersProjection>();

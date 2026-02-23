@@ -13,7 +13,9 @@ builder.Services.AddEventStore(
     new KurrentDBClientOptions(kurrentDBSection.Value),
     [executingAssembly]
 );
+
 builder.Services.AddCassandraCursorRepository(Configuration.Keyspace);
+builder.Services.AddCassandraDeadLetterRepository(Configuration.Keyspace);
 builder.Services.AddCassandraRepositories();
 
 builder.Services.AddSubscriber<BillingPeriodsProcessManager>();

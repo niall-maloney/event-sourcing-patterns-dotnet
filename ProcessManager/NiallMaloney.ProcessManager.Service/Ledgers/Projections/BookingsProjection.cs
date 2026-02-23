@@ -43,7 +43,7 @@ public class BookingsProjection : Projection
     private async Task Handle(BookingCommitted evnt, EventMetadata metadata)
     {
         var booking = await _repository.GetBooking(evnt.BookingId);
-        if (booking is null || !TryUpdateVersion(booking, metadata.StreamPosition, out booking))
+        if (!TryUpdateVersion(booking, metadata.StreamPosition, out booking))
         {
             return;
         }
@@ -55,7 +55,7 @@ public class BookingsProjection : Projection
     private async Task Handle(BookingRejected evnt, EventMetadata metadata)
     {
         var booking = await _repository.GetBooking(evnt.BookingId);
-        if (booking is null || !TryUpdateVersion(booking, metadata.StreamPosition, out booking))
+        if (!TryUpdateVersion(booking, metadata.StreamPosition, out booking))
         {
             return;
         }
@@ -64,8 +64,13 @@ public class BookingsProjection : Projection
         await _repository.UpdateBooking(booking);
     }
 
-    private bool TryUpdateVersion(BookingRow booking, ulong newVersion, out BookingRow newBooking)
+    private bool TryUpdateVersion(BookingRow? booking, ulong newVersion, out BookingRow newBooking)
     {
+        if (booking is null)
+        {
+            throw new InvalidOperationException($"Booking {booking} not found");
+        }
+        
         var expectedVersion = newVersion - 1;
         var actualVersion = booking.Version;
         if (actualVersion >= newVersion)
@@ -77,7 +82,7 @@ public class BookingsProjection : Projection
         if (actualVersion != expectedVersion)
         {
             throw new InvalidOperationException(
-                $"Version mismatch, expected {expectedVersion} actual {actualVersion}"
+                $"Version mismatch, expected {expectedVersion} actual {actualVersion}. Booking {booking}"
             );
         }
 
